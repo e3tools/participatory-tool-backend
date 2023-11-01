@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include participatory_backend *.css
+recursive-include participatory_backend *.csv
+recursive-include participatory_backend *.html
+recursive-include participatory_backend *.ico
+recursive-include participatory_backend *.js
+recursive-include participatory_backend *.json
+recursive-include participatory_backend *.md
+recursive-include participatory_backend *.png
+recursive-include participatory_backend *.py
+recursive-include participatory_backend *.svg
+recursive-include participatory_backend *.txt
+recursive-exclude participatory_backend *.pyc
