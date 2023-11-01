@@ -1,6 +1,6 @@
 ## Participatory Backend
 
-Backend to support participatory process
+Backend to support participatory processes
 
 #### License
 
