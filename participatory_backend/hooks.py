@@ -199,3 +199,30 @@ app_license = "MIT"
 # auth_hooks = [
 #	"participatory_backend.auth.validate"
 # ]
+
+fixtures = [  
+  {
+    "doctype":"PCRA Form"
+  },
+  {
+    "doctype":"Resource Type"
+  },
+  {
+    "doctype":"Hazard Type"
+  },
+  {
+    "doctype":"Hazard Exposure Object"
+  },
+  {
+    "doctype":"Administrative Level"
+  },
+  {
+    "doctype":"Process Type"
+  },
+  {
+    "doctype":"Vulnerable Group"
+  },
+  {
+    "doctype":"Workspace"
+  },
+]

@@ -1,0 +1,82 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Area",
+  "modified": "2023-11-10 11:43:19.918562",
+  "name": "Settlements",
+  "resource_type": "Settlements"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Area",
+  "modified": "2023-11-10 11:43:19.756548",
+  "name": "Farms and Farmland",
+  "resource_type": "Farms and Farmland"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Line",
+  "modified": "2023-11-10 11:42:58.162485",
+  "name": "Domestic Water",
+  "resource_type": "Domestic Water"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Point",
+  "modified": "2023-11-10 11:43:39.017206",
+  "name": "Markets",
+  "resource_type": "Markets"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Area",
+  "modified": "2023-11-10 11:42:28.765996",
+  "name": "Grazing areas",
+  "resource_type": "Grazing areas"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Area",
+  "modified": "2023-11-10 11:42:28.493970",
+  "name": "Forests",
+  "resource_type": "Forests"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Line",
+  "modified": "2023-11-10 11:42:57.909010",
+  "name": "Livestock Water",
+  "resource_type": "Livestock Water"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Not Applicable",
+  "modified": "2023-11-10 11:45:01.285424",
+  "name": "Livestock Mobility",
+  "resource_type": "Livestock Mobility"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Line",
+  "modified": "2023-11-10 11:42:58.284780",
+  "name": "Agriculture Water",
+  "resource_type": "Agriculture Water"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Resource Type",
+  "geographic_object_type": "Point",
+  "modified": "2023-11-10 11:43:38.748882",
+  "name": "Infrastructure and Services",
+  "resource_type": "Infrastructure and Services"
+ }
+]

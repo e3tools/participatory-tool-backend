@@ -1,0 +1,82 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-10 17:36:30.256494",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "characteristics",
+  "activities",
+  "column_break_2dlg",
+  "resources",
+  "have_resources_access",
+  "reason_for_no_access",
+  "have_equal_say",
+  "section_break_osbe",
+  "location"
+ ],
+ "fields": [
+  {
+   "fieldname": "characteristics",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Characteristics",
+   "reqd": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location of settlements or areas"
+  },
+  {
+   "fieldname": "activities",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Economic activities/livelihoods/roles associated with group",
+   "reqd": 1
+  },
+  {
+   "fieldname": "resources",
+   "fieldtype": "Data",
+   "label": "Resources relied upon by the group"
+  },
+  {
+   "default": "0",
+   "fieldname": "have_resources_access",
+   "fieldtype": "Check",
+   "label": "Do group members have access to resources?"
+  },
+  {
+   "fieldname": "reason_for_no_access",
+   "fieldtype": "Data",
+   "label": "If no access to resources, how and why do they differ?"
+  },
+  {
+   "default": "0",
+   "fieldname": "have_equal_say",
+   "fieldtype": "Check",
+   "label": "Do group members have equal say in community decision making"
+  },
+  {
+   "fieldname": "column_break_2dlg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_osbe",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-11-10 17:49:14.708627",
+ "modified_by": "Administrator",
+ "module": "PCRA",
+ "name": "Vulnerable Group Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

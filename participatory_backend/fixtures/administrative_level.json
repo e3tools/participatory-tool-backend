@@ -1,0 +1,52 @@
+[
+ {
+  "admin_level_name": "Kenya",
+  "docstatus": 0,
+  "doctype": "Administrative Level",
+  "is_group": 1,
+  "modified": "2023-11-09 16:20:13.807834",
+  "name": "Kenya",
+  "old_parent": "",
+  "parent_administrative_level": null
+ },
+ {
+  "admin_level_name": "Kilome",
+  "docstatus": 0,
+  "doctype": "Administrative Level",
+  "is_group": 0,
+  "modified": "2023-11-09 16:21:20.925525",
+  "name": "Kilome",
+  "old_parent": "Makueni",
+  "parent_administrative_level": "Makueni"
+ },
+ {
+  "admin_level_name": "Kibwezi West",
+  "docstatus": 0,
+  "doctype": "Administrative Level",
+  "is_group": 0,
+  "modified": "2023-11-09 16:21:35.413404",
+  "name": "Kibwezi West",
+  "old_parent": "Makueni",
+  "parent_administrative_level": "Makueni"
+ },
+ {
+  "admin_level_name": "Makueni",
+  "docstatus": 0,
+  "doctype": "Administrative Level",
+  "is_group": 1,
+  "modified": "2023-11-09 16:21:06.947474",
+  "name": "Makueni",
+  "old_parent": "Kenya",
+  "parent_administrative_level": "Kenya"
+ },
+ {
+  "admin_level_name": "Kibwezi East",
+  "docstatus": 0,
+  "doctype": "Administrative Level",
+  "is_group": 0,
+  "modified": "2023-11-09 16:21:28.200454",
+  "name": "Kibwezi East",
+  "old_parent": "Makueni",
+  "parent_administrative_level": "Makueni"
+ }
+]

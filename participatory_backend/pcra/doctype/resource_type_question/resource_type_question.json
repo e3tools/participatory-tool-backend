@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-10 11:28:59.532415",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "resource_type",
+  "response"
+ ],
+ "fields": [
+  {
+   "fieldname": "resource_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Question",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Response",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-11-10 11:30:43.480478",
+ "modified_by": "Administrator",
+ "module": "PCRA",
+ "name": "Resource Type Question",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1
+}

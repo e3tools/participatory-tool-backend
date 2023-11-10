@@ -1,0 +1,37 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Vulnerable Group",
+  "modified": "2023-11-10 13:33:04.937966",
+  "name": "Elderly",
+  "vulnerable_group": "Elderly"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Vulnerable Group",
+  "modified": "2023-11-10 13:33:12.942739",
+  "name": "Youth",
+  "vulnerable_group": "Youth"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Vulnerable Group",
+  "modified": "2023-11-10 13:33:19.064657",
+  "name": "Women",
+  "vulnerable_group": "Women"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Vulnerable Group",
+  "modified": "2023-11-10 13:36:44.960224",
+  "name": "All groups",
+  "vulnerable_group": "All groups"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Vulnerable Group",
+  "modified": "2023-11-10 13:47:33.154043",
+  "name": "Resource poor households",
+  "vulnerable_group": "Resource poor households"
+ }
+]

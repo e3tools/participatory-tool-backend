@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestPCRA(FrappeTestCase):
+class TestVulnerableGroup(FrappeTestCase):
 	pass

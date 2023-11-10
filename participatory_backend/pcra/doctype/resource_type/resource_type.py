@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class PCRA(Document):
+class ResourceType(Document):
 	pass

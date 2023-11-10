@@ -1,32 +1,32 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:hazard_type",
- "creation": "2023-11-07 17:13:31.320603",
+ "autoname": "field:vulnerable_group",
+ "creation": "2023-11-10 13:31:41.150286",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "hazard_type"
+  "vulnerable_group"
  ],
  "fields": [
   {
-   "fieldname": "hazard_type",
+   "fieldname": "vulnerable_group",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Hazard Type",
+   "label": "Vulnerable Group",
    "reqd": 1,
    "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-07 17:13:31.320603",
+ "modified": "2023-11-10 13:32:52.826216",
  "modified_by": "Administrator",
- "module": "Design",
- "name": "Hazard Type",
- "naming_rule": "Expression (old style)",
+ "module": "PCRA",
+ "name": "Vulnerable Group",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -44,7 +44,5 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "track_changes": 1,
- "track_seen": 1
+ "states": []
 }
