@@ -4,7 +4,7 @@
  "allow_events_in_timeline": 1,
  "allow_import": 1,
  "allow_rename": 1,
- "autoname": "format:PCRA-{county}-{ward}-{YYYY}-{#####} ",
+ "autoname": "format:{county}-{ward}-{YYYY}-{#####} ",
  "creation": "2023-11-06 15:11:35.668745",
  "default_view": "List",
  "description": "Participatory Climate Risk Assessment (PCRA)",
@@ -12,26 +12,19 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "main_introduction",
-  "tools_and_case_studies_tab",
-  "tools_introduction",
   "basic_details_tab",
   "process_type",
+  "facilitator",
   "facilitator_name",
-  "posting_date",
   "column_break_bfwz",
+  "posting_date",
   "ward",
   "county",
-  "gender_daily_calendar_tab",
-  "gender_daily_calendar_items",
-  "hazard_impact_chain_tab",
-  "hazard_impact_chain",
-  "resources_tab",
-  "resources",
-  "tab_break_lwaj",
-  "risks_and_threats",
-  "vulnerable_groups_tab",
-  "vulnerable_groups"
+  "amended_from",
+  "introduction_tab",
+  "main_introduction",
+  "tools_and_case_studies_tab",
+  "tools_introduction"
  ],
  "fields": [
   {
@@ -63,11 +56,10 @@
    "reqd": 1
   },
   {
+   "fetch_from": "facilitator.full_name",
    "fieldname": "facilitator_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Facilitator Name",
-   "reqd": 1
+   "fieldtype": "Read Only",
+   "label": "Facilitator Name"
   },
   {
    "fieldname": "posting_date",
@@ -97,65 +89,33 @@
    "sort_options": 1
   },
   {
-   "fieldname": "gender_daily_calendar_tab",
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "PCRA Form",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "facilitator",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Facilitator",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "introduction_tab",
    "fieldtype": "Tab Break",
-   "label": "Gender Daily Calendar"
-  },
-  {
-   "fieldname": "gender_daily_calendar_items",
-   "fieldtype": "Table",
-   "label": "Gender Daily Calendar",
-   "options": "Gender Daily Calendar"
-  },
-  {
-   "fieldname": "hazard_impact_chain_tab",
-   "fieldtype": "Tab Break",
-   "label": "Hazard Impact Chain"
-  },
-  {
-   "fieldname": "hazard_impact_chain",
-   "fieldtype": "Table",
-   "label": "Hazard Impact Chain",
-   "options": "Hazard Impact Chain"
-  },
-  {
-   "fieldname": "resources_tab",
-   "fieldtype": "Tab Break",
-   "label": "Resources"
-  },
-  {
-   "fieldname": "resources",
-   "fieldtype": "Table",
-   "label": "Resources",
-   "options": "Resource Item"
-  },
-  {
-   "fieldname": "tab_break_lwaj",
-   "fieldtype": "Tab Break",
-   "label": "Risks And Threats"
-  },
-  {
-   "fieldname": "risks_and_threats",
-   "fieldtype": "Table",
-   "label": "Risks and Threats",
-   "options": "Risks And Threats Item"
-  },
-  {
-   "fieldname": "vulnerable_groups_tab",
-   "fieldtype": "Tab Break",
-   "label": "Vulnerable Groups"
-  },
-  {
-   "fieldname": "vulnerable_groups",
-   "fieldtype": "Table",
-   "label": "Vulnerable Groups",
-   "options": "Vulnerable Group Item"
+   "label": "Introduction"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2023-11-10 17:52:34.638089",
+ "modified": "2023-11-16 16:08:42.312185",
  "modified_by": "Administrator",
  "module": "PCRA",
  "name": "PCRA Form",
@@ -177,5 +137,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

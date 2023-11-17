@@ -1,74 +1,16 @@
 [
  {
-  "auto_repeat": null,
-  "county": null,
-  "docstatus": 0,
-  "doctype": "PCRA Form",
-  "facilitator_name": "Steve Nyaga",
-  "gender_daily_calendar_items": [],
-  "hazard_impact_chain": [],
-  "modified": "2023-11-06 16:15:00.416951",
-  "name": "PCRA-Kaiti-2023-00002",
-  "posting_date": "2023-11-01",
-  "process_type": "PCRA",
-  "resources": [],
-  "risks_and_threats": [],
-  "vulnerable_groups": [],
-  "ward": "Kaiti"
- },
- {
+  "amended_from": null,
   "auto_repeat": null,
   "county": "Makueni",
   "docstatus": 0,
   "doctype": "PCRA Form",
+  "facilitator": "stevenyaga@gmail.com",
   "facilitator_name": "Steve Nyaga",
-  "gender_daily_calendar_items": [
-   {
-    "activity_men": null,
-    "activity_women": null,
-    "parent": "PCRA-Makueni-Kibwezi East-2023-00003",
-    "parentfield": "gender_daily_calendar_items",
-    "parenttype": "PCRA Form",
-    "time": "12am"
-   }
-  ],
-  "hazard_impact_chain": [
-   {
-    "direct_impact": "No trees",
-    "hazard_exposure_object": "Forests",
-    "hazard_type": "Deforestation",
-    "indirect_impact": "Water drying",
-    "parent": "PCRA-Makueni-Kibwezi East-2023-00003",
-    "parentfield": "hazard_impact_chain",
-    "parenttype": "PCRA Form"
-   }
-  ],
-  "modified": "2023-11-10 16:49:04.577798",
-  "name": "PCRA-Makueni-Kibwezi East-2023-00003",
+  "modified": "2023-11-16 13:00:30.869856",
+  "name": "Makueni-Kilome-2023-00005",
   "posting_date": "2023-11-16",
   "process_type": "PCRA",
-  "resources": [
-   {
-    "map": null,
-    "parent": "PCRA-Makueni-Kibwezi East-2023-00003",
-    "parentfield": "resources",
-    "parenttype": "PCRA Form",
-    "resource_address": null,
-    "resource_name": "Farm",
-    "resource_type": "Agriculture Water"
-   },
-   {
-    "map": null,
-    "parent": "PCRA-Makueni-Kibwezi East-2023-00003",
-    "parentfield": "resources",
-    "parenttype": "PCRA Form",
-    "resource_address": null,
-    "resource_name": "General hospital",
-    "resource_type": "Infrastructure and Services"
-   }
-  ],
-  "risks_and_threats": [],
-  "vulnerable_groups": [],
-  "ward": "Kibwezi East"
+  "ward": "Kilome"
  }
 ]

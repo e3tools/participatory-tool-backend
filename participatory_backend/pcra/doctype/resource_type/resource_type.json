@@ -2,14 +2,13 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:resource_type",
- "creation": "2023-11-10 11:24:05.221502",
+ "creation": "2023-11-16 11:56:43.783370",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "resource_type",
-  "geographic_object_type"
+  "resource_type"
  ],
  "fields": [
   {
@@ -19,19 +18,11 @@
    "label": "Resource Type",
    "reqd": 1,
    "unique": 1
-  },
-  {
-   "fieldname": "geographic_object_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Geographic Object Type",
-   "options": "Point\nLine\nArea\nNot Applicable",
-   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-10 11:44:53.292490",
+ "modified": "2023-11-16 11:56:43.783370",
  "modified_by": "Administrator",
  "module": "PCRA",
  "name": "Resource Type",
@@ -54,6 +45,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1,
- "track_seen": 1
+ "track_changes": 1
 }

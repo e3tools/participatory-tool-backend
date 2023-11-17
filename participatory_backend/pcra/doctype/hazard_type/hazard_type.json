@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:hazard_type",
- "creation": "2023-11-07 17:13:31.320603",
+ "creation": "2023-11-14 18:13:10.405251",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -22,7 +22,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-09 16:29:15.905534",
+ "modified": "2023-11-14 18:13:10.405251",
  "modified_by": "Administrator",
  "module": "PCRA",
  "name": "Hazard Type",
@@ -45,6 +45,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1,
- "track_seen": 1
+ "track_changes": 1
 }
