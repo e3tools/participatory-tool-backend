@@ -1,0 +1,16 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Hazard Type",
+  "hazard_type": "Drought",
+  "modified": "2023-11-09 15:04:02.300488",
+  "name": "Drought"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Hazard Type",
+  "hazard_type": "Deforestation",
+  "modified": "2023-11-09 15:03:49.668023",
+  "name": "Deforestation"
+ }
+]
