@@ -1,13 +1,18 @@
 
 import frappe
 from frappe.core.doctype.user.user import generate_keys
+from frappe.desk.form.load import getdoctype
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
     try:
-        # usr, pwd, cmd = frappe.form_dict.values()
-        values = frappe.form_dict.values().mapping.get('_value')
-        usr, pwd = values.get('usr'), values.get('pwd')
+        #usr, pwd, cmd = frappe.form_dict.values()
+        if frappe.form_dict.values():
+            values = frappe.form_dict.values().mapping.get('_value')
+            usr, pwd = values.get('usr'), values.get('pwd')
+        if not usr or not pwd:
+            values = frappe.form_dict.values()
+            usr, pwd = values.get('usr'), values.get('pwd')
 
         #print(usr, pwd, cmd)
         print(usr, pwd)
@@ -31,3 +36,12 @@ def login(**kwargs):
         return {'status_code':401, 'text':frappe.local.response.message}
     except Exception as e:
         return {'status_code':500, 'text':str(e)}
+
+@frappe.whitelist()
+def get_doctype(doctype: str, with_parent: int = 0):
+    return getdoctype(doctype, with_parent=with_parent)
+
+@frappe.whitelist()
+def new_doc(doctype: str):
+    return frappe.new_doc(doctype, as_dict=True)
+    
