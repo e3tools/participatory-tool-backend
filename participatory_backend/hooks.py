@@ -201,27 +201,36 @@ app_license = "MIT"
 # ]
 
 fixtures = [  
-  {
-    "doctype":"PCRA Form"
+    {
+    "doctype":"Custom Field", 
+    "filters": [
+      ["fieldname", "in", (
+                    "engagement_entry", "engagement_entry_status"
+                   )
+      ]
+    ]
   },
-  {
-    "doctype":"Resource Type"
-  },
-  {
-    "doctype":"Hazard Type"
-  },
-  {
-    "doctype":"Hazard Exposure Object"
-  },
-  {
-    "doctype":"Administrative Level"
-  },
-  {
-    "doctype":"Process Type"
-  },
-  {
-    "doctype":"Vulnerable Group"
-  },
+  # {
+  #   "doctype":"PCRA Form"
+  # },
+  # {
+  #   "doctype":"Resource Type"
+  # },
+  # {
+  #   "doctype":"Hazard Type"
+  # },
+  # {
+  #   "doctype":"Hazard Exposure Object"
+  # },
+  # {
+  #   "doctype":"Administrative Level"
+  # },
+  # {
+  #   "doctype":"Process Type"
+  # },
+  # {
+  #   "doctype":"Vulnerable Group"
+  # },
   {
     "doctype":"Workspace"
   },

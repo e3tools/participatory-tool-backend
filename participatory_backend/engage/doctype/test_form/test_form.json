@@ -1,0 +1,271 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "Form-.#####",
+ "creation": "2023-12-24 03:09:38.233974",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "button",
+  "check",
+  "currency",
+  "data",
+  "date",
+  "date_time",
+  "dynamic_link",
+  "duration",
+  "float",
+  "html",
+  "int",
+  "link",
+  "heading",
+  "icon",
+  "password",
+  "percent",
+  "phone",
+  "read_only",
+  "rating",
+  "select",
+  "time",
+  "editor_fields_tab",
+  "html_editor",
+  "small_text",
+  "text",
+  "text_editor",
+  "image_fields_tab",
+  "image",
+  "attach",
+  "attach_image",
+  "geo_field_tab",
+  "geolocation",
+  "code_fields_tab",
+  "json",
+  "markdown",
+  "table_fields_tab",
+  "table",
+  "table_multiselect"
+ ],
+ "fields": [
+  {
+   "fieldname": "attach",
+   "fieldtype": "Attach",
+   "label": "Attach"
+  },
+  {
+   "fieldname": "attach_image",
+   "fieldtype": "Attach Image",
+   "label": "Attach image"
+  },
+  {
+   "fieldname": "button",
+   "fieldtype": "Button",
+   "label": "Button"
+  },
+  {
+   "default": "0",
+   "fieldname": "check",
+   "fieldtype": "Check",
+   "label": "Check"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Currency",
+   "label": "Currency"
+  },
+  {
+   "fieldname": "data",
+   "fieldtype": "Data",
+   "label": "Data"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "date_time",
+   "fieldtype": "Datetime",
+   "label": "Date Time"
+  },
+  {
+   "fieldname": "duration",
+   "fieldtype": "Duration",
+   "label": "Duration"
+  },
+  {
+   "fieldname": "float",
+   "fieldtype": "Float",
+   "label": "Float"
+  },
+  {
+   "fieldname": "geolocation",
+   "fieldtype": "Geolocation",
+   "label": "Geolocation"
+  },
+  {
+   "fieldname": "html",
+   "fieldtype": "HTML",
+   "label": "HTML"
+  },
+  {
+   "fieldname": "html_editor",
+   "fieldtype": "HTML Editor",
+   "label": "HTML Editor"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "int",
+   "fieldtype": "Int",
+   "label": "Int"
+  },
+  {
+   "fieldname": "link",
+   "fieldtype": "Link",
+   "label": "Link",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "dynamic_link",
+   "fieldtype": "Dynamic Link",
+   "label": "Dynamic Link",
+   "options": "link"
+  },
+  {
+   "fieldname": "heading",
+   "fieldtype": "Heading",
+   "label": "Heading"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Icon",
+   "label": "Icon"
+  },
+  {
+   "fieldname": "json",
+   "fieldtype": "JSON",
+   "label": "JSON"
+  },
+  {
+   "fieldname": "markdown",
+   "fieldtype": "Markdown Editor",
+   "label": "Markdown"
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Password",
+   "label": "Password"
+  },
+  {
+   "fieldname": "percent",
+   "fieldtype": "Percent",
+   "label": "Percent"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Phone",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "read_only",
+   "fieldtype": "Read Only",
+   "label": "Read Only"
+  },
+  {
+   "fieldname": "rating",
+   "fieldtype": "Rating",
+   "label": "Rating"
+  },
+  {
+   "fieldname": "select",
+   "fieldtype": "Select",
+   "label": "Select",
+   "options": "\nOne\nTwo\nThree"
+  },
+  {
+   "fieldname": "small_text",
+   "fieldtype": "Small Text",
+   "label": "Small Text"
+  },
+  {
+   "fieldname": "table",
+   "fieldtype": "Table",
+   "label": "Table",
+   "options": "Test Form Item"
+  },
+  {
+   "fieldname": "table_multiselect",
+   "fieldtype": "Table MultiSelect",
+   "label": "Table Multiselect",
+   "options": "Test Form Item"
+  },
+  {
+   "fieldname": "text",
+   "fieldtype": "Text",
+   "label": "Text"
+  },
+  {
+   "fieldname": "text_editor",
+   "fieldtype": "Text Editor",
+   "label": "Text editor"
+  },
+  {
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "label": "Time"
+  },
+  {
+   "fieldname": "editor_fields_tab",
+   "fieldtype": "Tab Break",
+   "label": "Editor Fields"
+  },
+  {
+   "fieldname": "image_fields_tab",
+   "fieldtype": "Tab Break",
+   "label": "Image Fields"
+  },
+  {
+   "fieldname": "geo_field_tab",
+   "fieldtype": "Tab Break",
+   "label": "Geo field"
+  },
+  {
+   "fieldname": "code_fields_tab",
+   "fieldtype": "Tab Break",
+   "label": "Code fields"
+  },
+  {
+   "fieldname": "table_fields_tab",
+   "fieldtype": "Tab Break",
+   "label": "Table Fields"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-24 03:37:27.420363",
+ "modified_by": "Administrator",
+ "module": "Engage",
+ "name": "Test Form",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

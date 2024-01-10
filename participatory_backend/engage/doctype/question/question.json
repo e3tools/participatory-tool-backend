@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:QST-{#####}",
+ "creation": "2024-01-04 07:42:00.475357",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "question_title",
+  "question_text",
+  "response_type",
+  "options"
+ ],
+ "fields": [
+  {
+   "fieldname": "question_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Question Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "question_text",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Question Text",
+   "reqd": 1
+  },
+  {
+   "fieldname": "response_type",
+   "fieldtype": "Select",
+   "label": "Response type",
+   "options": "\nParagraph\nDropdown\nCheckbox\nDate\nQuick poll"
+  },
+  {
+   "depends_on": "eval:doc.response_type == 'Dropdown' || eval:doc.response_type == 'Checkbox' || eval:doc.response_type == 'Quick poll'",
+   "fieldname": "options",
+   "fieldtype": "Table",
+   "label": "Options",
+   "mandatory_depends_on": "eval:doc.response_type == 'Dropdown' || eval:doc.response_type == 'Checkbox' || eval:doc.response_type == 'Quick poll'",
+   "options": "Question Option Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-04 08:40:30.330182",
+ "modified_by": "Administrator",
+ "module": "Engage",
+ "name": "Question",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "question_title"
+}

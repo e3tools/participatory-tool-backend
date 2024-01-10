@@ -49,7 +49,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-20 12:36:54.168045",
+ "modified": "2024-01-06 06:57:28.315399",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Template",
@@ -71,5 +71,8 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
 }

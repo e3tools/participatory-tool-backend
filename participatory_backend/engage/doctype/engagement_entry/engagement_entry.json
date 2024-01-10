@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:EN-{YYYY}-{#####}",
+ "creation": "2023-12-29 16:58:52.706437",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "engagement",
+  "engagement_name",
+  "entered_by",
+  "column_break_94j1",
+  "entered_on",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "engagement",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Engagement",
+   "options": "Engagement",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "engagement.engagement_name",
+   "fieldname": "engagement_name",
+   "fieldtype": "Read Only",
+   "label": "Engagement Name",
+   "options": "engagement.engagement_name"
+  },
+  {
+   "fieldname": "entered_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Entered By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "entered_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Entered On",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nSubmitted\nCancelled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_94j1",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-06 06:57:51.179845",
+ "modified_by": "Administrator",
+ "module": "Engage",
+ "name": "Engagement Entry",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}
