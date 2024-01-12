@@ -45,6 +45,19 @@ class PrecipitationNetCDF:
         plt.imshow(self.precipitation[0]) #data for the first time-step (January 1901)
         plt.title('Jan 1901 Monthly rainfall [mm]') # save map instead
 
+        lons, lats = np.meshgrid(self.lon, self.lat)
+        m = Basemap(projection='kav7', lon_0=0)
+        m.drawmapboundary(fill_color='Gray', zorder=0)
+        m.drawparallels(np.arange(-90, 99., 30.), labels=[1,0,0,0])
+        m.drawmeridians(np.arange(-180.,180., 60.), labels=[0,0,0,1])
+
+        h = m.pcolormesh(lons, lats, self.precipitation[0], shading='flat', latlon=True)
+        m.colorbar(h, location='bottom', pad='15%', label='Rainfall [mm/month]')
+        plt.title('Jan 1901 Monthly Rainfall [mm]')
+
+
+
+
     def calculate(self):
         self._extract_variables()
         self._parse_time()

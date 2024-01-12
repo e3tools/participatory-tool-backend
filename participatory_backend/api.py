@@ -118,4 +118,4 @@ def get_engagement_entry_records(engagement_entry_name):
 
 @frappe.whitelist()
 def get_raster(vector):
-    return clip_raster('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+    return clip_raster('/home/sftdev/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)

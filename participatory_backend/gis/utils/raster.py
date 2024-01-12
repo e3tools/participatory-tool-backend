@@ -7,14 +7,15 @@ from frappe.utils.file_manager import save_file, delete_file, save_file_on_files
 import tempfile
 
 def clip_raster(raster_path, vector):
-    raster_file = str(datetime.datetime.now()).replace(' ', '_').replace('-','').replace(':','').replace('.', '_') + '.tif'
+    raster_file = str(datetime.datetime.now()).replace(' ', '_').replace('-','').replace(':','').replace('.', '_') + '.png'# '.tif'
     output_raster_path = raster_file # get_files_path(raster_file, is_private=False)
     with rasterio.open(raster_path) as src:
         out_img, out_transform = rasterio.mask.mask(src, [vector], crop=True)
         out_meta = src.meta
 
     out_meta.update({
-        'driver': 'GTiff',
+        #'driver': 'GTiff',
+        'driver': 'PNG',
         'height': out_img.shape[1],
         'width': out_img.shape[2],
         'transform': out_transform
