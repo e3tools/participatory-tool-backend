@@ -6,6 +6,7 @@ from frappe.desk.doctype.dashboard_chart.dashboard_chart import get as get_chart
 from frappe.desk.doctype.dashboard.dashboard import get_permitted_charts
 import datetime
 import participatory_backend.engage.utils as EngageUtil
+from participatory_backend.gis.utils.raster import clip_raster
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
@@ -113,4 +114,8 @@ def get_engagement_entry_records(engagement_entry_name):
     """
     Get all records associated with an engagement entry
     """
-    return EngageUtil.get_engagement_entry_records(engagement_entry_name)    
+    return EngageUtil.get_engagement_entry_records(engagement_entry_name)
+
+@frappe.whitelist()
+def get_raster(vector):
+    return clip_raster('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
