@@ -70,7 +70,7 @@ def save_engagement_entry():
 	def save_doctype_entry(doctype, entry):
 		# entry['engagement_entry'] = engagement_entry.name
 		# entry['engagement_name'] = engagement_entry.status
-		if 'name' in entry:
+		if 'name' in entry and entry['name'] != None:
 			doc = frappe.get_doc(doctype, entry['name'])
 		else:
 			doc = frappe.new_doc(doctype)
@@ -84,9 +84,11 @@ def save_engagement_entry():
 	engagement_name = data['Engagement']['name'] if isinstance(data['Engagement'], object) else data['Engagement']
 	engagement = frappe.get_doc("Engagement", engagement_name)	
 	engagement_entry = None
-	engagement_name = data['Engagement Entry']['name'] if isinstance(data['Engagement Entry'], object) else data['Engagement Entry']
+	engagement_entry_name = None
+	if 'Engagement Entry' in data:
+		engagement_entry_name = data['Engagement Entry']['name'] if isinstance(data['Engagement Entry'], object) else data['Engagement Entry']
 	if 'Engagement Entry' in data: # is an edit
-		engagement_entry = frappe.get_doc("Engagement Entry", engagement_name)
+		engagement_entry = frappe.get_doc("Engagement Entry", engagement_entry_name)
 	else: # is a first time entry
 		engagement_entry = frappe.new_doc("Engagement Entry")
 		rec = {

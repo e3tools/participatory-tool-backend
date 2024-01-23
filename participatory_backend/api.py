@@ -44,7 +44,10 @@ def login(**kwargs):
 
 @frappe.whitelist()
 def get_doctype(doctype: str, with_parent: int = 0):
-    return getdoctype(doctype, with_parent=with_parent)
+    getdoctype(doctype, with_parent=with_parent)
+    if frappe.response.docs:
+        return frappe.response.docs[-1] if frappe.response.docs[-1].name == doctype else None
+    return None
 
 @frappe.whitelist()
 def new_doc(doctype: str):
@@ -118,4 +121,4 @@ def get_engagement_entry_records(engagement_entry_name):
 
 @frappe.whitelist()
 def get_raster(vector):
-    return clip_raster('/home/sftdev/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+    return clip_raster('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)

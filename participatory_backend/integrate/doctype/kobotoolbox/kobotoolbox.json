@@ -1,0 +1,74 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:connection_name",
+ "creation": "2024-01-19 15:18:19.751024",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "connection_name",
+  "base_url",
+  "form_uuid",
+  "api_token",
+  "btn_test_connection"
+ ],
+ "fields": [
+  {
+   "fieldname": "connection_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Connection Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "api_token",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "API Token",
+   "reqd": 1
+  },
+  {
+   "fieldname": "btn_test_connection",
+   "fieldtype": "Button",
+   "label": "Test Connection"
+  },
+  {
+   "description": "Base url e.g https://kf.kobotoolbox.org or https://eu.kobotoolbox.org",
+   "fieldname": "base_url",
+   "fieldtype": "Data",
+   "label": "Base URL"
+  },
+  {
+   "fieldname": "form_uuid",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Form UUID",
+   "reqd": 1
+  }
+ ],
+ "links": [],
+ "modified": "2024-01-19 16:24:48.305861",
+ "modified_by": "Administrator",
+ "module": "Integrate",
+ "name": "KoboToolbox",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
