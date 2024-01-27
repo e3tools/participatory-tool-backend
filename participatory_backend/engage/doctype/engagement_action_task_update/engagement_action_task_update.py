@@ -5,8 +5,10 @@ import frappe
 from frappe.model.document import Document
 import datetime
 from frappe.utils import getdate
+from frappe.core.doctype.file.utils import delete_file, get_extension
 from frappe import _
 from participatory_backend.enums import EngagementActionTaskUpdateTypeEnum
+import mimetypes
 
 class EngagementActionTaskUpdate(Document):
 	def validate(self):
@@ -44,9 +46,13 @@ class EngagementActionTaskUpdate(Document):
 		"""
 		# See https://stackoverflow.com/questions/55307951/check-if-a-file-type-is-a-media-file
 		# See https://note.nkmk.me/en/python-mimetypes-usage/#:~:text=Use%20the%20guess_type()%20function,type%2C%20encoding)%20is%20returned.&text=The%20first%20element%20of%20the,compressed%20with%20gzip%20%2C%20for%20example.
-		mimetyp = item.file_type
+		# mimetypes.guess_type(item.media_file)
+		mimetyp = mimetypes.guess_type(item.media_file) #item.file_type
+		mimetyp = mimetyp[0] if len(mimetyp) > 0 else None
+		if not mimetyp:
+			return
 		item.media_type = mimetyp
-		parts = item.name.split('.')
+		parts = item.media_file.split('.')#item.name.split('.')
 		if parts and len(parts) > 1:
 			item.extension = parts[-1]
 		if mimetyp.startswith('image'):

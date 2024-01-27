@@ -7,6 +7,7 @@ from frappe.desk.doctype.dashboard.dashboard import get_permitted_charts
 import datetime
 import participatory_backend.engage.utils as EngageUtil
 from participatory_backend.gis.utils.raster import clip_raster
+from frappe.handler import upload_file, uploadfile
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
@@ -122,3 +123,10 @@ def get_engagement_entry_records(engagement_entry_name):
 @frappe.whitelist()
 def get_raster(vector):
     return clip_raster('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+
+@frappe.whitelist()
+def do_upload():
+    """
+    Upload file
+    """
+    return upload_file()
