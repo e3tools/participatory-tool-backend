@@ -8,6 +8,7 @@ import datetime
 import participatory_backend.engage.utils as EngageUtil
 from participatory_backend.gis.utils.raster import clip_raster
 from frappe.handler import upload_file, uploadfile
+from frappe.desk.reportview import get_count as get_record_count
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
@@ -53,6 +54,10 @@ def get_doctype(doctype: str, with_parent: int = 0):
 @frappe.whitelist()
 def new_doc(doctype: str):
     return frappe.new_doc(doctype, as_dict=True)
+
+@frappe.whitelist()
+def get_count(**kwargs):
+    return get_record_count()
 
 @frappe.whitelist()
 def get_dashboards(**kwargs):

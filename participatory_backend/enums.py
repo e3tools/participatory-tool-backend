@@ -12,3 +12,4 @@ class EngagementActionTaskUpdateTypeEnum(enum.Enum):
     START_DATE = "Start Date"
     END_DATE = "End Date"
     BULK = "Multiple Fields At Once"
+

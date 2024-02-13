@@ -112,7 +112,7 @@ def save_engagement_entry():
 	for doctype in data:
 		if doctype not in ['Engagement', 'Engagement Entry']:
 			save_doctype_entry(doctype, data[doctype])
-
+	return engagement_entry.name
 
 def get_engagement_entry_records(engagement_entry_name):
 	"""

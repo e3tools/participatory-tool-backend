@@ -110,6 +110,12 @@ app_license = "MIT"
 #	}
 # }
 
+doc_events = {
+    "Shape File": {
+        "before_save": "participatory_backend.event_handler.before_save_shape_file"
+    }
+}
+
 # Scheduled Tasks
 # ---------------
 
@@ -199,13 +205,17 @@ app_license = "MIT"
 # auth_hooks = [
 #	"participatory_backend.auth.validate"
 # ]
-
+  
 fixtures = [  
     {
     "doctype":"Custom Field", 
     "filters": [
       ["fieldname", "in", (
                     "engagement_entry", "engagement_entry_status"
+                   )
+      ],
+      ["dt", "in", (
+                    "Shape File",  
                    )
       ]
     ]
