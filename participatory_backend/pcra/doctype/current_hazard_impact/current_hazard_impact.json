@@ -67,7 +67,8 @@
    "fieldname": "hazard_impacts",
    "fieldtype": "Table",
    "label": "S3B: Direct and Indirect Impacts of Climate Hazards relevant to local Community",
-   "options": "Hazard Impact Item"
+   "options": "Hazard Impact Item",
+   "reqd": 1
   },
   {
    "fieldname": "hazard",
@@ -106,24 +107,25 @@
    "label": "Facilitator name"
   },
   {
+   "fieldname": "s3b_direct_and_indirect_impacts_of_climate_hazards_tab",
+   "fieldtype": "Tab Break",
+   "label": "S3B: Direct and Indirect Impacts of Climate Hazards"
+  },
+  {
    "fieldname": "amended_from",
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
    "options": "Current Hazard Impact",
    "print_hide": 1,
-   "read_only": 1
-  },
-  {
-   "fieldname": "s3b_direct_and_indirect_impacts_of_climate_hazards_tab",
-   "fieldtype": "Tab Break",
-   "label": "S3B: Direct and Indirect Impacts of Climate Hazards"
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-16 16:11:18.293994",
+ "modified": "2024-02-12 20:13:53.232997",
  "modified_by": "Administrator",
  "module": "PCRA",
  "name": "Current Hazard Impact",
