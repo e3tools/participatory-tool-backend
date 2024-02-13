@@ -1,0 +1,142 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:analysis_name",
+ "creation": "2024-01-31 06:28:04.623904",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_gxhn",
+  "analysis_name",
+  "technical_data",
+  "dataset_type",
+  "is_published",
+  "column_break_9j6k",
+  "analysis_based_on",
+  "analysis_field",
+  "data_type",
+  "formula",
+  "analysis_sb",
+  "column_break_hsgt",
+  "column_break_kken",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_gxhn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Technical Data Analysis",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "analysis_name",
+   "fieldtype": "Data",
+   "label": "Analysis Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "technical_data",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Technical Data",
+   "options": "Technical Analysis",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "technical_data.dataset_type",
+   "fieldname": "dataset_type",
+   "fieldtype": "Read Only",
+   "label": "Dataset Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_published",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Published"
+  },
+  {
+   "fieldname": "analysis_based_on",
+   "fieldtype": "Select",
+   "label": "Analysis Based On",
+   "options": "\nSingle Field\nFormula",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.analysis_based_on=='Single Field'",
+   "fieldname": "analysis_field",
+   "fieldtype": "Link",
+   "label": "Field to use For Analysis",
+   "mandatory_depends_on": "eval:doc.analysis_based_on=='Single Field'",
+   "options": "Technical Data Attribute"
+  },
+  {
+   "depends_on": "eval:doc.analysis_baesd_on=='Formula'",
+   "description": "Use abbreviations set when uploading Technical Data e.g density, age",
+   "fieldname": "formula",
+   "fieldtype": "Small Text",
+   "label": "Formula",
+   "read_only_depends_on": "eval:doc.analysis_baesd_on=='Formula'"
+  },
+  {
+   "fieldname": "column_break_9j6k",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "analysis_sb",
+   "fieldtype": "Section Break",
+   "label": "Analysis Section"
+  },
+  {
+   "fieldname": "column_break_kken",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hsgt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": ".data_type",
+   "fieldname": "data_type",
+   "fieldtype": "Data",
+   "label": "Data Type",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-02-01 09:04:05.451712",
+ "modified_by": "Administrator",
+ "module": "Technical",
+ "name": "Technical Data Analysis",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
