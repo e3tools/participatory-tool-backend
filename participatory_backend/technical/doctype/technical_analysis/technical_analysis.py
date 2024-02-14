@@ -6,15 +6,32 @@ from frappe.model.document import Document
 from frappe import _
 from gis.enums import DatasetTypeEnum
 from gis.analyzers.vector import ShapeFileAnalyzer
-
+import json
 class TechnicalAnalysis(Document):
 	def validate(self):
-		self.validate_organization_level()
+		# self.validate_organization_level()
+		self.analyze()
 
 	@frappe.whitelist()
 	def analyze(self):
-		doc = ShapeFileAnalyzer(self.name)
-		res = doc.analyze()
+		res = None
+		self.result_items = []
+		if self.datasource_type == DatasetTypeEnum.VECTOR.value:
+			doc = ShapeFileAnalyzer(self.name)
+			res = doc.analyze()
+		if self.datasource_type == DatasetTypeEnum.TABULAR.value:
+			pass
+		if self.datasource_type == DatasetTypeEnum.RASTER.value:
+			pass
+		if res:
+			for itm in res:
+				result = frappe._dict(itm)
+				result.pop('doctype', None)
+				self.append('result_items', {
+					'doctype': 'Technical Analysis Result Item',
+					'description': itm.get(self.description_field),
+					'result': json.dumps(result)
+				}) 
 		return res
 
 	def validate_organization_level(self):
@@ -23,7 +40,7 @@ class TechnicalAnalysis(Document):
 			if not exists:
 				frappe.throw(_(f"Attribute value [{frappe.bold(attribute_name)}] for [{frappe.bold(label)}] is not listed as an attribute in the Attributes table"))
  
-		if self.dataset_type == DatasetTypeEnum.VECTOR:
+		if self.datasource_type == DatasetTypeEnum.VECTOR.value:
 			county_field = [x for x in self.meta.fields if x.fieldname == 'shape_file_county_field'][0]
 			sub_county_field = [x for x in self.meta.fields if x.fieldname == 'shape_file_sub_county_field'][0]
 			ward_field = [x for x in self.meta.fields if x.fieldname == 'shape_file_ward_field'][0]
@@ -63,5 +80,6 @@ class TechnicalAnalysis(Document):
 		# 	if not self.ward_field: 
 		# 		frappe.throw(_(f"You must select the {ward_field.label}"))
 		# 	_is_an_attribute(self.ward_field, ward_field.label)
+
 
 

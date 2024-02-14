@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-02-01 12:55:24.080541",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "alphatext_value",
+  "numeric_value",
+  "date_value",
+  "lower_numeric",
+  "upper_numeric",
+  "column_break_qknh",
+  "lower_date",
+  "upper_date",
+  "color",
+  "label"
+ ],
+ "fields": [
+  {
+   "fieldname": "alphatext_value",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Alpha(Text) Value"
+  },
+  {
+   "fieldname": "numeric_value",
+   "fieldtype": "Float",
+   "label": "Numeric Value"
+  },
+  {
+   "fieldname": "date_value",
+   "fieldtype": "Datetime",
+   "label": "Date Value"
+  },
+  {
+   "fieldname": "lower_numeric",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Lower Numeric"
+  },
+  {
+   "fieldname": "upper_numeric",
+   "fieldtype": "Float",
+   "label": "Upper Numeric"
+  },
+  {
+   "fieldname": "column_break_qknh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lower_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Lower Date"
+  },
+  {
+   "fieldname": "upper_date",
+   "fieldtype": "Datetime",
+   "label": "Upper Date"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "in_list_view": 1,
+   "label": "Color"
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-02-14 10:01:13.863865",
+ "modified_by": "Administrator",
+ "module": "Technical",
+ "name": "Technical Data Source Legend",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,16 +1,35 @@
 // Copyright (c) 2024, Steve Nyaga and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on("Technical Analysis", {
-    setup: function (frm) {        
+// cur_frm.add_fetch('analysis_field', 'data_type', 'data_type')
+
+frappe.ui.form.on("Technical Analysis", { 
+    // setup: function (frm) {
+	// 	frm.set_query("analysis_field", function () {
+    //         if(!frm.doc.technical_data){
+    //             frappe.throw(__("Select the value of Technical Data first"))
+    //         }
+	// 		return {
+	// 			filters: {
+	// 				parent: frm.doc.technical_data,
+	// 				//'is_company_account': 1
+	// 			},
+	// 		};
+	// 	}); 
+	// },
+
+    // refresh(frm) {
+
+	// },
+	setup: function (frm) {        
 		frm.set_query("county_field", function () {
-            if(!frm.doc.dataset_type){
+            if(!frm.doc.datasource_type){
                 frappe.throw(__("Select Dataset Type first"))
             }
-            if(frm.doc.dataset_type == 'Vector' && !frm.doc.shape_file){
+            if(frm.doc.datasource_type == 'Vector' && !frm.doc.shape_file){
                 frappe.throw(__("Select the shape file first"))
             }
-            if(frm.doc.dataset_type == 'Tabular' && !frm.doc.statistics_file){
+            if(frm.doc.datasource_type == 'Tabular' && !frm.doc.statistics_file){
                 frappe.throw(__("Select the statistics file"))
             }           
 			return {
@@ -64,4 +83,4 @@ frappe.ui.form.on("Technical Analysis", {
             })
         }
     }
-});
+}); 
