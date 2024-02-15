@@ -17,9 +17,10 @@
   "analysis_field",
   "data_type",
   "formula",
-  "analysis_sb",
-  "column_break_hsgt",
+  "result_items_section",
   "result_items",
+  "analysis_sb",
+  "geom",
   "amended_from"
  ],
  "fields": [
@@ -79,14 +80,10 @@
    "fieldtype": "Column Break"
   },
   {
+   "collapsible": 1,
    "fieldname": "analysis_sb",
    "fieldtype": "Section Break",
-   "label": "Analysis Section"
-  },
-  {
-   "fieldname": "column_break_hsgt",
-   "fieldtype": "Column Break",
-   "read_only": 1
+   "label": "Vector Section"
   },
   {
    "fetch_from": ".data_type",
@@ -124,12 +121,24 @@
    "fieldname": "datasource_type",
    "fieldtype": "Read Only",
    "label": "Datasource Type"
+  },
+  {
+   "fieldname": "geom",
+   "fieldtype": "Geolocation",
+   "label": "Geometry",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "result_items_section",
+   "fieldtype": "Section Break",
+   "label": "Result items"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-14 14:42:24.873599",
+ "modified": "2024-02-15 12:58:18.593892",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Analysis",

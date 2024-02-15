@@ -14,23 +14,27 @@ class TechnicalAnalysis(Document):
 
 	@frappe.whitelist()
 	def analyze(self):
-		res = None
+		res, parent_json = None, None
 		self.result_items = []
 		if self.datasource_type == DatasetTypeEnum.VECTOR.value:
 			doc = ShapeFileAnalyzer(self.name)
-			res = doc.analyze()
+			res, parent_json = doc.analyze()
 		if self.datasource_type == DatasetTypeEnum.TABULAR.value:
 			pass
 		if self.datasource_type == DatasetTypeEnum.RASTER.value:
 			pass
 		if res:
+			self.geom = parent_json
 			for itm in res:
 				result = frappe._dict(itm)
+				geom = itm.geom
 				result.pop('doctype', None)
+				result.pop('geom', None)
 				self.append('result_items', {
 					'doctype': 'Technical Analysis Result Item',
 					'description': itm.get(self.description_field),
-					'result': json.dumps(result)
+					'result': json.dumps(result),
+					'geom': json.dumps(geom)
 				}) 
 		return res
 
