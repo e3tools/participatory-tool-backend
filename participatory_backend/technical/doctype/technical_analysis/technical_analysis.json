@@ -11,12 +11,14 @@
   "data_source",
   "datasource_type",
   "description_field",
+  "analysis_type",
   "is_published",
   "column_break_9j6k",
   "analysis_based_on",
   "analysis_field",
-  "data_type",
   "formula",
+  "section_break_ryae",
+  "legend",
   "result_items_section",
   "result_items",
   "analysis_sb",
@@ -68,7 +70,7 @@
    "options": "Technical Data Source Attribute"
   },
   {
-   "depends_on": "eval:doc.analysis_baesd_on=='Formula'",
+   "depends_on": "eval:doc.analysis_based_on=='Formula'",
    "description": "Use abbreviations set when uploading Technical Data e.g density, age",
    "fieldname": "formula",
    "fieldtype": "Small Text",
@@ -83,14 +85,8 @@
    "collapsible": 1,
    "fieldname": "analysis_sb",
    "fieldtype": "Section Break",
-   "label": "Vector Section"
-  },
-  {
-   "fetch_from": ".data_type",
-   "fieldname": "data_type",
-   "fieldtype": "Data",
-   "label": "Data Type",
-   "read_only": 1
+   "label": "Vector Section",
+   "no_copy": 1
   },
   {
    "fieldname": "data_source",
@@ -104,6 +100,7 @@
    "fieldname": "result_items",
    "fieldtype": "Table",
    "label": "Results",
+   "no_copy": 1,
    "options": "Technical Analysis Result Item",
    "read_only": 1
   },
@@ -126,6 +123,7 @@
    "fieldname": "geom",
    "fieldtype": "Geolocation",
    "label": "Geometry",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -133,12 +131,28 @@
    "fieldname": "result_items_section",
    "fieldtype": "Section Break",
    "label": "Result items"
+  },
+  {
+   "fieldname": "section_break_ryae",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "legend",
+   "fieldtype": "Table",
+   "label": "Legend",
+   "options": "Technical Analysis Legend Item"
+  },
+  {
+   "fieldname": "analysis_type",
+   "fieldtype": "Select",
+   "label": "Analysis Type",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-15 12:58:18.593892",
+ "modified": "2024-02-15 18:33:38.972886",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Analysis",

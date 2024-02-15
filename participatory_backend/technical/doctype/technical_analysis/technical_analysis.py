@@ -6,11 +6,26 @@ from frappe.model.document import Document
 from frappe import _
 from gis.enums import DatasetTypeEnum
 from gis.analyzers.vector import ShapeFileAnalyzer
+from gis.analyzers.utils import extract_fields_from_formula
 import json
 class TechnicalAnalysis(Document):
 	def validate(self):
 		# self.validate_organization_level()
+		self.infer_analysis_type()
 		self.analyze()
+
+	def infer_analysis_type(self):
+		if self.analysis_based_on == 'Single Field':
+			self.formula = "{" + self.analysis_field + "}"
+		fields = extract_fields_from_formula(self.formula, return_enclosed=False)		
+		data_types = []
+		data_source = frappe.get_doc("Technical Data Source", self.data_source) 
+		data_types = [x.table_field_data_type for x in data_source.attributes if x.attribute_name in fields]
+		if len(list(set(data_types))) > 1:
+			frappe.throw(_("Formula includes fields of different data types"))
+		elif len(list(set(data_types))) == 0:
+			frappe.throw(_("Formula must include at lease one field"))
+		self.analysis_type = data_types[0] 
 
 	@frappe.whitelist()
 	def analyze(self):
