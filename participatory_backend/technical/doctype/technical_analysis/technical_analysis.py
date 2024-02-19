@@ -2,12 +2,15 @@
 # For license information, please see license.txt
 
 import frappe
+import json
 from frappe.model.document import Document
 from frappe import _
 from gis.enums import DatasetTypeEnum
 from gis.analyzers.vector import ShapeFileAnalyzer
 from gis.analyzers.utils import extract_fields_from_formula
-import json
+from participatory_backend.enums import TechnicalAnalysisTypeEnum
+from participatory_backend.utils import get_technical_analysis_type
+
 class TechnicalAnalysis(Document):
 	def validate(self):
 		# self.validate_organization_level()
@@ -25,14 +28,14 @@ class TechnicalAnalysis(Document):
 			frappe.throw(_("Formula includes fields of different data types"))
 		elif len(list(set(data_types))) == 0:
 			frappe.throw(_("Formula must include at lease one field"))
-		self.analysis_type = data_types[0] 
+		self.analysis_type = get_technical_analysis_type(data_types[0]) 
 
 	@frappe.whitelist()
 	def analyze(self):
 		res, parent_json = None, None
 		self.result_items = []
 		if self.datasource_type == DatasetTypeEnum.VECTOR.value:
-			doc = ShapeFileAnalyzer(self.name)
+			doc = ShapeFileAnalyzer(analysis_doc=self)
 			res, parent_json = doc.analyze()
 		if self.datasource_type == DatasetTypeEnum.TABULAR.value:
 			pass

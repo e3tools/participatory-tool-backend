@@ -7,6 +7,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "operator",
   "alphatext_value",
   "numeric_value",
   "date_value",
@@ -71,12 +72,20 @@
    "fieldname": "label",
    "fieldtype": "Data",
    "label": "Label"
+  },
+  {
+   "fieldname": "operator",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Operator",
+   "options": "Equals\nNot Equals\nLike\nNot Like\nIn\nNot In\n>\n<\n>=\n<=\nBetween",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-15 13:40:43.860404",
+ "modified": "2024-02-16 08:03:38.720348",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Analysis Legend Item",

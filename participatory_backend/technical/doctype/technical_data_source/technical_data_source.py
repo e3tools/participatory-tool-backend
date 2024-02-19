@@ -25,23 +25,23 @@ class TechnicalDataSource(Document):
 
 	def validate_organization_level(self):
 		def _is_an_attribute(attribute_name, label):
-			exists = [x for x in self.attributes if x.table_field == attribute_name]	
+			exists = [x for x in self.attributes if x.attribute_name == attribute_name]	
 			if not exists:
 				frappe.throw(_(f"Attribute value [{frappe.bold(attribute_name)}] for [{frappe.bold(label)}] is not listed as an attribute in the Attributes table"))
  
-		if self.datasource_type == DatasetTypeEnum.VECTOR.value:
-			county_field = [x for x in self.meta.fields if x.fieldname == 'shape_file_county_field'][0]
-			sub_county_field = [x for x in self.meta.fields if x.fieldname == 'shape_file_sub_county_field'][0]
-			ward_field = [x for x in self.meta.fields if x.fieldname == 'shape_file_ward_field'][0]
+		if self.datasource_type in [DatasetTypeEnum.VECTOR.value, DatasetTypeEnum.TABULAR.value]:
+			county_field = [x for x in self.meta.fields if x.fieldname == 'county_field'][0]
+			sub_county_field = [x for x in self.meta.fields if x.fieldname == 'sub_county_field'][0]
+			ward_field = [x for x in self.meta.fields if x.fieldname == 'ward_field'][0]
 
-			if self.shape_file_county_field:  
-				_is_an_attribute(self.shape_file_county_field, county_field.label)
+			if self.county_field:  
+				_is_an_attribute(self.county_field, county_field.label)
 
-			if self.shape_file_sub_county_field:		 
-				_is_an_attribute(self.shape_file_sub_county_field, sub_county_field.label)
+			if self.sub_county_field:		 
+				_is_an_attribute(self.sub_county_field, sub_county_field.label)
 
-			if self.shape_file_ward_field: 
-				_is_an_attribute(self.shape_file_ward_field, ward_field.label)
+			if self.ward_field: 
+				_is_an_attribute(self.ward_field, ward_field.label)
 
 		# if self.lowest_organization_level == "County": 
 		# 	if not self.county_field:

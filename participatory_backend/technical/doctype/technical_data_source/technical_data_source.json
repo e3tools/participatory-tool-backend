@@ -13,14 +13,11 @@
   "column_break_k2bi",
   "datasource_type",
   "shape_file",
-  "lowest_organization_level",
-  "shape_file_county_field",
-  "shape_file_sub_county_field",
-  "shape_file_ward_field",
+  "county_field",
+  "sub_county_field",
+  "ward_field",
   "attributes_sb",
   "attributes",
-  "define_legend_section",
-  "legend",
   "amended_from"
  ],
  "fields": [
@@ -37,16 +34,6 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "depends_on": "eval:doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector'",
-   "fieldname": "lowest_organization_level",
-   "fieldtype": "Select",
-   "hidden": 1,
-   "in_list_view": 1,
-   "label": "Lowest Organization Level",
-   "mandatory_depends_on": "eval:doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector'",
-   "options": "\nCounty\nSub-County\nWard"
   },
   {
    "fieldname": "column_break_k2bi",
@@ -76,27 +63,6 @@
    "options": "Shape File"
   },
   {
-   "depends_on": "eval:(doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector')",
-   "fetch_from": "shape_file.custom_county_field",
-   "fieldname": "shape_file_county_field",
-   "fieldtype": "Read Only",
-   "label": "County Attribute / Column Abbreviation"
-  },
-  {
-   "depends_on": "eval:(doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector')",
-   "fetch_from": "shape_file.custom_sub_county_field",
-   "fieldname": "shape_file_sub_county_field",
-   "fieldtype": "Read Only",
-   "label": "Sub-County Attribute / Column Abbreviation"
-  },
-  {
-   "depends_on": "eval:(doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector')",
-   "fetch_from": "shape_file.custom_ward_field",
-   "fieldname": "shape_file_ward_field",
-   "fieldtype": "Read Only",
-   "label": "Ward Attribute / Column Abbreviation"
-  },
-  {
    "fieldname": "analysis_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -108,19 +74,8 @@
    "description": "Use attributes enclosed in {} to set the formula e.g {density} * 0.5 * {area}",
    "fieldname": "formula",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Formula"
-  },
-  {
-   "fieldname": "define_legend_section",
-   "fieldtype": "Section Break",
-   "label": "Define Legend"
-  },
-  {
-   "fieldname": "legend",
-   "fieldtype": "Table",
-   "label": "Legend",
-   "options": "Technical Data Source Legend",
-   "reqd": 1
   },
   {
    "default": "0",
@@ -135,11 +90,32 @@
    "label": "Datasource Type",
    "options": "\nTabular\nVector\nRaster",
    "reqd": 1
+  },
+  {
+   "depends_on": "eval:(doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector')",
+   "fetch_from": "shape_file.custom_county_field",
+   "fieldname": "county_field",
+   "fieldtype": "Read Only",
+   "label": "County Attribute / Column Abbreviation"
+  },
+  {
+   "depends_on": "eval:(doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector')",
+   "fetch_from": "shape_file.custom_sub_county_field",
+   "fieldname": "sub_county_field",
+   "fieldtype": "Read Only",
+   "label": "Sub-County Attribute / Column Abbreviation"
+  },
+  {
+   "depends_on": "eval:(doc.datasource_type == 'Tabular' || doc.datasource_type == 'Vector')",
+   "fetch_from": "shape_file.custom_ward_field",
+   "fieldname": "ward_field",
+   "fieldtype": "Read Only",
+   "label": "Ward Attribute / Column Abbreviation"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-14 13:19:17.501896",
+ "modified": "2024-02-16 05:28:42.616882",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Data Source",

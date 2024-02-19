@@ -13,3 +13,9 @@ class EngagementActionTaskUpdateTypeEnum(enum.Enum):
     END_DATE = "End Date"
     BULK = "Multiple Fields At Once"
 
+
+class TechnicalAnalysisTypeEnum(enum.Enum):
+    TEXT = "Text"
+    NUMERIC = "Numeric"
+    DATE = "Date"
+
