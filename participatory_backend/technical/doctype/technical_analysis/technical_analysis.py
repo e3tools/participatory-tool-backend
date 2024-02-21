@@ -7,7 +7,8 @@ from frappe.model.document import Document
 from frappe import _
 from gis.enums import DatasetTypeEnum
 from gis.analyzers.vector import ShapeFileAnalyzer
-from gis.analyzers.utils import extract_fields_from_formula
+from gis.analyzers.raster import RasterFileAnalyzer
+from gis.utils.common import extract_fields_from_formula
 from participatory_backend.enums import TechnicalAnalysisTypeEnum
 from participatory_backend.utils import get_technical_analysis_type
 
@@ -40,7 +41,8 @@ class TechnicalAnalysis(Document):
 		if self.datasource_type == DatasetTypeEnum.TABULAR.value:
 			pass
 		if self.datasource_type == DatasetTypeEnum.RASTER.value:
-			pass
+			doc = RasterFileAnalyzer(analysis_doc=self)
+			res, parent_json = doc.analyze()
 		if res:
 			self.geom = parent_json
 			for itm in res:

@@ -1,4 +1,4 @@
-cython=3.0.8
+cython==3.0.8
 matplotlib==3.8.2
 matplotlib-inline==0.1.6
 mpl-toolkits.clifford==0.0.3

@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-02-21 02:49:41.688643",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "data_source_type",
+  "data_source",
+  "formula",
+  "is_base_line"
+ ],
+ "fields": [
+  {
+   "fieldname": "data_source_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Data Source Type",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "data_source",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Data Source",
+   "options": "data_source_type"
+  },
+  {
+   "fieldname": "formula",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Formula",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_base_line",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Set As Base Line"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-02-21 02:55:44.464700",
+ "modified_by": "Administrator",
+ "module": "Technical",
+ "name": "Technical Analysis Data Source Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -5,8 +5,8 @@ from frappe.desk.form.load import getdoctype
 from frappe.desk.doctype.dashboard_chart.dashboard_chart import get as get_chart
 from frappe.desk.doctype.dashboard.dashboard import get_permitted_charts
 import datetime
-import participatory_backend.engage.utils as EngageUtil
-from participatory_backend.gis.utils.raster import clip_raster
+import participatory_backend.engage.utils as EngageUtil 
+from gis.utils.raster import clip_raster_to_vector
 from frappe.handler import upload_file, uploadfile
 from frappe.desk.reportview import get_count as get_record_count
 
@@ -127,7 +127,20 @@ def get_engagement_entry_records(engagement_entry_name):
 
 @frappe.whitelist()
 def get_raster(vector):
-    return clip_raster('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+    return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+
+@frappe.whitelist()
+def get_raster_analysis(analysis_name, vector_id, admin_level):
+    vector = None
+    if admin_level == 0:
+        vector = frappe.db.get_value("Admin 0", vector_id, 'geom')
+    elif admin_level == 1:
+        vector = frappe.db.get_value("Admin 1", vector_id, 'geom') 
+    elif admin_level == 2:
+        vector = frappe.db.get_value("Admin 2", vector_id, 'geom')
+    elif admin_level == 3:
+        vector = frappe.db.get_value("Admin 3", vector_id, 'geom')
+    return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
 
 @frappe.whitelist()
 def do_upload():

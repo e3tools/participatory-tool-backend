@@ -17,13 +17,18 @@
   "analysis_based_on",
   "analysis_field",
   "formula",
-  "section_break_ryae",
-  "legend",
-  "result_items_section",
-  "result_items",
+  "datasource_expression",
+  "data_sources_section",
+  "data_sources",
   "analysis_sb",
   "geom",
-  "amended_from"
+  "amended_from",
+  "legend_tab",
+  "legend_entries_section",
+  "legend",
+  "results_tab",
+  "results_section",
+  "result_items"
  ],
  "fields": [
   {
@@ -57,25 +62,23 @@
   {
    "fieldname": "analysis_based_on",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Analysis Based On",
-   "options": "\nSingle Field\nFormula",
-   "reqd": 1
+   "options": "\nSingle Field\nFormula"
   },
   {
-   "depends_on": "eval:doc.analysis_based_on=='Single Field'",
+   "depends_on": "eval:doc.datasource_type!='Raster'",
    "fieldname": "analysis_field",
    "fieldtype": "Link",
-   "label": "Field to use For Analysis",
-   "mandatory_depends_on": "eval:doc.analysis_based_on=='Single Field'",
+   "label": "Vector / Tabular Fields",
    "options": "Technical Data Source Attribute"
   },
   {
-   "depends_on": "eval:doc.analysis_based_on=='Formula'",
-   "description": "Use abbreviations set when uploading Technical Data e.g density, age",
+   "description": "<ol>\n<li>\nFor <b>Vector and Tabular data source </b>\n<ul>\n<li>\nUse abbreviations set when uploading Technical Data e.g density, age\n</li>\n</ul>\n</li>\n\n<li>\nFor <b>Raster data source </b>\n<ul>\n<li>\nUse <b>x</b> to represent pixel value. Sample expression would be <b> x * 10</b>\n</li>\n</ul>\n</li>\n</ol>",
    "fieldname": "formula",
    "fieldtype": "Small Text",
-   "label": "Formula",
-   "read_only_depends_on": "eval:doc.analysis_baesd_on=='Formula'"
+   "label": "Formula to apply to individual data sources",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_9j6k",
@@ -87,14 +90,6 @@
    "fieldtype": "Section Break",
    "label": "Vector Section",
    "no_copy": 1
-  },
-  {
-   "fieldname": "data_source",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Technical Data Source",
-   "options": "Technical Data Source",
-   "reqd": 1
   },
   {
    "fieldname": "result_items",
@@ -127,16 +122,6 @@
    "read_only": 1
   },
   {
-   "collapsible": 1,
-   "fieldname": "result_items_section",
-   "fieldtype": "Section Break",
-   "label": "Result items"
-  },
-  {
-   "fieldname": "section_break_ryae",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "legend",
    "fieldtype": "Table",
    "label": "Legend",
@@ -147,12 +132,60 @@
    "fieldtype": "Select",
    "label": "Analysis Type",
    "read_only": 1
+  },
+  {
+   "description": "<ul>\n<li>\nFor <b>Non-aggregate functions e.g -/+/* etc </b> use <b>x</b> for Base Data source file and <b>y</b> for other data source file. E.g <ol>\n<li> To subract current data source for baseline, the formula would be <b> y - x </b>\n</li>\n</ol>\n</li><li>\nFor <b>Aggregate functions e.g MEAN, MIN, MAX</b> type the aggregate function name only. Supported functions are MEAN, MIN, MAX, SUM, COUNT\n</li>\n</ul>",
+   "fieldname": "datasource_expression",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Expression to apply when combining multiple data sources"
+  },
+  {
+   "fieldname": "data_sources_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Data Sources"
+  },
+  {
+   "fieldname": "data_sources",
+   "fieldtype": "Table",
+   "label": "Data Sources",
+   "options": "Technical Analysis Data Source Item"
+  },
+  {
+   "fieldname": "legend_tab",
+   "fieldtype": "Tab Break",
+   "label": "Legend"
+  },
+  {
+   "fieldname": "results_tab",
+   "fieldtype": "Tab Break",
+   "label": "Results"
+  },
+  {
+   "fieldname": "data_source",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Technical Data Source",
+   "options": "Technical Data Source",
+   "reqd": 1
+  },
+  {
+   "fieldname": "legend_entries_section",
+   "fieldtype": "Section Break",
+   "label": "Legend Entries"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "results_section",
+   "fieldtype": "Section Break",
+   "label": "Results"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-15 18:33:38.972886",
+ "modified": "2024-02-21 03:45:44.408323",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Analysis",
