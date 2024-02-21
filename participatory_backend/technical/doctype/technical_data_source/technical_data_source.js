@@ -22,21 +22,21 @@ frappe.ui.form.on("Technical Data Source", {
 		}); 
 	},
 	refresh(frm) {
-        if(!frm.doc.__islocal){
-			frm.add_custom_button(__("Analyze"), function() {
-				frappe.call({
-                    doc: frm.doc,
-                    freeze: true,
-                    freeze_message: __('Analyzing. Please wait...'),
-                    method: 'analyze',
-                    callback: function(r) {
-                        if(!r.exc){
-                            debugger
-                        }
-                    }
-                })
-			});
-		}
+        // if(!frm.doc.__islocal){
+		// 	frm.add_custom_button(__("Analyze"), function() {
+		// 		frappe.call({
+        //             doc: frm.doc,
+        //             freeze: true,
+        //             freeze_message: __('Analyzing. Please wait...'),
+        //             method: 'analyze',
+        //             callback: function(r) {
+        //                 if(!r.exc){
+        //                     debugger
+        //                 }
+        //             }
+        //         })
+		// 	});
+		// }
 	},
     shape_file(frm) {
         frm.clear_table("attributes");

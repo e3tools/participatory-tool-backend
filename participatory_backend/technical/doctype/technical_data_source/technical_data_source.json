@@ -13,6 +13,7 @@
   "column_break_k2bi",
   "datasource_type",
   "shape_file",
+  "raster",
   "county_field",
   "sub_county_field",
   "ward_field",
@@ -111,11 +112,19 @@
    "fieldname": "ward_field",
    "fieldtype": "Read Only",
    "label": "Ward Attribute / Column Abbreviation"
+  },
+  {
+   "depends_on": "eval:doc.datasource_type == 'Raster'",
+   "fieldname": "raster",
+   "fieldtype": "Link",
+   "label": "Raster",
+   "mandatory_depends_on": "eval:doc.datasource_type == 'Raster'",
+   "options": "Raster"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-16 05:28:42.616882",
+ "modified": "2024-02-21 17:41:49.773611",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Data Source",

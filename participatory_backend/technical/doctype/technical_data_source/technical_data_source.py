@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe import _
 from gis.enums import DatasetTypeEnum
-from gis.utils.vector import ShapeFileAnalyzer
+from gis.analyzers.vector import ShapeFileAnalyzer
 
 class TechnicalDataSource(Document):
 	def validate(self):

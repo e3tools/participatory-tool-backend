@@ -15,7 +15,8 @@ from participatory_backend.utils import get_technical_analysis_type
 class TechnicalAnalysis(Document):
 	def validate(self):
 		# self.validate_organization_level()
-		self.infer_analysis_type()
+		if self.datasource_type == DatasetTypeEnum.VECTOR:
+			self.infer_analysis_type()
 		self.analyze()
 
 	def infer_analysis_type(self):

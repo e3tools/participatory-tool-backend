@@ -86,6 +86,7 @@
   },
   {
    "collapsible": 1,
+   "depends_on": "eval:doc.datasource_type == 'Vector'",
    "fieldname": "analysis_sb",
    "fieldtype": "Section Break",
    "label": "Vector Section",
@@ -185,7 +186,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-21 03:45:44.408323",
+ "modified": "2024-02-21 17:49:54.456372",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Analysis",
