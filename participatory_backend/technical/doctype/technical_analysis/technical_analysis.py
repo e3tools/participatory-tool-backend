@@ -58,8 +58,10 @@ class TechnicalAnalysis(Document):
 			pass
 		if self.datasource_type == DatasetTypeEnum.RASTER.value:
 			doc = RasterAnalyzer(analysis_doc=self) 
-			out_image, file_url, nodata = doc.analyze()
-			res = out_image
+			# out_image, file_url, nodata = doc.analyze()
+			# res = out_image
+			stats_obj = doc.analyze()
+			res = stats_obj
 		
 		return res
 
