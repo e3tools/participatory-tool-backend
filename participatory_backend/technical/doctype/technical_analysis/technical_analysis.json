@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:analysis_name",
- "creation": "2024-02-14 13:21:06.328711",
+ "creation": "2024-02-22 04:45:00.164372",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -12,6 +12,7 @@
   "datasource_type",
   "description_field",
   "analysis_type",
+  "legend",
   "is_published",
   "column_break_9j6k",
   "analysis_based_on",
@@ -23,9 +24,6 @@
   "analysis_sb",
   "geom",
   "amended_from",
-  "legend_tab",
-  "legend_entries_section",
-  "legend",
   "results_tab",
   "results_section",
   "result_items"
@@ -104,10 +102,9 @@
    "depends_on": "eval:doc.analysis_based_on=='Single Field'",
    "fieldname": "description_field",
    "fieldtype": "Link",
-   "label": "Field to use For Description",
+   "label": "Field To Use For Description",
    "mandatory_depends_on": "eval:doc.analysis_based_on=='Single Field'",
-   "options": "Technical Data Source Attribute",
-   "reqd": 1
+   "options": "Technical Data Source Attribute"
   },
   {
    "fetch_from": "data_source.datasource_type",
@@ -124,9 +121,10 @@
   },
   {
    "fieldname": "legend",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Legend",
-   "options": "Technical Analysis Legend Item"
+   "options": "Legend",
+   "reqd": 1
   },
   {
    "fieldname": "analysis_type",
@@ -154,11 +152,6 @@
    "options": "Technical Analysis Data Source Item"
   },
   {
-   "fieldname": "legend_tab",
-   "fieldtype": "Tab Break",
-   "label": "Legend"
-  },
-  {
    "fieldname": "results_tab",
    "fieldtype": "Tab Break",
    "label": "Results"
@@ -172,11 +165,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "legend_entries_section",
-   "fieldtype": "Section Break",
-   "label": "Legend Entries"
-  },
-  {
    "collapsible": 1,
    "fieldname": "results_section",
    "fieldtype": "Section Break",
@@ -186,7 +174,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-21 17:49:54.456372",
+ "modified": "2024-02-24 04:53:59.716965",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Analysis",

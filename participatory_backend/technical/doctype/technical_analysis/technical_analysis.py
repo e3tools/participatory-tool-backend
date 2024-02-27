@@ -7,7 +7,7 @@ from frappe.model.document import Document
 from frappe import _
 from gis.enums import DatasetTypeEnum
 from gis.analyzers.vector import ShapeFileAnalyzer
-from gis.analyzers.raster import RasterFileAnalyzer
+from gis.analyzers.raster import RasterAnalyzer
 from gis.utils.common import extract_fields_from_formula
 from participatory_backend.enums import TechnicalAnalysisTypeEnum
 from participatory_backend.utils import get_technical_analysis_type
@@ -17,6 +17,8 @@ class TechnicalAnalysis(Document):
 		# self.validate_organization_level()
 		if self.datasource_type == DatasetTypeEnum.VECTOR:
 			self.infer_analysis_type()
+			if not self.description_field:
+				frappe.throw(_("You must specify the field to use for {0}".format(self.meta.get_field('description_field').label)))
 		self.analyze()
 
 	def infer_analysis_type(self):
@@ -39,24 +41,26 @@ class TechnicalAnalysis(Document):
 		if self.datasource_type == DatasetTypeEnum.VECTOR.value:
 			doc = ShapeFileAnalyzer(analysis_doc=self)
 			res, parent_json = doc.analyze()
+			if res:
+				self.geom = parent_json
+				for itm in res:
+					result = frappe._dict(itm)
+					geom = itm.geom
+					result.pop('doctype', None)
+					result.pop('geom', None)
+					self.append('result_items', {
+						'doctype': 'Technical Analysis Result Item',
+						'description': itm.get(self.description_field),
+						'result': json.dumps(result),
+						'geom': json.dumps(geom)
+					}) 
 		if self.datasource_type == DatasetTypeEnum.TABULAR.value:
 			pass
 		if self.datasource_type == DatasetTypeEnum.RASTER.value:
-			doc = RasterFileAnalyzer(analysis_doc=self)
-			res, parent_json = doc.analyze()
-		if res:
-			self.geom = parent_json
-			for itm in res:
-				result = frappe._dict(itm)
-				geom = itm.geom
-				result.pop('doctype', None)
-				result.pop('geom', None)
-				self.append('result_items', {
-					'doctype': 'Technical Analysis Result Item',
-					'description': itm.get(self.description_field),
-					'result': json.dumps(result),
-					'geom': json.dumps(geom)
-				}) 
+			doc = RasterAnalyzer(analysis_doc=self) 
+			out_image, file_url, nodata = doc.analyze()
+			res = out_image
+		
 		return res
 
 	def validate_organization_level(self):

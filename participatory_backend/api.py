@@ -9,6 +9,10 @@ import participatory_backend.engage.utils as EngageUtil
 from gis.utils.raster import clip_raster_to_vector
 from frappe.handler import upload_file, uploadfile
 from frappe.desk.reportview import get_count as get_record_count
+from gis.analyzers.raster import RasterAnalyzer
+from gis.enums import DatasetTypeEnum
+from gis.utils.vector import get_admin_tree, get_admin_doc
+import json
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
@@ -130,17 +134,39 @@ def get_raster(vector):
     return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
 
 @frappe.whitelist()
-def get_raster_analysis(analysis_name, vector_id, admin_level):
+def get_all_admins():
+    """
+    Get all admins with the children property set 
+    """
+    res = get_admin_tree()
+    return res
+
+@frappe.whitelist()
+def get_admin(admin_id: str, admin_level: int):
+    """Get admin object
+
+    Args:
+        admin_id (str): Admin id
+        admin_level (int): Admin Level. One of 0, 1, 2, 3
+    """ 
+    return get_admin_doc(admin_id, admin_level)
+
+@frappe.whitelist()
+def get_computation(analysis_name, vector_id, admin_level):
     vector = None
-    if admin_level == 0:
-        vector = frappe.db.get_value("Admin 0", vector_id, 'geom')
-    elif admin_level == 1:
-        vector = frappe.db.get_value("Admin 1", vector_id, 'geom') 
-    elif admin_level == 2:
-        vector = frappe.db.get_value("Admin 2", vector_id, 'geom')
-    elif admin_level == 3:
-        vector = frappe.db.get_value("Admin 3", vector_id, 'geom')
-    return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+    if admin_level:
+        vector = frappe.db.get_value(f"Admin {admin_level}", vector_id, ['name', 'geom'], as_dict=True)
+    
+    doc = frappe.get_doc("Technical Analysis", analysis_name)
+    res = None
+    if doc.datasource_type == DatasetTypeEnum.RASTER.value:
+        analyzer = RasterAnalyzer(analysis_name=analysis_name, analysis_doc=doc, vector=vector.geom if vector else None)
+        stats_obj = analyzer.analyze()
+        res = { "type": doc.datasource_type, "result": stats_obj }
+    if doc.datasource_type == DatasetTypeEnum.VECTOR.value:
+        res = { "type": doc.datasource_type, "result": json.loads(doc.geom) }
+    return res
+    #return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
 
 @frappe.whitelist()
 def do_upload():
