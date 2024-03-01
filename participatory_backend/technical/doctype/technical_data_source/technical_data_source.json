@@ -1,13 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:analysis_name",
- "creation": "2024-01-31 05:57:17.366319",
+ "autoname": "field:datasource_name",
+ "creation": "2024-02-22 04:45:13.382714",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "section_break_x9n6",
-  "analysis_name",
+  "datasource_name",
   "formula",
   "is_published",
   "column_break_k2bi",
@@ -64,14 +64,6 @@
    "options": "Shape File"
   },
   {
-   "fieldname": "analysis_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Analysis name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
    "description": "Use attributes enclosed in {} to set the formula e.g {density} * 0.5 * {area}",
    "fieldname": "formula",
    "fieldtype": "Small Text",
@@ -120,11 +112,19 @@
    "label": "Raster",
    "mandatory_depends_on": "eval:doc.datasource_type == 'Raster'",
    "options": "Raster"
+  },
+  {
+   "fieldname": "datasource_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Datasource name",
+   "reqd": 1,
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-21 17:41:49.773611",
+ "modified": "2024-02-28 15:46:26.444955",
  "modified_by": "Administrator",
  "module": "Technical",
  "name": "Technical Data Source",

@@ -134,11 +134,11 @@ def get_raster(vector):
     return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
 
 @frappe.whitelist()
-def get_all_admins():
+def get_all_admins(as_tree=True):
     """
     Get all admins with the children property set 
     """
-    res = get_admin_tree()
+    res = get_admin_tree(as_tree=as_tree)
     return res
 
 @frappe.whitelist()

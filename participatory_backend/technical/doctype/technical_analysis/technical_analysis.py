@@ -57,12 +57,14 @@ class TechnicalAnalysis(Document):
 		if self.datasource_type == DatasetTypeEnum.TABULAR.value:
 			pass
 		if self.datasource_type == DatasetTypeEnum.RASTER.value:
+			pass
+			"""
 			doc = RasterAnalyzer(analysis_doc=self) 
 			# out_image, file_url, nodata = doc.analyze()
 			# res = out_image
 			stats_obj = doc.analyze()
 			res = stats_obj
-		
+			"""
 		return res
 
 	def validate_organization_level(self):
