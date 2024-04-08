@@ -12,6 +12,6 @@ class KoboToolbox(Document):
 	@frappe.whitelist()
 	def test_connection(self):
 		if get_data(self.name): # get_metadata(self.name):
-			frappe.msgprint(_("Connection successfule"))
+			frappe.msgprint(_("Connection successful"))
 		else:
 			frappe.errprint(_("Connection could not be established"))
