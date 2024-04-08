@@ -11,8 +11,10 @@ from frappe.handler import upload_file, uploadfile
 from frappe.desk.reportview import get_count as get_record_count
 from gis.analyzers.raster import RasterAnalyzer
 from gis.enums import DatasetTypeEnum
-from gis.utils.vector import get_admin_tree, get_admin_doc
+from gis.utils.vector import get_admin_tree, get_admin_doc, get_geojson_bounds
 import json
+from frappe.desk.reportview import export_query
+from frappe.utils.file_manager import save_file_on_filesystem 
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
@@ -30,12 +32,16 @@ def login(**kwargs):
         auth = frappe.auth.LoginManager()
         auth.authenticate(user=usr, pwd=pwd)
         auth.post_login()
+        user = frappe.get_doc('User', frappe.session.user)
         msg = {
             'status_code':200,
             'text':frappe.local.response.message,
-            'user': frappe.session.user
+            'user': frappe.session.user,
+            'token': None,
+            'email': user.email,
+            'full_name': user.full_name,
+            'username': user.username
         }
-        user = frappe.get_doc('User', frappe.session.user)
         if(user.api_key and user.api_secret):
             msg['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
         else:
@@ -149,7 +155,10 @@ def get_admin(admin_id: str, admin_level: int):
         admin_id (str): Admin id
         admin_level (int): Admin Level. One of 0, 1, 2, 3
     """ 
-    return get_admin_doc(admin_id, admin_level)
+    doc = get_admin_doc(admin_id, admin_level)
+    if not doc.bounds:
+        doc.bounds = get_geojson_bounds(doc.geom)
+    return doc
 
 @frappe.whitelist()
 def get_computation(analysis_name, vector_id, admin_level):
@@ -167,6 +176,20 @@ def get_computation(analysis_name, vector_id, admin_level):
         res = { "type": doc.datasource_type, "result": json.loads(doc.geom) }
     return res
     #return clip_raster_to_vector('/home/nyaga/frappe-bench-15/participatory-frontend/src/data/raster/result.tiff', vector)
+
+@frappe.whitelist()
+def change_password(user: str, password: str):
+    from frappe.utils.password import update_password
+    update_password(user, password)
+    return {"res": True}
+    
+
+@frappe.whitelist()
+def export_data():
+    export_query()
+    fl = save_file_on_filesystem(frappe.response["filename"], content=frappe.response["filecontent"])
+    frappe.response["filename"] = fl['file_url']
+    return {"file": fl['file_url'] }
 
 @frappe.whitelist()
 def do_upload():

@@ -82,7 +82,10 @@ def save_engagement_entry():
 
 	data = frappe.form_dict.entry
 	engagement_name = data['Engagement']['name'] if isinstance(data['Engagement'], object) else data['Engagement']
-	engagement = frappe.get_doc("Engagement", engagement_name)	
+	engagement = frappe.get_doc("Engagement", engagement_name)
+
+	engagement.create_custom_fields()# IF has forms, create custom fields
+
 	engagement_entry = None
 	engagement_entry_name = None
 	if 'Engagement Entry' in data:
