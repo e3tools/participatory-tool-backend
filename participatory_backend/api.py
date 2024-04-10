@@ -40,7 +40,8 @@ def login(**kwargs):
             'token': None,
             'email': user.email,
             'full_name': user.full_name,
-            'username': user.username
+            'username': user.username,
+            'name': user.name
         }
         if(user.api_key and user.api_secret):
             msg['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
