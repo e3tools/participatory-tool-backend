@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-04-23 15:41:50.018536",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "field_label",
+  "field_name",
+  "field_type",
+  "data_field_options",
+  "field_length",
+  "field_doctype",
+  "field_child_doctype",
+  "choices",
+  "field_precision",
+  "column_break_ikco",
+  "field_reqd",
+  "field_non_negative"
+ ],
+ "fields": [
+  {
+   "fieldname": "field_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Field Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "field_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Field Type",
+   "options": "\nData\nInteger\nFloat\nSelect\nCheck\nText\nLink\nGeoLocation\nTable",
+   "reqd": 1
+  },
+  {
+   "fieldname": "field_label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Field Label",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.field_type == 'Select'",
+   "description": "Each choice or option to be entered in a new line. Do not put commas",
+   "fieldname": "choices",
+   "fieldtype": "Small Text",
+   "label": "Choices"
+  },
+  {
+   "fieldname": "column_break_ikco",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:in_list([\"Float\", \"Currency\", \"Percent\"], doc.fieldtype)",
+   "fieldname": "field_precision",
+   "fieldtype": "Select",
+   "label": "Precision",
+   "options": "\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+  },
+  {
+   "depends_on": "eval:in_list(['Data', 'Link', 'Dynamic Link', 'Password', 'Select', 'Read Only', 'Attach', 'Attach Image', 'Int'], doc.fieldtype)",
+   "fieldname": "field_length",
+   "fieldtype": "Int",
+   "label": "Length"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:!in_list([\"Section Break\", \"Column Break\", \"Button\", \"HTML\"], doc.fieldtype)",
+   "fieldname": "field_reqd",
+   "fieldtype": "Check",
+   "label": "Required"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:in_list([\"Int\", \"Float\", \"Currency\"], doc.fieldtype)",
+   "fieldname": "field_non_negative",
+   "fieldtype": "Check",
+   "label": "Non-Negative"
+  },
+  {
+   "depends_on": "eval:in_list(['Data'], doc.fieldtype)",
+   "fieldname": "data_field_options",
+   "fieldtype": "Select",
+   "label": "Text Validation",
+   "options": "\nEmail\nPhone\nURL"
+  },
+  {
+   "depends_on": "eval:in_list(['Link'], doc.fieldtype)",
+   "fieldname": "field_doctype",
+   "fieldtype": "Link",
+   "label": "Form",
+   "options": "DocType"
+  },
+  {
+   "depends_on": "eval:in_list(['Table'], doc.fieldtype)",
+   "fieldname": "field_child_doctype",
+   "fieldtype": "Link",
+   "label": "Child Form",
+   "options": "DocType"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-04-23 16:43:59.660022",
+ "modified_by": "Administrator",
+ "module": "Engage",
+ "name": "Form Field",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
