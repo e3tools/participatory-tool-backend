@@ -2,18 +2,20 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:form_name",
- "creation": "2024-04-23 15:33:18.836561",
+ "creation": "2024-04-24 07:43:18.567280",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "section_break_wcou",
   "form_name",
   "column_break_ygly",
   "description",
-  "section_break_kyrh",
-  "fields_column",
-  "fields"
+  "section_break_wjep",
+  "form_fields",
+  "tab_2_tab",
+  "form_permissions"
  ],
  "fields": [
   {
@@ -34,24 +36,35 @@
    "label": "Description"
   },
   {
-   "fieldname": "section_break_kyrh",
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "Permissions"
+  },
+  {
+   "fieldname": "form_permissions",
+   "fieldtype": "Table",
+   "label": "Permissions",
+   "options": "Form Permisssion",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_wcou",
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "fields_column",
-   "fieldtype": "Column Break",
-   "label": "Fields"
-  },
-  {
-   "fieldname": "fields",
+   "fieldname": "form_fields",
    "fieldtype": "Table",
    "label": "Fields",
    "options": "Form Field"
+  },
+  {
+   "fieldname": "section_break_wjep",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-23 15:47:24.267483",
+ "modified": "2024-04-24 10:43:53.337345",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Form",

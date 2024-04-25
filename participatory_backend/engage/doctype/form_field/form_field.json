@@ -1,23 +1,25 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-04-23 15:41:50.018536",
+ "creation": "2024-04-24 07:43:15.149714",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "field_label",
-  "field_name",
   "field_type",
+  "field_name",
+  "field_choices",
   "data_field_options",
   "field_length",
   "field_doctype",
   "field_child_doctype",
-  "choices",
   "field_precision",
   "column_break_ikco",
   "field_reqd",
-  "field_non_negative"
+  "field_non_negative",
+  "field_default",
+  "field_in_list_view"
  ],
  "fields": [
   {
@@ -32,7 +34,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Field Type",
-   "options": "\nData\nInteger\nFloat\nSelect\nCheck\nText\nLink\nGeoLocation\nTable",
+   "options": "\nData\nInteger\nFloat\nSelect\nCheck\nDate\nText\nLink\nGeoLocation\nTable",
    "reqd": 1
   },
   {
@@ -43,25 +45,18 @@
    "reqd": 1
   },
   {
-   "depends_on": "eval:doc.field_type == 'Select'",
-   "description": "Each choice or option to be entered in a new line. Do not put commas",
-   "fieldname": "choices",
-   "fieldtype": "Small Text",
-   "label": "Choices"
-  },
-  {
    "fieldname": "column_break_ikco",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:in_list([\"Float\", \"Currency\", \"Percent\"], doc.fieldtype)",
+   "depends_on": "eval:in_list([\"Float\", \"Currency\", \"Percent\"], doc.field_type)",
    "fieldname": "field_precision",
    "fieldtype": "Select",
    "label": "Precision",
    "options": "\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
   },
   {
-   "depends_on": "eval:in_list(['Data', 'Link', 'Dynamic Link', 'Password', 'Select', 'Read Only', 'Attach', 'Attach Image', 'Int'], doc.fieldtype)",
+   "depends_on": "eval:in_list(['Data', 'Link', 'Dynamic Link', 'Password', 'Select', 'Read Only', 'Attach', 'Attach Image', 'Int'], doc.field_type)",
    "fieldname": "field_length",
    "fieldtype": "Int",
    "label": "Length"
@@ -71,6 +66,7 @@
    "depends_on": "eval:!in_list([\"Section Break\", \"Column Break\", \"Button\", \"HTML\"], doc.fieldtype)",
    "fieldname": "field_reqd",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Required"
   },
   {
@@ -81,31 +77,50 @@
    "label": "Non-Negative"
   },
   {
-   "depends_on": "eval:in_list(['Data'], doc.fieldtype)",
+   "depends_on": "eval:in_list(['Data'], doc.field_type)",
    "fieldname": "data_field_options",
    "fieldtype": "Select",
-   "label": "Text Validation",
+   "label": "Special Text Validation",
    "options": "\nEmail\nPhone\nURL"
   },
   {
-   "depends_on": "eval:in_list(['Link'], doc.fieldtype)",
+   "depends_on": "eval:in_list(['Link'], doc.field_type)",
    "fieldname": "field_doctype",
    "fieldtype": "Link",
    "label": "Form",
    "options": "DocType"
   },
   {
-   "depends_on": "eval:in_list(['Table'], doc.fieldtype)",
+   "depends_on": "eval:in_list(['Table'], doc.field_type)",
    "fieldname": "field_child_doctype",
    "fieldtype": "Link",
    "label": "Child Form",
    "options": "DocType"
+  },
+  {
+   "fieldname": "field_default",
+   "fieldtype": "Data",
+   "label": "Default Value"
+  },
+  {
+   "depends_on": "eval:doc.field_type == 'Select'",
+   "description": "Each choice or option to be entered in a new line. Do not put commas",
+   "fieldname": "field_choices",
+   "fieldtype": "Small Text",
+   "label": "Choices"
+  },
+  {
+   "default": "0",
+   "fieldname": "field_in_list_view",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Show in List View"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-23 16:43:59.660022",
+ "modified": "2024-04-24 10:48:00.996828",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Form Field",
