@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestFormPermisssion(FrappeTestCase):
+class TestEngagementFormPermission(FrappeTestCase):
 	pass

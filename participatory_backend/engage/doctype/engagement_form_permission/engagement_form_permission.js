@@ -1,7 +1,7 @@
 // Copyright (c) 2024, Steve Nyaga and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Form Permisssion", {
+// frappe.ui.form.on("Engagement Form Permission", {
 // 	refresh(frm) {
 
 // 	},

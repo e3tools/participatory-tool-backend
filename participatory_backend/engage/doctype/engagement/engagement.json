@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:ENG-{administration_level}-{YYYY}-{#####}",
+ "autoname": "field:engagement_name",
  "creation": "2023-12-20 12:40:36.777754",
  "default_view": "List",
  "doctype": "DocType",
@@ -13,7 +13,6 @@
   "status",
   "is_published",
   "column_break_t82l",
-  "administration_level",
   "description",
   "engagement_types_tab",
   "has_data_forms",
@@ -35,7 +34,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Engagement Name",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "description",
@@ -47,13 +47,6 @@
   {
    "fieldname": "column_break_t82l",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "administration_level",
-   "fieldtype": "Link",
-   "label": "Administration Level",
-   "options": "Administrative Level",
-   "reqd": 1
   },
   {
    "fieldname": "engagement_type",
@@ -72,13 +65,14 @@
   },
   {
    "default": "0",
+   "description": "If checked, the engagement will be visible on the frontend for data  capture",
    "fieldname": "is_published",
    "fieldtype": "Check",
    "label": "Is Published"
   },
   {
    "fieldname": "engagement_types_tab",
-   "fieldtype": "Tab Break",
+   "fieldtype": "Section Break",
    "label": "Engagement Types"
   },
   {
@@ -158,13 +152,14 @@
    "fieldtype": "Column Break"
   }
  ],
+ "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-06 06:58:21.935888",
+ "modified": "2024-04-25 14:11:19.586415",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement",
- "naming_rule": "Expression",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

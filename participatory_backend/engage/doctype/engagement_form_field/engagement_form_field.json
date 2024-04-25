@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-04-24 07:43:15.149714",
+ "creation": "2024-04-25 08:09:19.410580",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -26,15 +26,14 @@
    "fieldname": "field_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Field Name",
-   "reqd": 1
+   "label": "Field Name"
   },
   {
    "fieldname": "field_type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Field Type",
-   "options": "\nData\nInteger\nFloat\nSelect\nCheck\nDate\nText\nLink\nGeoLocation\nTable",
+   "options": "\nAttach\nCheck\nColumn Break\nCurrency\nData\nDate\nInt\nFloat\nGeolocation\nLink\nSelect\nSelect Multiple\nSection Break\nText\nTab Break\nTable\nTable MultiSelect",
    "reqd": 1
   },
   {
@@ -91,7 +90,7 @@
    "options": "DocType"
   },
   {
-   "depends_on": "eval:in_list(['Table'], doc.field_type)",
+   "depends_on": "eval:in_list(['Table', 'Table MultiSelect'], doc.field_type)",
    "fieldname": "field_child_doctype",
    "fieldtype": "Link",
    "label": "Child Form",
@@ -103,7 +102,7 @@
    "label": "Default Value"
   },
   {
-   "depends_on": "eval:doc.field_type == 'Select'",
+   "depends_on": "eval:in_list([\"Select\", \"Select Multiple\"], doc.field_type)",
    "description": "Each choice or option to be entered in a new line. Do not put commas",
    "fieldname": "field_choices",
    "fieldtype": "Small Text",
@@ -120,10 +119,10 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-24 10:48:00.996828",
+ "modified": "2024-04-25 17:46:31.176078",
  "modified_by": "Administrator",
  "module": "Engage",
- "name": "Form Field",
+ "name": "Engagement Form Field",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

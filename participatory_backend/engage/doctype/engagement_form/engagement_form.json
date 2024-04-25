@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:form_name",
- "creation": "2024-04-24 07:43:18.567280",
+ "creation": "2024-04-25 08:09:04.749401",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -10,6 +10,9 @@
  "field_order": [
   "section_break_wcou",
   "form_name",
+  "field_is_table",
+  "record_id_prefix",
+  "naming_format",
   "column_break_ygly",
   "description",
   "section_break_wjep",
@@ -41,11 +44,12 @@
    "label": "Permissions"
   },
   {
+   "depends_on": "eval:!doc.field_is_table",
    "fieldname": "form_permissions",
    "fieldtype": "Table",
    "label": "Permissions",
-   "options": "Form Permisssion",
-   "reqd": 1
+   "mandatory_depends_on": "eval:!doc.field_is_table",
+   "options": "Engagement Form Permission"
   },
   {
    "fieldname": "section_break_wcou",
@@ -55,19 +59,41 @@
    "fieldname": "form_fields",
    "fieldtype": "Table",
    "label": "Fields",
-   "options": "Form Field"
+   "options": "Engagement Form Field"
   },
   {
    "fieldname": "section_break_wjep",
    "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "field_is_table",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Table"
+  },
+  {
+   "depends_on": "eval:!doc.field_is_table",
+   "description": "Records created will be prefixed by this value",
+   "fieldname": "record_id_prefix",
+   "fieldtype": "Data",
+   "label": "Record ID Prefix",
+   "mandatory_depends_on": "eval:!doc.field_is_table"
+  },
+  {
+   "fieldname": "naming_format",
+   "fieldtype": "Data",
+   "label": "Naming Format",
+   "read_only": 1
   }
  ],
+ "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-24 10:43:53.337345",
+ "modified": "2024-04-25 16:32:32.942455",
  "modified_by": "Administrator",
  "module": "Engage",
- "name": "Form",
+ "name": "Engagement Form",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

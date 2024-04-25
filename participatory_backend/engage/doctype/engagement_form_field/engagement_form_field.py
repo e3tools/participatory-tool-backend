@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class FormPermisssion(Document):
+class EngagementFormField(Document):
 	pass
