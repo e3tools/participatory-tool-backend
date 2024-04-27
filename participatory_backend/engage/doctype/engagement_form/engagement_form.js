@@ -21,6 +21,10 @@ frappe.ui.form.on("Engagement Form", {
 				// frm.add_custom_button(__("Go to {0} List", [__(frm.doc.name)]), () => {
 				// 	window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
 				// });
+				
+				frm.add_custom_button(__("New", [__(frm.doc.name)]), () => {			
+					window.open(`/app/${frappe.router.slug(frm.doc.name)}/new`);
+				}, __('View'));
 
 				frm.add_custom_button(__("List", [__(frm.doc.name)]), () => {			
 					window.open(`/app/${frappe.router.slug(frm.doc.name)}`);

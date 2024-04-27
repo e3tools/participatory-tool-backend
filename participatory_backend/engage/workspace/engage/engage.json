@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Engage",
  "links": [],
- "modified": "2024-04-25 16:30:36.491409",
+ "modified": "2024-04-26 05:43:21.917498",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engage",
@@ -26,26 +26,26 @@
  "sequence_id": 24.0,
  "shortcuts": [
   {
-   "color": "Grey",
-   "doc_view": "New",
-   "label": "Create Form",
-   "link_to": "Engagement Form",
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Engagement Templates",
+   "link_to": "Engagement Template",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Grey",
-   "doc_view": "New",
-   "label": "New Engagement",
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Existing Engagements",
    "link_to": "Engagement",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
-   "color": "Blue",
+   "color": "Red",
    "doc_view": "New",
-   "label": "Create Dashboard",
-   "link_to": "Dashboard",
+   "label": "Create Form",
+   "link_to": "Engagement Form",
    "stats_filter": "[]",
    "type": "DocType"
   },
@@ -58,9 +58,17 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Existing Engagements",
+   "color": "Blue",
+   "doc_view": "New",
+   "label": "Create Dashboard",
+   "link_to": "Dashboard",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "New",
+   "label": "New Engagement",
    "link_to": "Engagement",
    "stats_filter": "[]",
    "type": "DocType"
@@ -70,14 +78,6 @@
    "doc_view": "List",
    "label": "Dashboards",
    "link_to": "Dashboard",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Engagement Templates",
-   "link_to": "Engagement Template",
    "stats_filter": "[]",
    "type": "DocType"
   }
