@@ -158,7 +158,7 @@ def get_admin(admin_id: str, admin_level: int):
     """ 
     doc = get_admin_doc(admin_id, admin_level)
     if not doc.bounds:
-        doc.bounds = get_geojson_bounds(doc.geom)
+        doc.bounds = str(get_geojson_bounds(doc.geom))   
     return doc
 
 @frappe.whitelist()
