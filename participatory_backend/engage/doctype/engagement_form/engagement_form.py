@@ -29,7 +29,7 @@ class EngagementForm(Document):
 	def on_trash(self):
 		doctype = frappe.db.exists("DocType", self.name)
 		if doctype:
-			frappe.delete_doc("DocType", doctype)
+			frappe.delete_doc("DocType", doctype, ignore_permissions=True, delete_permanently=True)
 
 	def validate_fields(self):
 		for fld in self.form_fields:
@@ -251,7 +251,7 @@ class EngagementForm(Document):
 		# Step 3
 		exists = frappe.db.exists("DocType", child_doctype_name)
 		if exists:
-			frappe.delete_doc("DocType", exists)
+			frappe.delete_doc("DocType", exists, ignore_permissions=True)
 
 		ref_doc = frappe.get_doc({
 			'doctype': 'DocType',
@@ -320,10 +320,10 @@ class EngagementForm(Document):
 			# results = get_linked_docs("Role", "System Manager", linkinfo=get_linked_doctypes("Role"))
 			links = get_linked_docs(doctype, itm.name, linkinfo=get_linked_doctypes(doctype))
 			if not links:
-				frappe.delete_doc(doctype, itm.name, delete_permanently=True)
+				frappe.delete_doc(doctype, itm.name, ignore_permissions=True, delete_permanently=True)
 			else:
 				error = True 
 		if not error: # drop tables if there are no existing links with existing data
-			frappe.delete_doc("DocType", doctype, delete_permanently=True)
+			frappe.delete_doc("DocType", doctype, ignore_permissions=True, delete_permanently=True)
 			frappe.db.sql_ddl(f"DROP TABLE IF EXISTS `tab{doctype}`")
 		return not error
