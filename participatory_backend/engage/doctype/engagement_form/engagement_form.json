@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:form_name",
- "creation": "2024-04-25 08:09:04.749401",
+ "creation": "2024-05-07 20:58:55.090115",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -67,18 +67,17 @@
   },
   {
    "default": "0",
+   "description": "A form which can only be linked to a parent Form. Allows storing multiple records against one record, also known as many-to-one relationships",
    "fieldname": "field_is_table",
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Is Child Table"
   },
   {
-   "depends_on": "eval:!doc.field_is_table",
    "description": "Records created will be prefixed by this value",
    "fieldname": "record_id_prefix",
    "fieldtype": "Data",
-   "label": "Record ID Prefix",
-   "mandatory_depends_on": "eval:!doc.field_is_table"
+   "label": "Record ID Prefix"
   },
   {
    "fieldname": "naming_format",
@@ -90,7 +89,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-07 16:40:55.432186",
+ "modified": "2024-05-07 21:10:24.898289",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

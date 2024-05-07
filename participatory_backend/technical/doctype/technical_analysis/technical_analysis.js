@@ -41,7 +41,8 @@ frappe.ui.form.on("Technical Analysis", {
 		}); 
 	},
 	refresh(frm) {
-        if(!frm.doc.__islocal){
+        debugger;
+        if(!frm.doc.__islocal && frm.doc.datasource_type == 'Vector'){
 			frm.add_custom_button(__("Analyze"), function() {
 				frappe.call({
                     doc: frm.doc,
@@ -49,8 +50,7 @@ frappe.ui.form.on("Technical Analysis", {
                     freeze_message: __('Analyzing. Please wait...'),
                     method: 'analyze',
                     callback: function(r) {
-                        if(!r.exc){
-                            debugger
+                        if(!r.exc){ 
                         }
                     }
                 })

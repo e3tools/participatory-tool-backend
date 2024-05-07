@@ -20,6 +20,8 @@ class EngagementForm(Document):
 			frappe.throw(_("You must specify at lease one field"))
 		if not cint(self.field_is_table) and not self.form_permissions:
 			frappe.throw(_("You must specify at lease one permission"))
+		if self.record_id_prefix:
+			self.record_id_prefix = self.record_id_prefix.upper()
 		self.validate_fields()
 		self.make_doctype()
 
@@ -86,8 +88,13 @@ class EngagementForm(Document):
 		doc.states = [] 	
 		doc.custom = 1
 		doc.module = MODULE_NAME
-		doc.naming_rule = 'Expression (old style)'
-		doc.autoname = self._get_naming_rule()
+		if self.record_id_prefix:
+			doc.naming_rule = 'Expression (old style)'
+			doc.autoname = self._get_naming_rule()
+		else:
+			doc.naming_rule = ""
+			doc.autoname = ""
+			self.naming_format = ""
 		doc.track_changes = 1
 		doc.allow_rename = 0
 		doc.allow_import = 1
@@ -158,15 +165,20 @@ class EngagementForm(Document):
 				return form_field.data_field_options
 			if form_field.field_type == 'Link':
 				return form_field.field_doctype
-			if form_field.field_type == 'Table':
+			if form_field.field_type in ['Table', 'Table MultiSelect']:
 				return form_field.field_child_doctype
-			if form_field.field_type == 'Select':
+			if form_field.field_type in ['Select', 'Select Multiple']:
+				if not form_field.field_choices.strip().startswith("\n"):
+					form_field.field_choices = '\n' + form_field.field_choices
+				if form_field.field_choices.strip() == '':
+					frappe.throw(_("Field {} in row {}. You must specify the choices for the Select Field".format(form_field.field_label, form_field.idx)))
 				return form_field.field_choices
 			return None
 
+		form_field.field_name = form_field.field_name.strip()
 		field = {
 			'doctype': 'DocField', 
-			'label': form_field.field_label if form_field.field_type not in ['Column Break'] else '',
+			'label': form_field.field_label, # if form_field.field_type not in ['Column Break'] else '',
 			'fieldname': form_field.field_name or frappe.scrub(form_field.field_label),
 			'fieldtype': form_field.field_type,
 			'precision': form_field.field_precision,
