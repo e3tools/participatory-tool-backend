@@ -70,7 +70,7 @@
    "fieldname": "field_is_table",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Is Table"
+   "label": "Is Child Table"
   },
   {
    "depends_on": "eval:!doc.field_is_table",
@@ -90,7 +90,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-25 16:32:32.942455",
+ "modified": "2024-05-07 16:40:55.432186",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",
@@ -117,7 +117,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Form Designer",
+   "role": "Form Design User",
    "share": 1,
    "write": 1
   }

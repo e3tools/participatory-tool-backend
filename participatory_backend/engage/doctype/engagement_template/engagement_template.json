@@ -50,7 +50,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-25 14:11:32.924241",
+ "modified": "2024-05-07 07:25:11.169060",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Template",
@@ -66,6 +66,27 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Form Design User",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Form Designer Manager",
    "share": 1,
    "write": 1
   }
