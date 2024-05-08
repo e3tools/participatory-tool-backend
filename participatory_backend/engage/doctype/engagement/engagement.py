@@ -45,7 +45,7 @@ class Engagement(Document):
 					"options": "Engagement Entry",
 					"owner": "Administrator",
 				}
-			).save()
+			).save(ignore_permissions=False)
 
 			frappe.msgprint(
 				_("Created Custom Field {0} in {1}").format(self.ENGAGEMENT_ENTRY_FIELD, document_type)
