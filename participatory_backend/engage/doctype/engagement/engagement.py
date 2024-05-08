@@ -45,7 +45,7 @@ class Engagement(Document):
 					"options": "Engagement Entry",
 					"owner": "Administrator",
 				}
-			).save(ignore_permissions=False)
+			).save(ignore_permissions=True)
 
 			frappe.msgprint(
 				_("Created Custom Field {0} in {1}").format(self.ENGAGEMENT_ENTRY_FIELD, document_type)
@@ -68,7 +68,7 @@ class Engagement(Document):
 					"options": "Draft\nSubmitted\nCancelled",
 					"owner": "Administrator",
 				}
-			).save(ignore_permissions=False)
+			).save(ignore_permissions=True)
 
 			frappe.msgprint(
 				_("Created Custom Field {0} in {1}").format(self.ENGAGEMENT_ENTRY_STATUS_FIELD, document_type)
