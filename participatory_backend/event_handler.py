@@ -1,6 +1,7 @@
 import frappe
 from frappe import _
 
+
 def before_save_shape_file(shape_file, method): 
     # check that admin level fields refer to existing attributes
     attribs = [x.attribute for x in shape_file.field_mappings]

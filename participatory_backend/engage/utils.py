@@ -70,11 +70,14 @@ def save_engagement_entry():
 	def save_doctype_entry(doctype, entry):
 		# entry['engagement_entry'] = engagement_entry.name
 		# entry['engagement_name'] = engagement_entry.status
-		if 'name' in entry and entry['name'] != None:
-			doc = frappe.get_doc(doctype, entry['name'])
+		name_field = 'docname'
+		name = entry[name_field]
+		if name_field in entry and entry[name_field] != None:
+			doc = frappe.get_doc(doctype, entry[name_field])
 		else:
 			doc = frappe.new_doc(doctype)
 		
+		entry['name'] = name
 		doc.update(entry)
 		doc.engagement_entry = engagement_entry.name
 		doc.engagement_entry_status = engagement_entry.status		
