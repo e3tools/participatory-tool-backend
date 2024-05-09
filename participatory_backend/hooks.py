@@ -112,8 +112,18 @@ app_license = "MIT"
 
 doc_events = {
     "Shape File": {
-        "before_save": "participatory_backend.event_handler.before_save_shape_file"
-    }
+        # "before_save": "participatory_backend.event_handler.before_save_shape_file"
+    },
+}
+
+scheduler_events = {
+	"all": [		 
+	],  
+  "cron": {
+        "0/1 * * * *": [ #run every 1 minute.
+           "participatory_backend.tasks.generate_user_api_keys", 
+        ], 
+	}
 }
 
 # Scheduled Tasks
@@ -205,9 +215,17 @@ doc_events = {
 # auth_hooks = [
 #	"participatory_backend.auth.validate"
 # ]
-  
+
+CUSTOM_ROLES = (
+    "Form Design User",
+    "Form Design Manager",
+    "Technical Data User",
+    "Technical Data Manager",
+    "Data Capture"
+)
+
 fixtures = [  
-    {
+  {
     "doctype":"Custom Field", 
     "filters": [
       ["fieldname", "in", (
@@ -219,6 +237,14 @@ fixtures = [
                    )
       ]
     ]
+  },
+  {
+      "doctype": "Custom DocPerm",
+      "filters": [
+          [
+              "role", "in", CUSTOM_ROLES
+          ]
+      ]
   },
   # {
   #   "doctype":"PCRA Form"

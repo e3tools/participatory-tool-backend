@@ -53,6 +53,7 @@ def login(**kwargs):
     except frappe.exceptions.AuthenticationError:
         return {'status_code':401, 'text':frappe.local.response.message}
     except Exception as e:
+        print("Login error: ", str(e))
         return {'status_code':500, 'text':str(e)}
 
 @frappe.whitelist()
