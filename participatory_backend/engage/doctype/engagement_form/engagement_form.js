@@ -12,7 +12,7 @@ frappe.ui.form.on("Engagement Form", {
 		});
     },
 	refresh(frm) { 
-        if (!frm.is_new() && !frm.doc.istable) {
+        if (!frm.is_new() && !frm.doc.field_is_table) {
 			if (frm.doc.issingle) {
 				frm.add_custom_button(__("Go to {0}", [__(frm.doc.name)]), () => {
 					window.open(`/app/${frappe.router.slug(frm.doc.name)}`);
