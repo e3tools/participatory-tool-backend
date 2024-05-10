@@ -15,6 +15,11 @@ from gis.utils.vector import get_admin_tree, get_admin_doc, get_geojson_bounds
 import json
 from frappe.desk.reportview import export_query
 from frappe.utils.file_manager import save_file_on_filesystem 
+from frappe import ping as pinged
+
+@frappe.whitelist(allow_guest=True)
+def ping():
+    return pinged()
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
@@ -51,10 +56,10 @@ def login(**kwargs):
             msg['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
         return msg
     except frappe.exceptions.AuthenticationError:
-        return {'status_code':401, 'text':frappe.local.response.message}
+        return {'status_code': 401, 'text':frappe.local.response.message}
     except Exception as e:
         print("Login error: ", str(e))
-        return {'status_code':500, 'text':str(e)}
+        return {'status_code': 500, 'text':str(e)}
 
 @frappe.whitelist()
 def get_doctype(doctype: str, with_parent: int = 0):
