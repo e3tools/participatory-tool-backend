@@ -13,9 +13,11 @@ SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
 OPTION_NAME_FIELD = 'option_name'
 MODULE_NAME = 'Engage'
+DOCTYPE_MAX_LENGTH = 61
 
 class EngagementForm(Document):
 	def validate(self):
+		self.form_name = frappe.unscrub(self.form_name)
 		if not self.form_fields:
 			frappe.throw(_("You must specify at lease one field"))
 		if not cint(self.field_is_table) and not self.form_permissions:
@@ -195,17 +197,27 @@ class EngagementForm(Document):
 		}
 		return field
 
-	def make_ref_doctype_name(self, form_field):
+	def make_ref_doctype_name(self, form_field, max_length=DOCTYPE_MAX_LENGTH):
 		"""
 		Get name to call DocType that will store options when field is Select Multiple
 		"""
-		return "{0} {1}".format(self.form_name, form_field.field_label.title())
+		# name = "{0} {1}".format(self.form_name, form_field.field_label.title()) 
+		kid_name = frappe.unscrub(form_field.field_name or form_field.field_label)
+		# first try use the field_name
+		name = "{0} {1}".format(self.form_name, kid_name)
+		name = name.strip()
+		if len(name) > max_length:
+			if len(name) > max_length:
+				# if field_name will not resolve, then concat form initials with field_name
+				form_initials = "".join([x[0] for x in self.form_name.replace("  ", " ").split(" ")]).upper()
+				name = "{0} {1}".format(form_initials, kid_name)
+		return name	
 
 	def make_child_doctype_name(self, form_field):
 		"""
 		Get name to use for Child DocType that will allow multiselection of ref_doctype_name values 
 		"""
-		reference_doctype_name = self.make_ref_doctype_name(form_field)
+		reference_doctype_name = self.make_ref_doctype_name(form_field, max_length=DOCTYPE_MAX_LENGTH - len(" Item"))
 		return "{0} Item".format(reference_doctype_name)
 
 	def handle_multi_select(self, form_field, select_type):
