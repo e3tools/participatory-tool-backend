@@ -190,7 +190,7 @@ class EngagementForm(Document):
 			'non_negative': form_field.field_non_negative,
 			'default': form_field.field_default,
 			'in_list_view': form_field.field_in_list_view,
-			'depends_on': str(form_field.depends_on).strip(),
+			'depends_on': str(form_field.depends_on).strip() if form_field.depends_on else None,
 			'mandatory_depends_on': str(form_field.mandatory_depends_on).strip() if form_field.mandatory_depends_on else None,
 			'read_only_depends_on': str(form_field.read_only_depends_on).strip() if form_field.read_only_depends_on else None,
 			'options': _get_options(),
