@@ -3,6 +3,10 @@ import datetime
 from participatory_backend.enums import EngagementStatusEnum
 from frappe.desk.form.linked_with import get_linked_docs, get_linked_doctypes
 from frappe.utils import cint
+from frappe.client import attach_file
+import base64
+from PIL import Image
+import io
 
 def update_engagement_entry_status(engagement_entry_name, status: EngagementStatusEnum):
 	"""
@@ -68,15 +72,91 @@ def save_engagement_entry():
 	The object has DocType as the keys
 	"""
 	def save_doctype_entry(doctype, entry):
+
+		def save_files():
+
+			def _upload_file(file_entry: dict):
+				"""Save/upload file
+
+				Args:
+					file_entry (dict): The uploaded file 
+				"""
+				file_url = None
+				content = frappe.safe_decode(base64.b64decode(file_entry['base64']))
+				# img = Image.open(io.BytesIO(content))
+				file_name = file_entry.get('file_name') or file_entry.get('uri').split("/")[-1]
+				if is_new_record:
+					new_file = frappe.get_doc(
+						{
+							"doctype": "File",
+							"file_name": file_name,
+							"content": content,
+							"is_private": 1,
+						}
+					)
+					fl = new_file.insert()
+					file_url = fl.file_url
+				else:
+					new_file = frappe.get_doc(
+						{
+							"doctype": "File",
+							"file_name": file_name,
+							"content": content,
+							"is_private": 1,
+						}
+					)
+					fl = new_file.insert()
+					file_url = fl.file_url
+
+				return file_url
+
+			def _process_file_fields(file_fields, doc):
+				"""
+				Save/upload files for all field types (Attach/Attach Image) present in a doc 
+				"""
+				for field in file_fields:
+					urls = []
+					uploaded_files = doc.get(field.fieldname)
+					doc[field.fieldname] = None #reset the file url 
+					if uploaded_files:
+						if isinstance(uploaded_files, list):
+							for file in uploaded_files:
+								urls.append(_upload_file(file_entry=file))									
+						elif isinstance(uploaded_files, str):
+							# If there is no reupload, the value will be a url. check if the file has changed
+							urls.append(uploaded_files)
+						
+						# set file_urls as the value of the attach fields
+						doc[field.fieldname] = "\n".join(urls)
+
+			# upload files for parent, in case there are child tables, upload later
+			file_fields = [x for x in frappe.get_meta(doctype).fields if x.fieldtype in ['Attach', 'Attach Image']]
+			# attach_fields = doc.meta.get("fields", {"fieldtype": ["in", ["Attach", "Attach Image"]]})
+			# process for parent doc
+			_process_file_fields(file_fields=file_fields, doc=entry)
+
+			# check if there are child table with file fields
+			child_tables = [x for x in frappe.get_meta(doctype).fields if x.fieldtype in ['Table']]
+			for table in child_tables:
+				child_table_file_fields = [x for x in frappe.get_meta(table.options).fields if x.fieldtype in ['Attach', 'Attach Image']]
+
+				# get the various child table items
+				child_docs = entry.get(table.fieldname)
+				for child_doc in child_docs:
+					_process_file_fields(file_fields=child_table_file_fields, doc=child_doc)
+ 
 		# entry['engagement_entry'] = engagement_entry.name
 		# entry['engagement_name'] = engagement_entry.status
 		name_field = 'docname'
 		name = entry[name_field]
+		is_new_record = False
 		if name_field in entry and entry[name_field] != None:
 			doc = frappe.get_doc(doctype, entry[name_field])
 		else:
 			doc = frappe.new_doc(doctype)
+			is_new_record = True
 		
+		save_files()
 		entry['name'] = name
 		doc.update(entry)
 		doc.engagement_entry = engagement_entry.name

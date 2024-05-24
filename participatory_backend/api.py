@@ -16,6 +16,8 @@ import json
 from frappe.desk.reportview import export_query
 from frappe.utils.file_manager import save_file_on_filesystem 
 from frappe import ping as pinged
+from frappe.utils.data import get_url
+from frappe.frappeclient import FrappeClient
 
 @frappe.whitelist(allow_guest=True)
 def ping():
@@ -197,6 +199,25 @@ def export_data():
     fl = save_file_on_filesystem(frappe.response["filename"], content=frappe.response["filecontent"])
     frappe.response["filename"] = fl['file_url']
     return {"file": fl['file_url'] }
+
+@frappe.whitelist()
+def upsert_doc(doc):
+    """Upsert a doctype
+
+    Args:
+        doc (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    site = frappe.utils.get_site_url(frappe.local.site)
+    client = FrappeClient(site)
+    client2 = FrappeClient(get_url())
+    if doc.name:
+        res = client.update(doc)
+    else:
+        res = client.insert(doc)
+    # check if there are files
 
 @frappe.whitelist()
 def do_upload():

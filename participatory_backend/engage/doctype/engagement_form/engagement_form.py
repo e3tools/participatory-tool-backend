@@ -177,7 +177,19 @@ class EngagementForm(Document):
 					frappe.throw(_("Field {} in row {}. You must specify the choices for the Select Field".format(form_field.field_label, form_field.idx)))
 				return form_field.field_choices
 			return None
-
+		
+		def _set_depends_on(exp: str):
+			"""
+			Set depends on expression 
+			"""
+			if not exp:
+				return None
+			exp = exp.strip()
+			if exp.lower().startswith("eval:"):
+				return exp
+			else:
+				return f"eval:{exp}"
+				
 		form_field.field_name = form_field.field_name.strip()
 		field = {
 			'doctype': 'DocField', 
@@ -190,9 +202,9 @@ class EngagementForm(Document):
 			'non_negative': form_field.field_non_negative,
 			'default': form_field.field_default,
 			'in_list_view': form_field.field_in_list_view,
-			'depends_on': str(form_field.depends_on).strip() if form_field.depends_on else None,
-			'mandatory_depends_on': str(form_field.mandatory_depends_on).strip() if form_field.mandatory_depends_on else None,
-			'read_only_depends_on': str(form_field.read_only_depends_on).strip() if form_field.read_only_depends_on else None,
+			'depends_on': _set_depends_on(form_field.depends_on), # str(form_field.depends_on).strip() if form_field.depends_on else None,
+			'mandatory_depends_on': _set_depends_on(form_field.mandatory_depends_on), #str(form_field.mandatory_depends_on).strip() if form_field.mandatory_depends_on else None,
+			'read_only_depends_on': _set_depends_on(form_field.read_only_depends_on), #str(form_field.read_only_depends_on).strip() if form_field.read_only_depends_on else None,
 			'options': _get_options(),
 		}
 		return field
