@@ -3,20 +3,22 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cint
+from frappe.utils import cint, get_url
 from frappe import _
 import datetime
 from frappe.desk.form.linked_with import get as get_links 
 from frappe.desk.form.linked_with import get_linked_docs, get_linked_doctypes
+from participatory_backend.utils import get_initials
 
 SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
 OPTION_NAME_FIELD = 'option_name'
 MODULE_NAME = 'Engage'
 DOCTYPE_MAX_LENGTH = 61
+FIELD_NAME_MAX_LENGTH = frappe.db.MAX_COLUMN_LENGTH - 3
 
 class EngagementForm(Document):
-	def validate(self):
+	def validate(self): 
 		self.form_name = frappe.unscrub(self.form_name)
 		if not self.form_fields:
 			frappe.throw(_("You must specify at lease one field"))
@@ -25,9 +27,13 @@ class EngagementForm(Document):
 		if self.record_id_prefix:
 			self.record_id_prefix = self.record_id_prefix.upper()
 		self.validate_fields()
-		self.route = self.web_title.lower().replace(" ", "-") if self.web_title else None
+		self.route = self.get_route() # self.web_title.lower().replace(" ", "-") if self.web_title else None
+		self.public_url = self.get_route(fqdn=True)
 		self.make_doctype()
-		self.publish_form()		
+		if self.field_is_table:
+			self.enable_web_form = False
+			self.is_published = False
+		self.publish_form()
 
 	def after_rename(self, old_name, new_name, merge=False):
 		frappe.rename_doc("DocType", old=old_name, new=new_name)
@@ -61,9 +67,10 @@ class EngagementForm(Document):
 		Get naming rule 
 		Return of the form SDD.-.YYYY.-.#####
 		"""
+		initials = get_initials(self.form_name)
 		prefix = str(self.record_id_prefix).strip()
 		# res = "format:{0}-{1}-{2}".format(prefix, "{YYYY}", "{#####}")
-		res = "{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####")
+		res = "{3}.-.{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####", initials)
 		format = res.replace(" ", "").replace("--", "-")
 		self.naming_format = "{0} e.g {1}".format(format, format.replace("format:", "").replace("{YYYY}", str(datetime.date.today().year)).replace("{#####}", "00001"))
 		return format
@@ -196,7 +203,7 @@ class EngagementForm(Document):
 		field = {
 			'doctype': 'DocField', 
 			'label': form_field.field_label.strip(), # if form_field.field_type not in ['Column Break'] else '',
-			'fieldname': form_field.field_name or frappe.scrub(form_field.field_label),
+			'fieldname': self.get_field_name(form_field),
 			'fieldtype': form_field.field_type,
 			'precision': form_field.field_precision,
 			'length': form_field.field_length,
@@ -318,7 +325,7 @@ class EngagementForm(Document):
 		field = {
 			'doctype': 'DocField', 
 			'label': form_field.field_label if form_field.field_type not in ['Column Break'] else '',
-			'fieldname': form_field.field_name or frappe.scrub(form_field.field_label),
+			'fieldname': self.get_field_name(form_field),
 			'fieldtype': 'Table MultiSelect',
 			'precision': form_field.field_precision,
 			'length': form_field.field_length,
@@ -371,6 +378,24 @@ class EngagementForm(Document):
 			frappe.db.sql_ddl(f"DROP TABLE IF EXISTS `tab{doctype}`")
 		return not error
 	
+	def get_route(self, fqdn=False):
+		"""
+		Get route for the published form 
+
+		Args:
+			fdqn: return a fully qualified domain name
+		"""
+		if self.field_is_table:
+			return None
+		route = self.web_title.lower().replace(" ", "-") if not self.route else self.route
+		if route and fqdn:
+			route = get_url(route)
+		return route
+	
+	def get_field_name(self, form_field):
+		name = form_field.field_name or frappe.scrub(form_field.field_label)
+		return name[:FIELD_NAME_MAX_LENGTH]
+
 	def publish_form(self):
 		"""
 		Publishes the form to allow capturing of data from a website
@@ -387,7 +412,7 @@ class EngagementForm(Document):
 				frappe.delete_doc("Web Form", exists)
 			return
 			
-		doctype = frappe.get_doc("DocType", self.name)
+		doctype = frappe.get_doc("DocType", self.name) 
 		r = {
 			"title": self.web_title,
 			"doc_type": self.name,
@@ -396,7 +421,8 @@ class EngagementForm(Document):
 			"is_standard": False, 
 			"introduction_text": self.description,
 			"web_form_fields": [],
-			"route": self.web_title.lower().replace(" ", "-") if not self.route else self.route
+			"button_label": "Submit",
+			"route": self.get_route()
 		}
 
 		for df in doctype.fields:
@@ -420,13 +446,15 @@ class EngagementForm(Document):
 		#self.save()
 		#frappe.db.set_value(self.doctype, self.name, "route", doc.route)
 	
-# def doctype_to_engagement_form(doctype: str):
-# 	"""
-# 	Make an Engagement Form based on a DocType 
-# 	"""
-# 	doc = frappe.get_doc("DocType", doctype)
-# 	form = frappe.new_doc("Engagement Form")
-# 	for field in doc.fields:
-# 		form.append("fields", {
-# 			doctype: "Engagement Form Field"
-# 		})
+def doctype_to_engagement_form(doctype: str = 'Sample Test Form'):
+	"""
+	Make an Engagement Form based on a DocType 
+	"""
+	doc = frappe.get_doc("DocType", doctype)
+	form = frappe.new_doc("Engagement Form")
+	for field in doc.fields:
+		r = field.as_dict()
+		r['doctype'] = "Engagement Form Field"
+		form.append("fields", r)
+
+	form.save(ignore_permissions=True)

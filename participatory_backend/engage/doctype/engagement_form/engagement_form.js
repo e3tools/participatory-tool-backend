@@ -39,5 +39,10 @@ frappe.ui.form.on("Engagement Form", {
 				}, __('View')); 
 			}
 		}
+		if(!frm.is_new() && frm.doc.enable_web_form && frm.doc.is_published) {
+			frm.add_custom_button(__("See on website", [__(frm.doc.name)]), () => { 
+				window.open(`/${frm.doc.route}`);
+			}, null); 
+		}
 	},
 });

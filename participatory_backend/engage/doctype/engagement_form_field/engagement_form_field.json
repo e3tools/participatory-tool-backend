@@ -57,6 +57,7 @@
   },
   {
    "depends_on": "eval:in_list(['Data', 'Link', 'Dynamic Link', 'Password', 'Select', 'Read Only', 'Attach', 'Attach Image', 'Int'], doc.field_type)",
+   "description": "Limit the length of the text to the set value",
    "fieldname": "field_length",
    "fieldtype": "Int",
    "label": "Length"
@@ -141,7 +142,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-05-24 13:38:16.880080",
+ "modified": "2024-06-06 21:38:47.592119",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",

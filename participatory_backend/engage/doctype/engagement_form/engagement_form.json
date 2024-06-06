@@ -20,10 +20,12 @@
   "tab_2_tab",
   "form_permissions",
   "web_publishing_tab",
+  "section_break_kmob",
   "enable_web_form",
   "web_title",
   "is_published",
   "route",
+  "public_url",
   "column_break_mgpp"
  ],
  "fields": [
@@ -116,7 +118,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.enable_web_form",
+   "depends_on": "eval:doc.enable_web_form && !doc.field_is_table",
    "description": "Heading to display on the web form",
    "fieldname": "web_title",
    "fieldtype": "Data",
@@ -127,13 +129,26 @@
    "fieldname": "route",
    "fieldtype": "Data",
    "label": "Route",
+   "mandatory_depends_on": "eval:doc.enable_web_form && !doc.field_is_table",
    "read_only": 1
+  },
+  {
+   "fieldname": "public_url",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Public URL",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:!doc.field_is_table",
+   "fieldname": "section_break_kmob",
+   "fieldtype": "Section Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-06 08:00:16.168313",
+ "modified": "2024-06-06 23:02:10.445705",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",
