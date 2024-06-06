@@ -25,7 +25,9 @@ class EngagementForm(Document):
 		if self.record_id_prefix:
 			self.record_id_prefix = self.record_id_prefix.upper()
 		self.validate_fields()
+		self.route = self.web_title.lower().replace(" ", "-") if self.web_title else None
 		self.make_doctype()
+		self.publish_form()		
 
 	def after_rename(self, old_name, new_name, merge=False):
 		frappe.rename_doc("DocType", old=old_name, new=new_name)
@@ -368,3 +370,63 @@ class EngagementForm(Document):
 			frappe.delete_doc("DocType", doctype, ignore_permissions=True, delete_permanently=True)
 			frappe.db.sql_ddl(f"DROP TABLE IF EXISTS `tab{doctype}`")
 		return not error
+	
+	def publish_form(self):
+		"""
+		Publishes the form to allow capturing of data from a website
+		"""
+		exists = frappe.db.exists("Web Form", {"doc_type": self.name if self.name else self.form_name})
+		if exists: 
+			doc = frappe.get_doc("Web Form", exists)			
+		else:
+			doc = frappe.new_doc("Web Form")
+		
+		# if no web-form delete if existing
+		if not cint(self.enable_web_form):
+			if exists:
+				frappe.delete_doc("Web Form", exists)
+			return
+			
+		doctype = frappe.get_doc("DocType", self.name)
+		r = {
+			"title": self.web_title,
+			"doc_type": self.name,
+			"published": self.is_published,
+			"module": doctype.module,
+			"is_standard": False, 
+			"introduction_text": self.description,
+			"web_form_fields": [],
+			"route": self.web_title.lower().replace(" ", "-") if not self.route else self.route
+		}
+
+		for df in doctype.fields:
+			r['web_form_fields'].append({
+				'doctype': 'Web Form Field',
+				'fieldname': df.fieldname,
+				'label': df.label,
+				'fieldtype': df.fieldtype,
+				'options': df.options,
+				'reqd': df.reqd,
+				'default': df.default,
+				'read_only': df.read_only,
+				'depends_on': df.depends_on,
+				'mandatory_depends_on': df.mandatory_depends_on,
+				'read_only_depends_on': df.read_only_depends_on,
+			})
+		doc.update(r)
+		doc.save(ignore_permissions=True)
+
+		#self.route = doc.route
+		#self.save()
+		#frappe.db.set_value(self.doctype, self.name, "route", doc.route)
+	
+# def doctype_to_engagement_form(doctype: str):
+# 	"""
+# 	Make an Engagement Form based on a DocType 
+# 	"""
+# 	doc = frappe.get_doc("DocType", doctype)
+# 	form = frappe.new_doc("Engagement Form")
+# 	for field in doc.fields:
+# 		form.append("fields", {
+# 			doctype: "Engagement Form Field"
+# 		})

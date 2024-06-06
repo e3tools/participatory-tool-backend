@@ -246,6 +246,14 @@ fixtures = [
           ]
       ]
   },
+  {
+      "doctype": "Role",
+      "filters": [
+          [
+              "name", "in", CUSTOM_ROLES
+          ]
+      ]
+  },
   # {
   #   "doctype":"PCRA Form"
   # },
@@ -268,6 +276,11 @@ fixtures = [
   #   "doctype":"Vulnerable Group"
   # },
   {
-    "doctype":"Workspace"
+    "doctype":"Workspace",
+    "filters": [
+          [
+              "name", "in", ["Engage"]
+          ]
+      ]
   },
 ]
