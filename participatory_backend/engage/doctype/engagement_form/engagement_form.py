@@ -26,6 +26,7 @@ class EngagementForm(Document):
 			frappe.throw(_("You must specify at lease one permission"))
 		if self.record_id_prefix:
 			self.record_id_prefix = self.record_id_prefix.upper()
+		self.web_title = self.web_title or ''
 		self.validate_fields()
 		self.route = self.get_route() # self.web_title.lower().replace(" ", "-") if self.web_title else None
 		self.public_url = self.get_route(fqdn=True)
