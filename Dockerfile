@@ -205,5 +205,6 @@ CMD [ \
   "--worker-tmp-dir=/dev/shm", \
   "--timeout=120", \
   "--preload", \
+  "--reload", \
   "frappe.app:application" \
 ]
