@@ -23,7 +23,6 @@
   "section_break_kmob",
   "enable_web_form",
   "web_title",
-  "is_published",
   "route",
   "public_url",
   "column_break_mgpp"
@@ -100,36 +99,25 @@
   },
   {
    "default": "0",
-   "description": "If checked, data will be captured via the web in addition to the frontend",
+   "description": "If checked, data will be captured via the web link in addition to the front end",
    "fieldname": "enable_web_form",
    "fieldtype": "Check",
-   "label": "Enable Capture of Data Via Web"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:doc.enable_web_form",
-   "description": "Is checked, the form will be visible on a web page",
-   "fieldname": "is_published",
-   "fieldtype": "Check",
-   "label": "Is Published"
+   "label": "Enable Capture of Data Via Web Link"
   },
   {
    "fieldname": "column_break_mgpp",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.enable_web_form && !doc.field_is_table",
-   "description": "Heading to display on the web form",
+   "description": "Title to be displayed on the web form",
    "fieldname": "web_title",
    "fieldtype": "Data",
-   "label": "Title",
-   "mandatory_depends_on": "eval:doc.enable_web_form"
+   "label": "Alternative Form Title"
   },
   {
    "fieldname": "route",
    "fieldtype": "Data",
    "label": "Route",
-   "mandatory_depends_on": "eval:doc.enable_web_form && !doc.field_is_table",
    "read_only": 1
   },
   {
@@ -148,7 +136,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-06 23:02:10.445705",
+ "modified": "2024-06-12 17:04:55.805453",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

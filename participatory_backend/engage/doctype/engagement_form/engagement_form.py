@@ -27,13 +27,14 @@ class EngagementForm(Document):
 		if self.record_id_prefix:
 			self.record_id_prefix = self.record_id_prefix.upper()
 		self.web_title = self.web_title or ''
+		if not self.web_title:
+			self.web_title = self.form_name
 		self.validate_fields()
 		self.route = self.get_route() # self.web_title.lower().replace(" ", "-") if self.web_title else None
 		self.public_url = self.get_route(fqdn=True)
 		self.make_doctype()
 		if self.field_is_table:
-			self.enable_web_form = False
-			self.is_published = False
+			self.enable_web_form = False 
 		self.publish_form()
 
 	def after_rename(self, old_name, new_name, merge=False):
@@ -71,9 +72,12 @@ class EngagementForm(Document):
 		initials = get_initials(self.form_name)
 		prefix = str(self.record_id_prefix).strip()
 		# res = "format:{0}-{1}-{2}".format(prefix, "{YYYY}", "{#####}")
-		res = "{3}.-.{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####", initials)
+		# res = "{3}.-.{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####", initials)
+		res = "{0}.-.{1}.-.{2}".format(initials, "YYYY", "#####")
+		if prefix:
+			res = "{0}.-.{1}".format(prefix, res)
 		format = res.replace(" ", "").replace("--", "-")
-		self.naming_format = "{0} e.g {1}".format(format, format.replace("format:", "").replace("{YYYY}", str(datetime.date.today().year)).replace("{#####}", "00001"))
+		self.naming_format = "{0} e.g {1}".format(format, format.replace("format:", "").replace("YYYY", str(datetime.date.today().year)).replace("#####", "00001").replace(".", ""))
 		return format
 
 	def make_doctype(self):
@@ -413,13 +417,13 @@ class EngagementForm(Document):
 		if not cint(self.enable_web_form):
 			if exists:
 				frappe.delete_doc("Web Form", exists)
-			return
-			
+			return 
+
 		doctype = frappe.get_doc("DocType", self.name) 
 		r = {
 			"title": self.web_title,
 			"doc_type": self.name,
-			"published": self.is_published,
+			"published": self.enable_web_form,
 			"module": doctype.module,
 			"is_standard": False, 
 			"introduction_text": self.description,

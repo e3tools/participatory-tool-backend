@@ -39,10 +39,22 @@ frappe.ui.form.on("Engagement Form", {
 				}, __('View')); 
 			}
 		}
-		if(!frm.is_new() && frm.doc.enable_web_form && frm.doc.is_published) {
-			frm.add_custom_button(__("See on website", [__(frm.doc.name)]), () => { 
-				window.open(`/${frm.doc.route}`);
-			}, null); 
-		}
+		frm.trigger('enable_web_form');
+		// if(!frm.is_new() && frm.doc.enable_web_form && !frm.doc.field_is_table) {
+		// 	frm.add_custom_button(__("See on website", [__(frm.doc.name)]), () => { 
+		// 		window.open(`/${frm.doc.route}`);
+		// 	}, null); 
+		// }
 	},
+	enable_web_form(frm) {
+		if(!frm.is_new() && !frm.doc.field_is_table) {
+			if(frm.doc.enable_web_form){
+				frm.add_custom_button(__("See on website", [__(frm.doc.name)]), () => { 
+					window.open(`/${frappe.router.slug(frm.doc.route)}/new`);
+				}, null); 
+			} else {
+				frm.remove_custom_button(__("See on website"), null);
+			}
+		}
+	}
 });
