@@ -73,9 +73,10 @@ class EngagementForm(Document):
 		prefix = str(self.record_id_prefix).strip()
 		# res = "format:{0}-{1}-{2}".format(prefix, "{YYYY}", "{#####}")
 		# res = "{3}.-.{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####", initials)
-		res = "{0}.-.{1}.-.{2}".format(initials, "YYYY", "#####")
 		if prefix:
-			res = "{0}.-.{1}".format(prefix, res)
+			res = "{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####")
+		else:
+			res = "{0}.-.{1}.-.{2}".format(initials, "YYYY", "#####") 
 		format = res.replace(" ", "").replace("--", "-")
 		self.naming_format = "{0} e.g {1}".format(format, format.replace("format:", "").replace("YYYY", str(datetime.date.today().year)).replace("#####", "00001").replace(".", ""))
 		return format
