@@ -205,7 +205,7 @@ class EngagementForm(Document):
 		form_field.field_name = form_field.field_name.strip()
 		field = {
 			'doctype': 'DocField', 
-			'label': form_field.field_label.strip(), # if form_field.field_type not in ['Column Break'] else '',
+			'label': form_field.field_label.strip() if form_field.field_label else '', # if form_field.field_type not in ['Column Break'] else '',
 			'fieldname': self.get_field_name(form_field),
 			'fieldtype': form_field.field_type,
 			'precision': form_field.field_precision,
