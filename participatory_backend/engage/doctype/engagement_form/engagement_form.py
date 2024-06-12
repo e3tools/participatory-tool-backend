@@ -101,13 +101,15 @@ class EngagementForm(Document):
 		doc.states = [] 	
 		doc.custom = 1
 		doc.module = MODULE_NAME
-		if self.record_id_prefix:
-			doc.naming_rule = 'Expression (old style)'
-			doc.autoname = self._get_naming_rule()
-		else:
-			doc.naming_rule = ""
-			doc.autoname = ""
-			self.naming_format = ""
+		# if self.record_id_prefix:
+		# 	doc.naming_rule = 'Expression (old style)'
+		# 	doc.autoname = self._get_naming_rule()
+		# else:
+		# 	doc.naming_rule = ""
+		# 	doc.autoname = ""
+		# 	self.naming_format = ""
+		doc.naming_rule = 'Expression (old style)'
+		doc.autoname = self._get_naming_rule()
 		doc.track_changes = 1
 		doc.allow_rename = 0
 		doc.allow_import = 1
