@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:engagement_name",
- "creation": "2023-12-20 12:40:36.777754",
+ "creation": "2024-05-07 20:58:13.378372",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -40,7 +40,6 @@
   {
    "fieldname": "description",
    "fieldtype": "Small Text",
-   "in_list_view": 1,
    "label": "Description",
    "reqd": 1
   },
@@ -59,6 +58,7 @@
    "default": "Open",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
    "options": "Open\nClosed",
    "reqd": 1
@@ -68,6 +68,7 @@
    "description": "If checked, the engagement will be visible on the frontend for data  capture",
    "fieldname": "is_published",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Is Published"
   },
   {
@@ -155,7 +156,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-07 07:24:31.550568",
+ "modified": "2024-06-12 16:31:45.415011",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement",
