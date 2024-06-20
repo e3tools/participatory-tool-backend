@@ -124,7 +124,6 @@ ARG FRAPPE_BRANCH=version-15
 ARG FRAPPE_PATH=https://github.com/frappe/frappe
 ARG ERPNEXT_REPO=https://github.com/frappe/erpnext
 ARG ERPNEXT_BRANCH=version-15
-RUN echo 'Starting'
 RUN bench init \
   --frappe-branch=${FRAPPE_BRANCH} \
   --frappe-path=${FRAPPE_PATH} \
@@ -143,14 +142,8 @@ RUN cd /home/frappe
 
 RUN ls -lt
 
-# clone repo
+# create pysld folder, cd into it and clone repo
 RUN mkdir ~/pysld && cd ~/pysld && git clone -v https://github.com/iamtekson/pySLD.git pysld
-
-# cd into the pysld folder
-RUN echo 'inside pysld'
-
-# list folder contantes
-RUN ls -lt
 
 #RUN cat requirements_dev.txt
 
@@ -171,7 +164,6 @@ bench get-app --branch main --resolve-deps gis https://gitlab.com/steve.nyaga/gi
 bench get-app --branch develop --resolve-deps participatory_backend https://github.com/e3tools/participatory-backend.git && \
 /home/frappe/frappe-bench/env/bin/python -m pip install -r /home/frappe/frappe-bench/apps/gis/requirements.txt && \
 /home/frappe/frappe-bench/env/bin/python -m pip install -r /home/frappe/frappe-bench/apps/participatory_backend/requirements.txt
-
 
 # FROM base as erpnext
 
