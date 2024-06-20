@@ -14,6 +14,7 @@ RUN useradd -ms /bin/bash frappe \
     curl \
     git \
     vim \
+    nano \
     nginx \
     gettext-base \
     file \
