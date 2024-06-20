@@ -21,7 +21,8 @@
   "field_default",
   "field_in_list_view",
   "mandatory_depends_on",
-  "read_only_depends_on"
+  "read_only_depends_on",
+  "formula"
  ],
  "fields": [
   {
@@ -137,12 +138,19 @@
    "fieldname": "read_only_depends_on",
    "fieldtype": "Small Text",
    "label": "Readonly Depends On"
+  },
+  {
+   "depends_on": "eval:in_list([\"Currency\", \"Data\",\"Date\",\"Datetime\",\"Int\",\"Float\",\"Text\",\"Time\"], doc.field_type)",
+   "description": "Formula that will be used to generate value for this field. An example is <br> 1. <i><b>doc.qty * doc.rate; \n<br>\n2. doc.first_name + \" \" + doc.last_name\n</b>\n\n</i>",
+   "fieldname": "formula",
+   "fieldtype": "Small Text",
+   "label": "Formula"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-06-06 21:38:47.592119",
+ "modified": "2024-06-19 20:39:59.841096",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",

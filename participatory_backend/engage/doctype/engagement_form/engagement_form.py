@@ -16,6 +16,7 @@ OPTION_NAME_FIELD = 'option_name'
 MODULE_NAME = 'Engage'
 DOCTYPE_MAX_LENGTH = 61
 FIELD_NAME_MAX_LENGTH = frappe.db.MAX_COLUMN_LENGTH - 3
+ALLOWED_FORMULA_FIELD_TYPES = ["Currency", "Data","Date","Datetime","Int","Float","Text","Time"]
 
 class EngagementForm(Document):
 	def validate(self): 
@@ -91,6 +92,8 @@ class EngagementForm(Document):
 				fields.append(self.handle_multi_select(field, TABLE_MULTISELECT))
 			else:
 				fields.append(self._get_docfield(field))
+				if field.formula: # if has formula, make field read_only
+					fields[-1]['read_only'] = True
 
 		if self.is_new():
 			doc = frappe.new_doc("DocType")
@@ -123,6 +126,29 @@ class EngagementForm(Document):
 		self._set_roles(doc)
 		self._set_states(doc)
 		doc.save(ignore_permissions=True)
+		self.make_server_script()		
+
+	def make_server_script(self):
+		"""
+		For formula fields, handle them via Server Script
+		"""
+		def _create_script(field):
+			doc = frappe.get_doc({
+				"doctype": "Server Script",
+				"__newname": f'{self.form_name} - {field.field_label}',
+				"script_type": "DocType Event",			
+				"reference_doctype": self.form_name,
+				"doctype_event": "Before Save",
+				"module": MODULE_NAME,
+				"script": f'doc.{field.field_name}={field.formula}'
+			}).insert()
+
+		# delete scripts in case they exist
+		frappe.db.delete("Server Script", {"reference_doctype": self.form_name})
+		# make Server Script
+		formula_fields = [x for x in self.form_fields if x.formula and x.field_type in ALLOWED_FORMULA_FIELD_TYPES]
+		for field in formula_fields:
+			_create_script(field)  
 
 	def _set_states(self, doc):
 		colors = [
