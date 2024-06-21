@@ -71,7 +71,7 @@ class EngagementForm(Document):
 		Return of the form SDD.-.YYYY.-.#####
 		"""
 		initials = get_initials(self.form_name)
-		prefix = str(self.record_id_prefix).strip()
+		prefix = str(self.record_id_prefix).strip() if self.record_id_prefix else None
 		# res = "format:{0}-{1}-{2}".format(prefix, "{YYYY}", "{#####}")
 		# res = "{3}.-.{0}.-.{1}.-.{2}".format(prefix, "YYYY", "#####", initials)
 		if prefix:
