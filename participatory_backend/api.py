@@ -75,6 +75,13 @@ def new_doc(doctype: str):
     return frappe.new_doc(doctype, as_dict=True)
 
 @frappe.whitelist()
+def get_doc(doctype: str, docname: str):
+    try:
+        return frappe.get_doc(doctype, docname)
+    except:
+        return None
+
+@frappe.whitelist()
 def get_count(**kwargs):
     return get_record_count()
 
@@ -201,7 +208,7 @@ def export_data():
     return {"file": fl['file_url'] }
 
 @frappe.whitelist()
-def upsert_doc(doc):
+def upsert_doc():
     """Upsert a doctype
 
     Args:
@@ -210,13 +217,17 @@ def upsert_doc(doc):
     Returns:
         _type_: _description_
     """
-    site = frappe.utils.get_site_url(frappe.local.site)
-    client = FrappeClient(site)
-    client2 = FrappeClient(get_url())
-    if doc.name:
-        res = client.update(doc)
-    else:
-        res = client.insert(doc)
+    # site = frappe.utils.get_site_url(frappe.local.site)
+    # client = FrappeClient(site)
+    # client = FrappeClient(get_url())
+    doc = frappe._dict(frappe.form_dict)
+    doc = frappe.get_doc(doc).save()
+    return doc
+    # docname = frappe.form_dict['docname']
+    # if doc.name:
+    #     res = client.update(doc)
+    # else:
+    #     res = client.insert(doc)
     # check if there are files
 
 @frappe.whitelist()
