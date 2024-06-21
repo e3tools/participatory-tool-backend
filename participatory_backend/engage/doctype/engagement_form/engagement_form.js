@@ -6,7 +6,19 @@ frappe.ui.form.on("Engagement Form", {
         frm.set_query("field_child_doctype", "form_fields", function() {
 			return {
 				filters: {
-					'istable': 1
+					'istable': 1,
+					'custom': 1,
+					'module': 'Engage'
+				}
+			};
+		});
+
+		frm.set_query("field_doctype", "form_fields", function() {
+			return {
+				filters: {
+					'istable': 0,
+					'custom': 1,
+					'module': 'Engage'
 				}
 			};
 		});

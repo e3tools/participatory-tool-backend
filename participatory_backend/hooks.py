@@ -275,12 +275,12 @@ fixtures = [
   # {
   #   "doctype":"Vulnerable Group"
   # },
-  {
-    "doctype":"Workspace",
-    "filters": [
-          [
-              "name", "in", ["Engage"]
-          ]
-      ]
-  },
+#   {
+#     "doctype":"Workspace",
+#     "filters": [
+#           [
+#               "name", "in", ["Engage"]
+#           ]
+#       ]
+#   },
 ]
