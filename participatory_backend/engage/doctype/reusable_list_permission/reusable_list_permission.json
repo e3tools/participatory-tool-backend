@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-06-21 16:57:00.510341",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "role",
+  "permissions_section",
+  "perm_select",
+  "perm_create",
+  "perm_read",
+  "perm_write",
+  "perm_delete",
+  "column_break_siia",
+  "perm_report",
+  "perm_export",
+  "perm_import",
+  "perm_print"
+ ],
+ "fields": [
+  {
+   "fieldname": "role",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Role",
+   "options": "Role",
+   "reqd": 1
+  },
+  {
+   "fieldname": "permissions_section",
+   "fieldtype": "Section Break",
+   "label": "Permissions"
+  },
+  {
+   "default": "1",
+   "fieldname": "perm_select",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Select"
+  },
+  {
+   "default": "1",
+   "fieldname": "perm_create",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Create"
+  },
+  {
+   "default": "1",
+   "fieldname": "perm_read",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Read"
+  },
+  {
+   "default": "1",
+   "fieldname": "perm_write",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Write"
+  },
+  {
+   "default": "1",
+   "fieldname": "perm_delete",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Delete"
+  },
+  {
+   "fieldname": "column_break_siia",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "perm_report",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Report"
+  },
+  {
+   "default": "0",
+   "fieldname": "perm_export",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Export"
+  },
+  {
+   "default": "0",
+   "fieldname": "perm_import",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Import"
+  },
+  {
+   "default": "0",
+   "fieldname": "perm_print",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Print"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-06-21 16:57:09.161805",
+ "modified_by": "Administrator",
+ "module": "Engage",
+ "name": "Reusable List Permission",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
