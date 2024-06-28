@@ -231,6 +231,27 @@ def upsert_doc():
     # check if there are files
 
 @frappe.whitelist()
+def sync_records(doctype: str, docs: list):
+    """
+    Synchronize records from the frontend
+
+    Args:
+        doctype (str): Doctype
+        docs (list): Records to synchronize
+    """
+    fails, success = [], []
+    if isinstance(docs, list):
+        for rec in docs:
+            try:
+                doc = frappe.get_doc(rec)
+                doc.save()
+                success.append(rec['_name'])
+            except Exception as e:
+                fails.append({'rec': rec, 'error': str(e)})
+                pass
+    return {"res": len(fails) == 0 and len(docs) != 0, 'fail': fails, 'success': success} 
+
+@frappe.whitelist()
 def do_upload():
     """
     Upload file
