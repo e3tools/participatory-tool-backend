@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2024-05-07 20:59:23.174173",
+ "creation": "2024-06-20 08:59:22.124827",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -17,7 +17,9 @@
   "depends_on",
   "column_break_ikco",
   "field_reqd",
+  "field_readonly",
   "field_non_negative",
+  "field_is_backend_field",
   "field_default",
   "field_in_list_view",
   "mandatory_depends_on",
@@ -145,12 +147,28 @@
    "fieldname": "formula",
    "fieldtype": "Small Text",
    "label": "Formula"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:!in_list([\"Section Break\", \"Column Break\", \"Button\", \"HTML\"], doc.fieldtype)",
+   "fieldname": "field_readonly",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Read only?"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:!in_list([\"Section Break\", \"Column Break\", \"Button\", \"HTML\"], doc.fieldtype)",
+   "description": "If checked, the field will only be  visible and can only be edited from the backend only",
+   "fieldname": "field_is_backend_field",
+   "fieldtype": "Check",
+   "label": "Only Accessible From Backend"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-06-19 20:39:59.841096",
+ "modified": "2024-09-17 13:25:30.554686",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",
