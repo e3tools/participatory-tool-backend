@@ -25,7 +25,9 @@
   "web_title",
   "route",
   "public_url",
-  "column_break_mgpp"
+  "column_break_mgpp",
+  "anonymous",
+  "success_message"
  ],
  "fields": [
   {
@@ -123,7 +125,6 @@
   {
    "fieldname": "public_url",
    "fieldtype": "Data",
-   "hidden": 1,
    "label": "Public URL",
    "read_only": 1
   },
@@ -131,12 +132,23 @@
    "depends_on": "eval:!doc.field_is_table",
    "fieldname": "section_break_kmob",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "success_message",
+   "fieldtype": "Small Text",
+   "label": "Message to be displayed on successful completion"
+  },
+  {
+   "default": "1",
+   "fieldname": "anonymous",
+   "fieldtype": "Check",
+   "label": "Receive anonymous response"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-12 17:04:55.805453",
+ "modified": "2024-09-17 19:55:21.529078",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

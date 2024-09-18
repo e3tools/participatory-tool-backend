@@ -49,6 +49,18 @@ def is_engagement_entry_ready_to_submit(engagement_entry_name, engagement_name=N
 			return False
 	return True
 
+def get_backend_only_fields(engagement_form_name: str):
+    """
+    Get backend only fields. This approach was taken instead of customizing DocField since DocField is a restricted DocType that cannot be customized
+    """
+    if engagement_form_name:
+        # check if there is a matching Engagement Form
+        if frappe.db.exists("Engagement Form", {"name": engagement_form_name}):
+            engagement_form_fields = frappe.get_doc("Engagement Form", engagement_form_name).form_fields
+            backend_fields = [y for y in engagement_form_fields if y.field_is_backend_field]
+            return backend_fields
+    return []
+
 
 def get_engagement_doctypes(engagement_name):
 	"""Get doctypes that are required to capture data related to an engagement
@@ -156,11 +168,14 @@ def save_engagement_entry():
 			doc = frappe.new_doc(doctype)
 			is_new_record = True
 		
+		backend_only_fields = get_backend_only_fields(doctype)
 		save_files()
 		entry['name'] = name
 		doc.update(entry)
 		doc.engagement_entry = engagement_entry.name
-		doc.engagement_entry_status = engagement_entry.status		
+		doc.engagement_entry_status = engagement_entry.status	
+		doc.flags.ignore_mandatory = True if backend_only_fields else False	
+		doc.flags.ignore_permissions = True	
 		doc.save(ignore_permissions=True) #if entry.name else doc.insert(ignore_permissions=True) 
 
 	data = frappe.form_dict.entry

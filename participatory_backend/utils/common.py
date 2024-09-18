@@ -1,5 +1,6 @@
 import frappe
 from participatory_backend.enums import TechnicalAnalysisTypeEnum
+from frappe import _
 
 def get_technical_analysis_type(data_type):
     mp = {

@@ -52,6 +52,7 @@ frappe.ui.form.on("Engagement Form", {
 			}
 		}
 		frm.trigger('enable_web_form');
+		frm.trigger('set_public_url');
 		// if(!frm.is_new() && frm.doc.enable_web_form && !frm.doc.field_is_table) {
 		// 	frm.add_custom_button(__("See on website", [__(frm.doc.name)]), () => { 
 		// 		window.open(`/${frm.doc.route}`);
@@ -68,5 +69,10 @@ frappe.ui.form.on("Engagement Form", {
 				frm.remove_custom_button(__("See on website"), null);
 			}
 		}
+	},
+	set_public_url(frm) {
+		// if(frm.doc.enable_web_form){
+		// 	frappe.model.set_value(frm.doc.doctype, frm.doc.name, 'public_url', `/${frappe.router.slug(frm.doc.route)}/new`);
+		// }
 	}
 });

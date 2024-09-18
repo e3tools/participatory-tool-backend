@@ -32,7 +32,6 @@
   {
    "fieldname": "engagement_name",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "Engagement Name",
    "reqd": 1,
    "unique": 1
@@ -86,6 +85,7 @@
    "depends_on": "eval:doc.has_data_forms",
    "fieldname": "data_forms_template",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Data forms template",
    "mandatory_depends_on": "eval:doc.has_data_forms",
    "options": "Engagement Template"
@@ -156,7 +156,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-12 16:31:45.415011",
+ "modified": "2024-09-17 21:12:49.117743",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement",

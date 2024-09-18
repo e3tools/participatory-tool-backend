@@ -8,7 +8,8 @@ from frappe import _
 import datetime
 from frappe.desk.form.linked_with import get as get_links 
 from frappe.desk.form.linked_with import get_linked_docs, get_linked_doctypes
-from participatory_backend.utils import get_initials
+from participatory_backend.utils.common import get_initials
+from participatory_backend.utils.translator import generate_form_translations
 
 SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
@@ -40,6 +41,9 @@ class EngagementForm(Document):
 
 	def after_rename(self, old_name, new_name, merge=False):
 		frappe.rename_doc("DocType", old=old_name, new=new_name)
+
+	def on_update(self):
+		pass#generate_form_translations(self.name)
 
 	def on_trash(self):
 		doctype = frappe.db.exists("DocType", self.name)
@@ -249,6 +253,7 @@ class EngagementForm(Document):
 			'mandatory_depends_on': _set_depends_on(form_field.mandatory_depends_on), #str(form_field.mandatory_depends_on).strip() if form_field.mandatory_depends_on else None,
 			'read_only_depends_on': _set_depends_on(form_field.read_only_depends_on), #str(form_field.read_only_depends_on).strip() if form_field.read_only_depends_on else None,
 			'options': _get_options(),
+			'read_only': form_field.field_readonly,
 		}
 		return field
 
@@ -446,6 +451,7 @@ class EngagementForm(Document):
 				frappe.delete_doc("Web Form", exists)
 			return 
 
+		backend_only_fields = [x for x in self.form_fields if x.field_is_backend_field]
 		doctype = frappe.get_doc("DocType", self.name) 
 		r = {
 			"title": self.web_title,
@@ -454,17 +460,24 @@ class EngagementForm(Document):
 			"module": doctype.module,
 			"is_standard": False, 
 			"introduction_text": self.description,
+			"success_message": self.success_message,
 			"web_form_fields": [],
 			"button_label": "Submit",
-			"route": self.get_route()
+			"route": self.get_route(),
+			"allow_incomplete": True if backend_only_fields else False, #only allow incomplete if there are backend only fields
+			"anonymous": self.anonymous
 		}
 
-		for df in doctype.fields:
+		for df in [x for x in doctype.fields if x.fieldname not in [x.field_name for x in backend_only_fields]]:# excluse backend fields
+			field_type = df.fieldtype
+			if field_type == 'Tab Break':
+				field_type = 'Page Break'
+
 			r['web_form_fields'].append({
 				'doctype': 'Web Form Field',
 				'fieldname': df.fieldname,
 				'label': df.label,
-				'fieldtype': df.fieldtype,
+				'fieldtype': field_type,
 				'options': df.options,
 				'reqd': df.reqd,
 				'default': df.default,

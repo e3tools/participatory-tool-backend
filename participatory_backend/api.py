@@ -63,12 +63,23 @@ def login(**kwargs):
         print("Login error: ", str(e))
         return {'status_code': 500, 'text':str(e)}
 
+
 @frappe.whitelist()
 def get_doctype(doctype: str, with_parent: int = 0):
+    def filter_backend_only_fields():
+        if res_doctype:
+            # check if there is a matching Engagement Form
+            if res_doctype.module == 'Engage':
+                backend_fields = EngageUtil.get_backend_only_fields(res_doctype.name) 
+                backend_field_names = [y.field_name for y in backend_fields]
+                res_doctype.fields = [x for x in res_doctype.fields if x.fieldname not in backend_field_names]
+
+    res_doctype = None
     getdoctype(doctype, with_parent=with_parent)
     if frappe.response.docs:
-        return frappe.response.docs[-1] if frappe.response.docs[-1].name == doctype else None
-    return None
+        res_doctype = frappe.response.docs[-1] if frappe.response.docs[-1].name == doctype else None
+        filter_backend_only_fields()
+    return res_doctype
 
 @frappe.whitelist()
 def new_doc(doctype: str):
@@ -221,7 +232,8 @@ def upsert_doc():
     # client = FrappeClient(site)
     # client = FrappeClient(get_url())
     doc = frappe._dict(frappe.form_dict)
-    doc = frappe.get_doc(doc).save()
+    backend_only_fields = EngageUtil.get_backend_only_fields(doc.doctype)
+    doc = frappe.get_doc(doc).save(ignore_mandatory=True if backend_only_fields else False)
     return doc
     # docname = frappe.form_dict['docname']
     # if doc.name:

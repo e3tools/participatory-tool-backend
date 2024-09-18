@@ -76,6 +76,7 @@ class ReusableList(Document):
 			doc.hide_toolbar = 1
 			doc.istable = 0
 			self._set_roles(doc)
+			doc.flags.ignore_permissions = True
 			return doc.save(ignore_permissions=True)
 
 		dc = _upsert_doctype()
