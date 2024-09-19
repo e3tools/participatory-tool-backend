@@ -7,7 +7,7 @@ frappe.ui.form.on("Engagement Form", {
 			return {
 				filters: {
 					'istable': 1,
-					'custom': 1,
+					//'custom': 1,
 					//'module': 'Engage'
 				}
 			};
@@ -17,7 +17,7 @@ frappe.ui.form.on("Engagement Form", {
 			return {
 				filters: {
 					'istable': 0,
-					'custom': 1,
+					//'custom': 1,
 					//'module': 'Engage'
 				}
 			};

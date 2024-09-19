@@ -236,13 +236,23 @@ class EngagementForm(Document):
 				return exp
 			else:
 				return f"eval:{exp}"
+			
+		def _get_field_type(field_type: str):
+			if field_type == 'Linked Field':
+				return "Read Only"
+			return field_type
+		
+		def _get_fetch_from(field: str):
+			if field.field_type == 'Linked Field':
+				return field.field_linked_field
+			return None
 				
 		form_field.field_name = form_field.field_name.strip()
 		field = {
 			'doctype': 'DocField', 
 			'label': form_field.field_label.strip() if form_field.field_label else '', # if form_field.field_type not in ['Column Break'] else '',
 			'fieldname': self.get_field_name(form_field),
-			'fieldtype': form_field.field_type,
+			'fieldtype': _get_field_type(form_field.field_type),
 			'precision': form_field.field_precision,
 			'length': form_field.field_length,
 			'reqd': form_field.field_reqd,
@@ -254,6 +264,8 @@ class EngagementForm(Document):
 			'read_only_depends_on': _set_depends_on(form_field.read_only_depends_on), #str(form_field.read_only_depends_on).strip() if form_field.read_only_depends_on else None,
 			'options': _get_options(),
 			'read_only': form_field.field_readonly,
+			'fetch_from': _get_fetch_from(form_field),
+			'description': form_field.description
 		}
 		return field
 
