@@ -13,10 +13,28 @@ class Engagement(Document):
 		if cint(self.has_data_forms):
 			self.create_custom_fields()
 
+		self.validate_closing_date()
+
 	# def on_update(self):
 	# 	self.create_custom_fields()
 
 	def create_custom_fields(self):
+		self.create_custom_fields_for_engagement_form()
+		# self.create_custom_fields_by_template()
+
+	def validate_closing_date(self):
+		if cint(self.is_published):
+			if not self.closing_date:
+				frappe.throw(_("You must specify the Closing Date of this engagement")) 
+
+	def create_custom_fields_for_engagement_form(self):
+		"""
+		For the selected Engagement Form, add a field for Engagement Entry
+		"""
+		if self.is_published:
+			self.create_custom_field_for_engagement_entry(self.engagement_form) 
+
+	def create_custom_fields_by_template(self):
 		"""
 		For each doctype item, add a field for Engagement Entry
 		"""
