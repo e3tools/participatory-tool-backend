@@ -160,9 +160,10 @@ def save_engagement_entry():
 		# entry['engagement_entry'] = engagement_entry.name
 		# entry['engagement_name'] = engagement_entry.status
 		name_field = 'docname'
-		name = entry[name_field]
+		name = None
 		is_new_record = False
 		if name_field in entry and entry[name_field] != None:
+			name = entry[name_field]
 			doc = frappe.get_doc(doctype, entry[name_field])
 		else:
 			doc = frappe.new_doc(doctype)
@@ -236,3 +237,11 @@ def get_engagement_entry_records(engagement_entry_name):
 				if exists:
 					record_mp[item.doctype_item] = frappe.get_doc(item.doctype_item, exists).as_dict()
 	return record_mp
+
+def get_active_engagements():
+	engagements = frappe.db.get_list("Engagement", 
+						filters={"is_published": 1, "closing_date": [">=", datetime.datetime.today()]},
+						fields='*')
+	return engagements
+
+

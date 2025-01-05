@@ -15,8 +15,12 @@
   "naming_format",
   "column_break_ygly",
   "description",
+  "show_data_processing_consent_statement",
   "section_break_wjep",
   "form_fields",
+  "settings_tab",
+  "show_title_field_in_link",
+  "title_field",
   "tab_2_tab",
   "form_permissions",
   "web_publishing_tab",
@@ -100,11 +104,12 @@
    "label": "Web Publishing"
   },
   {
-   "default": "0",
-   "description": "If checked, data will be captured via the web link in addition to the front end",
+   "default": "1",
+   "description": "If checked, data will be captured via the web link in addition to the front end mobile application",
    "fieldname": "enable_web_form",
    "fieldtype": "Check",
-   "label": "Enable Capture of Data Via Web Link"
+   "label": "Enable Capture of Data Via Web Link",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_mgpp",
@@ -140,15 +145,43 @@
   },
   {
    "default": "1",
+   "description": "If checked, users who have not logged in will be able to enter data into the form",
    "fieldname": "anonymous",
    "fieldtype": "Check",
    "label": "Receive anonymous response"
+  },
+  {
+   "fieldname": "settings_tab",
+   "fieldtype": "Tab Break",
+   "label": "Settings"
+  },
+  {
+   "default": "0",
+   "description": "If checked, another field will be displayed instead of the id of the record if the values for this form as used as link fields in other forms",
+   "fieldname": "show_title_field_in_link",
+   "fieldtype": "Check",
+   "label": "Show alternative field in link fields instead of record id"
+  },
+  {
+   "depends_on": "eval:doc.show_title_field_in_link",
+   "description": "This is the value to be displayed instead of record ids when the values of this form are referenced in other forms\n",
+   "fieldname": "title_field",
+   "fieldtype": "Select",
+   "label": "Alternative field to use",
+   "mandatory_depends_on": "eval:doc.show_title_field_in_link"
+  },
+  {
+   "default": "0",
+   "description": "If checked, the General Data Protection Regulation statement will be displayed and the user has to agree to the terms before data can be submitted",
+   "fieldname": "show_data_processing_consent_statement",
+   "fieldtype": "Check",
+   "label": "Show Data Processing Consent Statement"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-17 19:55:21.529078",
+ "modified": "2024-12-12 09:14:20.635781",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

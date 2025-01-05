@@ -9,13 +9,16 @@
   "field_type",
   "field_name",
   "field_choices",
+  "linked_form",
+  "linked_form_property",
   "field_linked_field",
   "data_field_options",
   "field_length",
   "field_doctype",
   "field_child_doctype",
+  "set_filters",
+  "field_filters",
   "field_precision",
-  "depends_on",
   "column_break_ikco",
   "field_reqd",
   "field_readonly",
@@ -23,10 +26,13 @@
   "field_is_backend_field",
   "field_default",
   "field_in_list_view",
+  "depends_on",
   "mandatory_depends_on",
   "read_only_depends_on",
   "formula",
-  "description"
+  "description",
+  "max_height",
+  "html"
  ],
  "fields": [
   {
@@ -40,7 +46,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Field Type",
-   "options": "\nAttach\nAttach Image\nCheck\nColumn Break\nCurrency\nData\nDate\nDatetime\nInt\nFloat\nGeolocation\nLink\nLinked Field\nSelect\nSelect Multiple\nSection Break\nText\nTab Break\nTable\nTable MultiSelect\nTime",
+   "options": "\nAttach\nAttach Image\nCheck\nColumn Break\nCurrency\nData\nDate\nDatetime\nHTML\nInt\nFloat\nGeolocation\nLink\nLinked Field\nSelect\nSelect Multiple\nSection Break\nText\nTab Break\nTable\nTable MultiSelect\nTime",
    "reqd": 1
   },
   {
@@ -54,6 +60,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "2",
    "depends_on": "eval:in_list([\"Float\", \"Currency\", \"Percent\"], doc.field_type)",
    "fieldname": "field_precision",
    "fieldtype": "Select",
@@ -128,26 +135,26 @@
   {
    "description": "The field will be <b>displayed</b> when this condition is met. Conditions are written in form of <i>&lt;doc.FIELD_NAME&gt; ==&lt;CONDITION&gt; </i> e.g doc.first_name == 'Peter'",
    "fieldname": "depends_on",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Display Depends On"
   },
   {
    "description": "The field will be <b>mandatory</b> when this condition is met. Conditions are written in form of <i>&lt;doc.FIELD_NAME&gt; ==&lt;CONDITION&gt; </i> e.g doc.first_name == 'Peter' ",
    "fieldname": "mandatory_depends_on",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Mandatory Depends"
   },
   {
    "description": "The field will be <b>read only</b> when this condition is met. Conditions are written in form of <i>doc.&lt;doc.FIELD_NAME&gt; ==&lt;CONDITION&gt; </i> e.g doc.first_name == 'Peter'",
    "fieldname": "read_only_depends_on",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Readonly Depends On"
   },
   {
    "depends_on": "eval:in_list([\"Currency\", \"Data\",\"Date\",\"Datetime\",\"Int\",\"Float\",\"Text\",\"Time\"], doc.field_type)",
    "description": "Formula that will be used to generate value for this field. An example is <br> 1. <i><b>doc.qty * doc.rate; \n<br>\n2. doc.first_name + \" \" + doc.last_name\n</b>\n\n</i>",
    "fieldname": "formula",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Formula"
   },
   {
@@ -168,22 +175,61 @@
   },
   {
    "depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)",
-   "description": "Specify the field in the form of &lt;PARENT_LINK_FIELD_NAME&gt;.&lt;COLUMN_NAME&gt; e.g project.project_name. <b>project is the name of a field in this form. <b>project_name</b> is the name of field that exists in the Project form</b>",
+   "description": "e.g <i>project.project_name</i>. <b>project</b> is the name of a field in this form. <b>project_name</b> is the name of field that exists in the Project form",
    "fieldname": "field_linked_field",
    "fieldtype": "Data",
-   "label": "Linked Field",
-   "mandatory_depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)"
+   "label": "Generate Linked Field",
+   "mandatory_depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)",
+   "read_only": 1
   },
   {
    "fieldname": "description",
-   "fieldtype": "Text",
+   "fieldtype": "Small Text",
    "label": "Description"
+  },
+  {
+   "depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)",
+   "fieldname": "linked_form_property",
+   "fieldtype": "Select",
+   "label": "Field in the Linked Form",
+   "mandatory_depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)"
+  },
+  {
+   "depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)",
+   "fieldname": "linked_form",
+   "fieldtype": "Select",
+   "label": "Form To Link",
+   "mandatory_depends_on": "eval:in_list([\"Linked Field\"], doc.field_type)"
+  },
+  {
+   "depends_on": "eval:in_list([\"Link\"], doc.field_type)",
+   "description": "Filters that will be applied when retrieving list of records from the selected form. Filters are written as a JSON object in the form \n of &lt;PROPERTY_NAME&gt; OPERATOR &lt;FILTER_VALUE&gt;. An example is <br> <i><b>{ 'parent_admin': doc.admin_1,\n'admin_type': 'Polygon',\n'enabled': true\n} \n<br>\n</b></i>",
+   "fieldname": "field_filters",
+   "fieldtype": "Data",
+   "label": "Filters"
+  },
+  {
+   "fieldname": "max_height",
+   "fieldtype": "Data",
+   "label": "Max Height"
+  },
+  {
+   "fieldname": "html",
+   "fieldtype": "HTML",
+   "label": "HTML",
+   "read_only": 1
+  },
+  {
+   "fieldname": "set_filters",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "Set Filters"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-19 11:42:08.319344",
+ "modified": "2025-01-05 07:25:38.315030",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",
