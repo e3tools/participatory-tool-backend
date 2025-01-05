@@ -1,0 +1,215 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-11-10 02:53:57.831501",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "branding_tab",
+  "countyinstitution_details_section",
+  "county_name",
+  "county_slogan",
+  "column_break_ehxd",
+  "logo",
+  "participatory_tool_details_tab",
+  "details_specific_to_the_participatory_tool_section",
+  "app_name",
+  "app_slogan",
+  "column_break_yaoh",
+  "app_introduction",
+  "website_footer_details_tab",
+  "footer_section",
+  "column_1_title",
+  "column_1_details",
+  "column_break_slan",
+  "column_2_title",
+  "column_2_details",
+  "column_break_xpas",
+  "column_3_title",
+  "column_3_details",
+  "section_break_jaxf",
+  "socket",
+  "basic_settings_tab",
+  "terms",
+  "data_consent_statement"
+ ],
+ "fields": [
+  {
+   "fieldname": "data_consent_statement",
+   "fieldtype": "Text Editor",
+   "label": "Data Consent Statement"
+  },
+  {
+   "fieldname": "county_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "County/Institution Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "county_slogan",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "County/Institution Slogan",
+   "reqd": 1
+  },
+  {
+   "description": "Name or acronym of the participatory tool ",
+   "fieldname": "app_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Participatory Tool Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Institution/County Logo"
+  },
+  {
+   "description": "Short and striking or memorable phrase to describe the participatory tool",
+   "fieldname": "app_slogan",
+   "fieldtype": "Data",
+   "label": "Participatory Tool Slogan",
+   "reqd": 1
+  },
+  {
+   "description": "Long text that describes the participatory tool in detail",
+   "fieldname": "app_introduction",
+   "fieldtype": "Small Text",
+   "label": "App Introduction",
+   "reqd": 1
+  },
+  {
+   "fieldname": "basic_settings_tab",
+   "fieldtype": "Tab Break",
+   "label": "Data Consent"
+  },
+  {
+   "fieldname": "branding_tab",
+   "fieldtype": "Tab Break",
+   "label": "Institution Details"
+  },
+  {
+   "fieldname": "footer_section",
+   "fieldtype": "Section Break",
+   "label": "Information that appears at the bottom of every page on the website"
+  },
+  {
+   "default": "Contact Us",
+   "description": "e.g Contact us",
+   "fieldname": "column_1_title",
+   "fieldtype": "Data",
+   "label": "Column 1 Title"
+  },
+  {
+   "default": "Phone: 0722-000-999\nEmail: dumpty@humpty.com\n",
+   "description": "Enter each item on a separate line",
+   "fieldname": "column_1_details",
+   "fieldtype": "Small Text",
+   "label": "Column 1 Contents"
+  },
+  {
+   "fieldname": "column_break_slan",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Business Hours",
+   "description": "e.g Operating hours",
+   "fieldname": "column_2_title",
+   "fieldtype": "Data",
+   "label": "Column 2 Title"
+  },
+  {
+   "fieldname": "column_break_xpas",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Quick Links",
+   "description": "e.g Other resources",
+   "fieldname": "column_3_title",
+   "fieldtype": "Data",
+   "label": "Column 3 Title"
+  },
+  {
+   "default": "Monday - Friday: 9am - 5pm\nWeekends: Closed\nPublic Holiday: Closed",
+   "description": "Enter each item on a separate line",
+   "fieldname": "column_2_details",
+   "fieldtype": "Small Text",
+   "label": "Column 2 Contents"
+  },
+  {
+   "fieldname": "countyinstitution_details_section",
+   "fieldtype": "Section Break",
+   "label": "County/Institution Details"
+  },
+  {
+   "fieldname": "column_break_ehxd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "participatory_tool_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Participatory Tool Details"
+  },
+  {
+   "fieldname": "details_specific_to_the_participatory_tool_section",
+   "fieldtype": "Section Break",
+   "label": "Details specific to the participatory tool"
+  },
+  {
+   "fieldname": "column_break_yaoh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "website_footer_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Website Footer Details"
+  },
+  {
+   "default": "<a href=\"http://example.com\">ICT Helpdesk&gt;</a>",
+   "description": "Enter each item on a separate line",
+   "fieldname": "column_3_details",
+   "fieldtype": "Small Text",
+   "label": "Column 3 Contents"
+  },
+  {
+   "fieldname": "terms",
+   "fieldtype": "Section Break",
+   "label": "Terms and conditions that the user has to accept in tools that require consent for data collection and usage"
+  },
+  {
+   "fieldname": "section_break_jaxf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "The socket is the last content element underneath the footer. It normally contains the copyright message.",
+   "fieldname": "socket",
+   "fieldtype": "Data",
+   "label": "Socket Message"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-12-11 20:40:52.619632",
+ "modified_by": "Administrator",
+ "module": "Engage",
+ "name": "Engage Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
