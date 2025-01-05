@@ -12,11 +12,14 @@
   "engagement_type",
   "status",
   "is_published",
+  "closing_date",
   "column_break_t82l",
   "description",
+  "cover_image",
   "engagement_types_tab",
   "has_data_forms",
   "data_forms_template",
+  "engagement_form",
   "has_formal_submissions",
   "has_guestbook",
   "has_qa",
@@ -60,7 +63,7 @@
    "in_list_view": 1,
    "label": "Status",
    "options": "Open\nClosed",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "default": "0",
@@ -79,16 +82,14 @@
    "default": "0",
    "fieldname": "has_data_forms",
    "fieldtype": "Check",
-   "label": "Has data forms"
+   "label": "Has an Engagement Form?"
   },
   {
-   "depends_on": "eval:doc.has_data_forms",
    "fieldname": "data_forms_template",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Data forms template",
-   "mandatory_depends_on": "eval:doc.has_data_forms",
-   "options": "Engagement Template"
+   "options": "Engagement Template",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -151,12 +152,35 @@
   {
    "fieldname": "column_break_2smx",
    "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.is_published",
+   "description": "Date when the engagement will close. If the engagement does not close, set the value as 31/12/2099",
+   "fieldname": "closing_date",
+   "fieldtype": "Date",
+   "label": "Closing Date",
+   "mandatory_depends_on": "eval:doc.is_published"
+  },
+  {
+   "fieldname": "cover_image",
+   "fieldtype": "Attach Image",
+   "label": "Cover Image"
+  },
+  {
+   "depends_on": "eval:doc.has_data_forms",
+   "fieldname": "engagement_form",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Engagement Form",
+   "link_filters": "[[\"Engagement Form\",\"field_is_table\",\"=\",0]]",
+   "mandatory_depends_on": "eval:doc.has_data_forms",
+   "options": "Engagement Form"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-17 21:12:49.117743",
+ "modified": "2024-12-11 20:47:36.625062",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement",
