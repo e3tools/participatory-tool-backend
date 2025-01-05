@@ -1,0 +1,41 @@
+{% extends 'templates/engage_base.html' %}
+
+{% block content %}
+
+<!--- Welcome Section -->
+<div class="container-fluid">
+    <div class="row justify-content-center text-center">
+        <div class="col-md-11 col-lg-9">
+            <h1 class="display-5">{{settings.app_name}}</h1>
+            <p class="lead">
+                {{settings.app_introduction}}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% if engagements %}
+<!--- Three Column Section -->
+<div class="container-fluid">
+    <div class="row text-center">
+        {% for engagement in engagements %}
+        <div class="col-sm-6 col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-12 engagement-item">
+                <i class="fab fa-html5"></i>                  
+                <h4><a href="engage/detail?name={{engagement.name}}"> {{ engagement.engagement_name }} </a></h4>
+                <p>{{engagement.description[:500]}}</p>
+                <!-- <a href="#" class="btn btn-outline-dark">Make New Submission</a> -->
+            </div> 
+            <!-- <div class="col-12">
+               
+            </div> -->
+           
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<hr class="my-4" />
+{% endif %}
+
+{% endblock %}
