@@ -1,0 +1,2 @@
+[pre_model_sync]
+participatory_backend.patches.v1.update_depends_on
