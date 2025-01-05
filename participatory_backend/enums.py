@@ -19,3 +19,10 @@ class TechnicalAnalysisTypeEnum(enum.Enum):
     NUMERIC = "Numeric"
     DATE = "Date"
 
+class DefaultRolesEnum(enum.Enum):
+    GUEST = "Guest"
+    DATA_CAPTURE = "Data Capture" 
+    FORM_DESIGNER_USER = "Form Design User"
+    FORM_DESIGNER_MANAGER = "Form Design Manager"
+    TECHNICAL_DATA_USER = "Technical Data User"
+    TECHNICAL_DATA_MANAGER = "Technical Data Manager"

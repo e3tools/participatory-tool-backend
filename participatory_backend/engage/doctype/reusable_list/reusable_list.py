@@ -5,6 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import cint
 from frappe import _
+from participatory_backend.enums import DefaultRolesEnum
 
 MODULE_NAME = 'Engage'
 
@@ -14,6 +15,7 @@ class ReusableList(Document):
 			pi = frappe.db.exists(self.doctype, {"name": ("=", self.name), "docstatus": ("<", 2)})
 			if pi:
 				frappe.throw(_("Another list with the name {0} exists").format(frappe.bold(self.name)))
+			self.name = self.list_name.strip()
 
 		self.make_doctype()
 
@@ -83,6 +85,30 @@ class ReusableList(Document):
 		_upsert_items(doctype=dc.name)
 
 	def _set_roles(self, doc):
+		for role in [DefaultRolesEnum.DATA_CAPTURE.value, DefaultRolesEnum.GUEST.value]:
+			r = frappe._dict()
+			r['role'] = role
+			r['doctype'] = 'DocPerm'
+			r["select"] = 1
+			r["read"] = 1 		
+			doc.append("permissions", r)
+
+		for role in [DefaultRolesEnum.FORM_DESIGNER_USER.value, DefaultRolesEnum.FORM_DESIGNER_MANAGER.value]:
+			r = frappe._dict()
+			r['role'] = role
+			r['doctype'] = 'DocPerm'
+			r["select"] = 1
+			r["read"] = 1
+			r["write"] = 1
+			r["create"] = 1
+			r["delete"] = 1
+			r["report"] = 1
+			r["export"] = 1
+			r["import"] = 1
+			r["print"] = 1		
+			doc.append("permissions", r)  
+
+	def _set_roles_old(self, doc):
 		all_selected = False
 		for perm in self.permissions:
 			if perm.role == "All":

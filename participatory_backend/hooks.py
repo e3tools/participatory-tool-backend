@@ -12,7 +12,7 @@ app_license = "MIT"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/participatory_backend/css/participatory_backend.css"
-# app_include_js = "/assets/participatory_backend/js/participatory_backend.js"
+app_include_js = "/assets/participatory_backend/js/participatory_backend.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/participatory_backend/css/participatory_backend.css"

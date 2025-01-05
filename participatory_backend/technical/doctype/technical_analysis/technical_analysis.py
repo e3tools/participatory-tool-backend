@@ -10,7 +10,7 @@ from gis.analyzers.vector import ShapeFileAnalyzer
 from gis.analyzers.raster import RasterAnalyzer
 from gis.utils.common import extract_fields_from_formula
 from participatory_backend.enums import TechnicalAnalysisTypeEnum
-from participatory_backend.utils import get_technical_analysis_type
+from participatory_backend.utils.common import get_technical_analysis_type
 
 class TechnicalAnalysis(Document):
 	def validate(self):

@@ -1,8 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:list_name",
- "creation": "2024-06-21 16:31:13.645205",
+ "creation": "2024-09-17 19:16:08.892022",
  "description": "Doctype to hold reusable lists",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,9 +10,7 @@
   "column_break_nkfg",
   "description",
   "section_break_venq",
-  "items",
-  "permissions_tab",
-  "permissions"
+  "items"
  ],
  "fields": [
   {
@@ -43,27 +40,14 @@
    "label": "List Items",
    "options": "Reusable List Item",
    "reqd": 1
-  },
-  {
-   "fieldname": "permissions_tab",
-   "fieldtype": "Tab Break",
-   "label": "Permissions"
-  },
-  {
-   "fieldname": "permissions",
-   "fieldtype": "Table",
-   "label": "Permissions",
-   "options": "Reusable List Permission",
-   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-17 11:23:17.381582",
+ "modified": "2024-11-06 12:56:12.437795",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Reusable List",
- "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -79,6 +63,15 @@
    "write": 1
   },
   {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Data Capture",
+   "share": 1
+  },
+  {
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -86,7 +79,19 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Data Capture",
+   "role": "Form Design User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Form Design Manager",
    "share": 1,
    "write": 1
   }

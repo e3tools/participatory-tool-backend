@@ -25,6 +25,12 @@ def ping():
 
 @frappe.whitelist(allow_guest=True)
 def login(**kwargs):
+    response = {
+        'user': None,
+        'text': None,
+        'error': None,
+        'status_code': 0
+    }
     try:
         #usr, pwd, cmd = frappe.form_dict.values()
         usr, pwd = None, None
@@ -40,29 +46,47 @@ def login(**kwargs):
         auth.authenticate(user=usr, pwd=pwd)
         auth.post_login()
         user = frappe.get_doc('User', frappe.session.user)
-        msg = {
-            'status_code':200,
-            'text':frappe.local.response.message,
+        userObj = {
             'user': frappe.session.user,
             'token': None,
             'email': user.email,
+            'first_name': user.first_name,
+            'middle_name': user.middle_name,
+            'last_name': user.last_name,
             'full_name': user.full_name,
             'username': user.username,
-            'name': user.name
-        }
+            'name': user.name,
+            'mobile_no': user.mobile_no,
+            'is_locked': user.is_locked,
+            'language': user.language,
+            'roles': frappe.get_roles(user.name)
+        } 
         if(user.api_key and user.api_secret):
-            msg['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
+            userObj['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
         else:
             generate_keys(user.name)
             user.reload()
-            msg['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
-        return msg
+            userObj['token'] = f"{user.api_key}:{user.get_password('api_secret')}"
+        response['status_code'] = 200
+        response['text'] = frappe.local.response.message
+        response['user'] = userObj
+        response['error'] = None 
     except frappe.exceptions.AuthenticationError:
-        return {'status_code': 401, 'text':frappe.local.response.message}
+        # return {'status_code': 401, 'text':frappe.local.response.message, 'user': None, 'error': 'Login failed'}
+        response['status_code'] = 401
+        response['text'] = frappe.local.response.message
+        response['user'] = None
+        response['error'] = 'Login failed' 
+
     except Exception as e:
         print("Login error: ", str(e))
-        return {'status_code': 500, 'text':str(e)}
+        # return {'status_code': 500, 'text': str(e), 'user': null}
+        response['status_code'] = 500
+        response['text'] = str(e)
+        response['user'] = None
+        response['error'] = 'Login error' 
 
+    return response
 
 @frappe.whitelist()
 def get_doctype(doctype: str, with_parent: int = 0):

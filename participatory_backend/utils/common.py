@@ -17,4 +17,12 @@ def get_initials(text: str):
     """
     Get initials given a string 
     """
-    return "".join([x[0].upper() for x in text.replace("  ", " ").split(" ")])
+    res = ''
+    parts = text.strip().replace("  ", " ").split(" ")
+    for part in parts:
+        if part.isnumeric():
+            res += part
+        else:
+            res += part[0]
+    # return "".join([x[0].upper() for x in text.strip().replace("  ", " ").split(" ")])
+    return res
