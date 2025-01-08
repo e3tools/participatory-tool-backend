@@ -1,6 +1,15 @@
 // Copyright (c) 2024, Steve Nyaga and contributors
 // For license information, please see license.txt
 
+const ALLOWED_TITLE_FIELD_TYPES = [
+  "Data",
+  "Date",
+  "Datetime",
+  "Link",
+  "Linked Field",
+  "Select",
+]; 
+
 frappe.ui.form.on("Engagement Form", {
   setup(frm) {
     frm.set_query("field_child_doctype", "form_fields", function () {
@@ -273,7 +282,7 @@ const set_title_field_options = function (frm) {
   let label_val = "";
   const fields = [];
   frm.doc.form_fields?.forEach((field) => {
-    if (field.field_type == "Link") {
+    if(ALLOWED_TITLE_FIELD_TYPES.includes(field.field_type)) {
       fields.push({
         label: field.field_label,
         value: field.field_label,
