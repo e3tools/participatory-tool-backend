@@ -7,6 +7,9 @@ from frappe.client import attach_file
 import base64
 from PIL import Image
 import io
+from frappe import _
+
+IGNORE_ENGAGEMENT_TEMPLATE = 1
 
 def update_engagement_entry_status(engagement_entry_name, status: EngagementStatusEnum):
 	"""
@@ -36,7 +39,7 @@ def is_engagement_entry_ready_to_submit(engagement_entry_name, engagement_name=N
 	"""
 	if not engagement_name:
 		engagement_name = frappe.db.get_value("Engagement Entry", engagement_entry_name, "engagement_name")
-	doctypes = get_engagement_doctypes(engagement_name)
+
 	if not engagement_entry_doc:
 		engagement_entry_doc = get_engagement_entry_records()
 
@@ -73,8 +76,11 @@ def get_engagement_doctypes(engagement_name):
 	engagement = frappe.get_doc("Engagement", engagement_name)
 	if cint(engagement.has_data_forms):
 		# get the template
-		template = frappe.get_doc("Engagement Template", engagement.data_forms_template)
-		doctypes = [x.doctype_item for x in template.items]
+		if IGNORE_ENGAGEMENT_TEMPLATE:
+			doctypes = [engagement.engagement_form]
+		else:
+			template = frappe.get_doc("Engagement Template", engagement.data_forms_template)
+			doctypes = [x.doctype_item for x in template.items]
 	return doctypes
 
 
@@ -153,7 +159,7 @@ def save_engagement_entry():
 				child_table_file_fields = [x for x in frappe.get_meta(table.options).fields if x.fieldtype in ['Attach', 'Attach Image']]
 
 				# get the various child table items
-				child_docs = entry.get(table.fieldname)
+				child_docs = entry.get(table.fieldname) or []
 				for child_doc in child_docs:
 					_process_file_fields(file_fields=child_table_file_fields, doc=child_doc)
  
@@ -211,9 +217,13 @@ def save_engagement_entry():
 		engagement_entry.status = EngagementStatusEnum.SUBMITTED.value
 		engagement_entry.save(ignore_permissions=True)
 
+	saved_doctypes = 0
 	for doctype in data:
 		if doctype not in ['Engagement', 'Engagement Entry']:
 			save_doctype_entry(doctype, data[doctype])
+			saved_doctypes += 1
+	if saved_doctypes == 0:
+		frappe.throw(_("Form data was not submitted"))
 	return engagement_entry.name
 
 def get_engagement_entry_records(engagement_entry_name):
