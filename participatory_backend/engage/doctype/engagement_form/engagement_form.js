@@ -113,10 +113,12 @@ frappe.ui.form.on("Engagement Form", {
           ],
         };
       }
-    );
+    ); 
+    frm.events.show_qrcode(frm);
   },
   onload_post_render(frm) {
     set_title_field_options(frm);
+    frm.events.show_qrcode(frm);
   },
   enable_web_form(frm) {
     if (!frm.is_new() && !frm.doc.field_is_table) {
@@ -171,6 +173,14 @@ frappe.ui.form.on("Engagement Form", {
         }
       },
     });
+  },
+  show_qrcode(frm) {
+    let template = '<img src="" />';
+    if (!frm.doc.__islocal && !frm.doc.field_is_table && frm.doc.qr_code) {
+      template = `<img src="${frm.doc.qr_code}" width="240px"/>`;
+    }
+    frm.set_df_property('qr_code_preview', 'options', frappe.render_template(template));
+    frm.refresh_field('qr_code_preview');
   }
 });
 
@@ -348,8 +358,7 @@ function make_filters_dialog(frm, child) {
   });
 }
 
-function make_filters_area(frm, doctype) {
-  debugger;
+function make_filters_area(frm, doctype) { 
   frm.filter_group = new frappe.ui.FilterGroup({
     parent: frm.dialog.get_field("filter_area").$wrapper,
     doctype: doctype,

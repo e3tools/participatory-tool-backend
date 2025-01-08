@@ -12,6 +12,8 @@ from participatory_backend.utils.common import get_initials
 from participatory_backend.utils.translator import generate_form_translations
 import json
 import ast
+from participatory_backend.utils.qrcode import get_qrcode
+from frappe.utils import random_string, get_url
 
 SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
@@ -23,6 +25,40 @@ ALLOWED_FORMULA_FIELD_TYPES = ["Currency", "Data", "Date", "Datetime", "Int", "F
 ALLOWED_FILTER_FIELD_TYPES = ["Link"]
 
 class EngagementForm(Document):
+	# begin: auto-generated types
+	# This code is auto-generated. Do not modify anything in this block.
+
+	from typing import TYPE_CHECKING
+
+	if TYPE_CHECKING:
+		from frappe.types import DF
+		from participatory_backend.engage.doctype.engagement_form_field.engagement_form_field import EngagementFormField
+		from participatory_backend.engage.doctype.engagement_form_permission.engagement_form_permission import EngagementFormPermission
+
+		anonymous: DF.Check
+		description: DF.SmallText | None
+		enable_web_form: DF.Check
+		field_is_table: DF.Check
+		form_fields: DF.Table[EngagementFormField]
+		form_image: DF.AttachImage | None
+		form_name: DF.Data
+		form_permissions: DF.Table[EngagementFormPermission]
+		naming_format: DF.Data | None
+		public_url: DF.Data | None
+		qr_code: DF.AttachImage | None
+		record_id_prefix: DF.Data | None
+		route: DF.Data | None
+		show_data_processing_consent_statement: DF.Check
+		show_title_field_in_link: DF.Check
+		success_message: DF.SmallText | None
+		title_field: DF.Literal[None]
+		web_title: DF.Data | None
+	# end: auto-generated types
+	
+	@property
+	def form_url(self):
+		return self.get_route(fqdn=True)
+	
 	def validate(self): 
 		self.form_name = frappe.unscrub(self.form_name)
 		if not self.form_fields:
@@ -43,6 +79,21 @@ class EngagementForm(Document):
 			self.enable_web_form = False
 		self.publish_form()
 		
+	def before_save(self): 
+		if self.field_is_table:
+			self.qr_code = None
+		else: 
+			logo_files = frappe.get_all("File",
+				fields=["name", "file_name", "file_url", "is_private"],
+				filters={"attached_to_name": self.name, "attached_to_field": "form_image",  "attached_to_doctype": self.doctype },
+			)
+			form_image = None
+			if logo_files:
+				print(logo_files)
+				print(frappe.local.sites_path)
+				form_image = frappe.utils.get_files_path(logo_files[0].file_name, is_private=logo_files[0].is_private)
+
+			self.qr_code = get_qrcode(self.form_url, form_image)
 
 	def after_rename(self, old_name, new_name, merge=False):
 		frappe.rename_doc("DocType", old=old_name, new=new_name)

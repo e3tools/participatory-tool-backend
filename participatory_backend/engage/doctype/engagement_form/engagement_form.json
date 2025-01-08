@@ -31,7 +31,12 @@
   "public_url",
   "column_break_mgpp",
   "anonymous",
-  "success_message"
+  "success_message",
+  "qr_code_tab",
+  "qr_code",
+  "form_image",
+  "column_break_bdny",
+  "qr_code_preview"
  ],
  "fields": [
   {
@@ -176,12 +181,42 @@
    "fieldname": "show_data_processing_consent_statement",
    "fieldtype": "Check",
    "label": "Show Data Processing Consent Statement"
+  },
+  {
+   "fieldname": "qr_code_tab",
+   "fieldtype": "Tab Break",
+   "label": "QR Code"
+  },
+  {
+   "depends_on": "eval:!doc.field_is_table",
+   "fieldname": "qr_code",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": "QR Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_bdny",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:!doc.field_is_table",
+   "fieldname": "qr_code_preview",
+   "fieldtype": "HTML",
+   "label": "QR Code Preview"
+  },
+  {
+   "description": "Image to be used for the form",
+   "fieldname": "form_image",
+   "fieldtype": "Attach Image",
+   "label": "Form Image"
   }
  ],
  "hide_toolbar": 1,
+ "image_field": "qr_code",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-12 09:14:20.635781",
+ "modified": "2025-01-08 10:55:30.281020",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",
