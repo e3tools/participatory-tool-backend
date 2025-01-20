@@ -60,6 +60,10 @@ class EngagementForm(Document):
 		return self.get_route(fqdn=True)
 	
 	def validate(self): 
+		# from gis.shapefile_loader import load_cascaded_county_admins
+		# load_cascaded_county_admins()
+		# return
+	
 		self.form_name = frappe.unscrub(self.form_name)
 		if not self.form_fields:
 			frappe.throw(_("You must specify at lease one field"))
@@ -790,6 +794,7 @@ class EngagementForm(Document):
 				'depends_on': df.depends_on or '',
 				'mandatory_depends_on': df.mandatory_depends_on or '',
 				'read_only_depends_on': df.read_only_depends_on or '',
+				'description': df.description,
 			})
 		doc.update(r)
 		doc.save(ignore_permissions=True)
