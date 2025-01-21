@@ -26,6 +26,7 @@
   "field_is_backend_field",
   "field_default",
   "field_in_list_view",
+  "field_is_search_field",
   "depends_on",
   "mandatory_depends_on",
   "read_only_depends_on",
@@ -127,6 +128,7 @@
   },
   {
    "default": "0",
+   "description": "Should this field be shown when displaying data as a list",
    "fieldname": "field_in_list_view",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -224,12 +226,19 @@
    "fieldtype": "Button",
    "hidden": 1,
    "label": "Set Filters"
+  },
+  {
+   "default": "0",
+   "description": "If set, this field will be shown in Link fields in addition to the ID of the record",
+   "fieldname": "field_is_search_field",
+   "fieldtype": "Check",
+   "label": "Include this field in Link field search"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-05 07:25:38.315030",
+ "modified": "2025-01-21 23:30:17.722154",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",
