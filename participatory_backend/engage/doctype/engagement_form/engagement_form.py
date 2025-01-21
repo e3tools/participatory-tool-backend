@@ -221,6 +221,10 @@ class EngagementForm(Document):
 		for field in fields:
 			doc.append('fields', field)
 
+		# set search fields
+		search_fields = ','.join([x.field_name for x in self.form_fields if x.field_is_search_field])
+
+		doc.search_fields = search_fields
 		doc.permissions = []
 		doc.states = [] 	
 		doc.custom = 1
