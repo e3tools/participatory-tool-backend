@@ -258,7 +258,7 @@ class EngagementForm(Document):
 				"doctype_event": "Before Save",
 				"module": MODULE_NAME,
 				"script": f'doc.{field.field_name}={field.formula}'
-			}).insert()
+			}).insert(ignore_permissions=True)
 
 		# delete scripts in case they exist
 		frappe.db.delete("Server Script", {"reference_doctype": self.form_name})
@@ -280,7 +280,7 @@ class EngagementForm(Document):
 				"enabled": True,
 				"module": MODULE_NAME,
 				"script": script
-			}).insert()
+			}).insert(ignore_permissions=True)
 
 		NEWLINE = '\r\n'
 		OPEN_BRACKET = "{"
