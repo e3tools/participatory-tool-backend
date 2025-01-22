@@ -51,6 +51,8 @@ class ReusableList(Document):
 				}).insert(ignore_permissions=True)
 
 		def _upsert_doctype():
+			user = frappe.session.user
+			frappe.set_user("Administrator")
 			# create doctype and upsert items
 			if self.is_new():
 				doc = frappe.new_doc("DocType")
@@ -79,19 +81,22 @@ class ReusableList(Document):
 			doc.istable = 0
 			self._set_roles(doc)
 			doc.flags.ignore_permissions = True
-			return doc.save(ignore_permissions=True)
+			res = doc.save(ignore_permissions=True)
+
+			frappe.set_user(user)
+			return res
 
 		dc = _upsert_doctype()
 		_upsert_items(doctype=dc.name)
 
-	def _set_roles(self, doc):
+	def _set_roles(self, doc): 
 		for role in [DefaultRolesEnum.DATA_CAPTURE.value, DefaultRolesEnum.GUEST.value]:
 			r = frappe._dict()
 			r['role'] = role
 			r['doctype'] = 'DocPerm'
 			r["select"] = 1
 			r["read"] = 1 		
-			doc.append("permissions", r)
+			doc.append("permissions", r)		
 
 		for role in [DefaultRolesEnum.FORM_DESIGNER_USER.value, DefaultRolesEnum.FORM_DESIGNER_MANAGER.value]:
 			r = frappe._dict()
@@ -107,6 +112,21 @@ class ReusableList(Document):
 			r["import"] = 1
 			r["print"] = 1		
 			doc.append("permissions", r)  
+
+		# for role in [DefaultRolesEnum.FORM_DESIGNER_USER.value, DefaultRolesEnum.DATA_CAPTURE.value]:
+		# 	r = frappe._dict()
+		# 	r['role'] = role
+		# 	r['doctype'] = 'DocPerm'
+		# 	r["select"] = 1
+		# 	r["read"] = 1
+		# 	# r["write"] = 1
+		# 	# r["create"] = 1
+		# 	# r["delete"] = 1
+		# 	# r["report"] = 1
+		# 	# r["export"] = 1
+		# 	# r["import"] = 1
+		# 	# r["print"] = 1		
+		# 	doc.append("permissions", r)  
 
 	def _set_roles_old(self, doc):
 		all_selected = False
