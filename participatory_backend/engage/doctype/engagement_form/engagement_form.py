@@ -314,6 +314,7 @@ class EngagementForm(Document):
 				   				  filters=field.field_filters, # json.loads(field.field_filters.replace("\'", "\"")),
 								  open_bracket=OPEN_BRACKET,
 								  close_bracket=CLOSE_BRACKET)
+			filter = filter.replace("doc.", "frm.doc.")
 			full_script += filter
 		full_script += CLOSE_BRACKET
 
