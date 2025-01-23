@@ -10,6 +10,7 @@
  "field_order": [
   "section_break_wcou",
   "form_name",
+  "form_group",
   "field_is_table",
   "record_id_prefix",
   "naming_format",
@@ -23,6 +24,7 @@
   "title_field",
   "tab_2_tab",
   "form_permissions",
+  "form_design_permissions",
   "web_publishing_tab",
   "section_break_kmob",
   "enable_web_form",
@@ -65,7 +67,7 @@
    "depends_on": "eval:!doc.field_is_table",
    "fieldname": "form_permissions",
    "fieldtype": "Table",
-   "label": "Permissions",
+   "label": "Permissions For Access To This Form's Data",
    "mandatory_depends_on": "eval:!doc.field_is_table",
    "options": "Engagement Form Permission"
   },
@@ -210,13 +212,28 @@
    "fieldname": "form_image",
    "fieldtype": "Attach Image",
    "label": "Form Image"
+  },
+  {
+   "description": "Group where this form is associated with",
+   "fieldname": "form_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Group",
+   "options": "Engagement Form Group",
+   "unique": 1
+  },
+  {
+   "fieldname": "form_design_permissions",
+   "fieldtype": "Table",
+   "label": "Permissions For Design Of This Form",
+   "options": "Engagement Form Permission"
   }
  ],
  "hide_toolbar": 1,
  "image_field": "qr_code",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-08 10:55:30.281020",
+ "modified": "2025-01-23 23:03:43.459108",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

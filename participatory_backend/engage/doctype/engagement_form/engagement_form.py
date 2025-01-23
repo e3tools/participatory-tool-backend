@@ -39,7 +39,9 @@ class EngagementForm(Document):
 		description: DF.SmallText | None
 		enable_web_form: DF.Check
 		field_is_table: DF.Check
+		form_design_permissions: DF.Table[EngagementFormPermission]
 		form_fields: DF.Table[EngagementFormField]
+		form_group: DF.Link | None
 		form_image: DF.AttachImage | None
 		form_name: DF.Data
 		form_permissions: DF.Table[EngagementFormPermission]
