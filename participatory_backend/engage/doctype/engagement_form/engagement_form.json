@@ -12,8 +12,10 @@
   "form_name",
   "form_group",
   "field_is_table",
+  "use_field_to_generate_id",
   "record_id_prefix",
   "naming_format",
+  "naming_field",
   "column_break_ygly",
   "description",
   "show_data_processing_consent_statement",
@@ -94,6 +96,7 @@
    "label": "Is Child Table"
   },
   {
+   "depends_on": "eval: !doc.use_field_to_generate_id",
    "description": "Records created will be prefixed by this value",
    "fieldname": "record_id_prefix",
    "fieldtype": "Data",
@@ -218,6 +221,7 @@
    "fieldname": "form_group",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Group",
    "options": "Engagement Form Group",
    "unique": 1
@@ -227,13 +231,26 @@
    "fieldtype": "Table",
    "label": "Permissions For Design Of This Form",
    "options": "Engagement Form Permission"
+  },
+  {
+   "default": "0",
+   "fieldname": "use_field_to_generate_id",
+   "fieldtype": "Check",
+   "label": "Use a Form Field To Generate ID"
+  },
+  {
+   "depends_on": "eval: doc.use_field_to_generate_id",
+   "fieldname": "naming_field",
+   "fieldtype": "Data",
+   "label": "Field To Use As ID",
+   "mandatory_depends_on": "eval: doc.use_field_to_generate_id"
   }
  ],
  "hide_toolbar": 1,
  "image_field": "qr_code",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-23 23:03:43.459108",
+ "modified": "2025-01-24 10:23:06.409787",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",
@@ -265,6 +282,7 @@
    "write": 1
   }
  ],
+ "search_fields": "form_name, form_group",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

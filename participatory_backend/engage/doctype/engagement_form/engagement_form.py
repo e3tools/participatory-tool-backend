@@ -45,6 +45,7 @@ class EngagementForm(Document):
 		form_image: DF.AttachImage | None
 		form_name: DF.Data
 		form_permissions: DF.Table[EngagementFormPermission]
+		naming_field: DF.Data | None
 		naming_format: DF.Data | None
 		public_url: DF.Data | None
 		qr_code: DF.AttachImage | None
@@ -54,6 +55,7 @@ class EngagementForm(Document):
 		show_title_field_in_link: DF.Check
 		success_message: DF.SmallText | None
 		title_field: DF.Literal[None]
+		use_field_to_generate_id: DF.Check
 		web_title: DF.Data | None
 	# end: auto-generated types
 	
@@ -188,6 +190,8 @@ class EngagementForm(Document):
 		"""
 		if cint(self.field_is_table):
 			return None #if child table, no setting naming rule
+		if cint(self.use_field_to_generate_id):
+			return f'field:{self.naming_field}'
 		initials = get_initials(self.form_name)
 		prefix = str(self.record_id_prefix).strip() if self.record_id_prefix else None
 		# res = "format:{0}-{1}-{2}".format(prefix, "{YYYY}", "{#####}")
@@ -240,6 +244,8 @@ class EngagementForm(Document):
 		# 	self.naming_format = ""
 		doc.naming_rule = 'Expression (old style)'
 		doc.autoname = self._get_naming_rule()
+		if cint(self.use_field_to_generate_id):
+			doc.naming_rule = 'By fieldname'
 		doc.track_changes = 1
 		doc.allow_rename = 0
 		doc.allow_import = 1
