@@ -8,7 +8,7 @@ from frappe import _
 import datetime
 from frappe.desk.form.linked_with import get as get_links 
 from frappe.desk.form.linked_with import get_linked_docs, get_linked_doctypes
-from participatory_backend.utils.common import get_initials
+from participatory_backend.utils.common import get_initials, scrub
 from participatory_backend.utils.translator import generate_form_translations
 import json
 import ast
@@ -146,7 +146,7 @@ class EngagementForm(Document):
 			if fld.field_type in ['Table', 'Table MultiSelect', 'Select Multiple']:
 				fld.field_in_list_view = 0 #Table and multiselect fields are not allowed to have In List View
 			if not fld.field_name:
-				fld.field_name = frappe.scrub(fld.field_label)
+				fld.field_name = scrub(fld.field_label)
 			fld.field_name = fld.field_name.lower()
 			if fld.field_type in ['Link', 'Table MultiSelect']: 
 				#Table MultiSelect are associated with Non-Table DocTypes. The system will handle creation of corresponding child tables
@@ -244,10 +244,11 @@ class EngagementForm(Document):
 		# 	self.naming_format = ""
 		doc.naming_rule = 'Expression (old style)'
 		doc.autoname = self._get_naming_rule()
+		doc.allow_rename = 0
 		if cint(self.use_field_to_generate_id):
 			doc.naming_rule = 'By fieldname'
+			doc.allow_rename = 1
 		doc.track_changes = 1
-		doc.allow_rename = 0
 		doc.allow_import = 1
 		doc.hide_toolbar = 1
 		doc.istable = self.field_is_table
@@ -743,13 +744,13 @@ class EngagementForm(Document):
 		if self.field_is_table:
 			return None
 		# route = self.web_title.lower().replace(" ", "-") if not self.route else self.route
-		route = frappe.scrub(self.name).replace("_", "-").strip("-") # if not self.route else self.route
+		route = scrub(self.name).replace("_", "-").strip("-") # if not self.route else self.route
 		if route and fqdn:
 			route = get_url(route)
 		return route
 	
 	def get_field_name(self, form_field):
-		name = form_field.field_name or frappe.scrub(form_field.field_label)
+		name = form_field.field_name or scrub(form_field.field_label)
 		return name[:FIELD_NAME_MAX_LENGTH]
 
 	def publish_form(self):

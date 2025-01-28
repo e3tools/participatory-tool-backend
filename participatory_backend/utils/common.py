@@ -1,6 +1,7 @@
 import frappe
 from participatory_backend.enums import TechnicalAnalysisTypeEnum
 from frappe import _
+import re
 
 def get_technical_analysis_type(data_type):
     mp = {
@@ -26,3 +27,10 @@ def get_initials(text: str):
             res += part[0]
     # return "".join([x[0].upper() for x in text.strip().replace("  ", " ").split(" ")])
     return res
+
+def scrub(text: str):
+    """
+    Replace special characters then call frappe.scrub 
+    """
+    txt = '_'.join(re.findall(r'\b\w+\b', text))
+    return frappe.scrub(txt)
