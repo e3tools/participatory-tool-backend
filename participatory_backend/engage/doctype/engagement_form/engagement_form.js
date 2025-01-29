@@ -32,7 +32,7 @@ frappe.ui.form.on("Engagement Form", {
       };
     });
   },
-  refresh(frm) {
+  refresh(frm) { 
     if (!frm.is_new() && !frm.doc.field_is_table) {
       // force all forms to have web-form enabled
       frappe.model.set_value(
@@ -186,7 +186,13 @@ frappe.ui.form.on("Engagement Form", {
 
 frappe.ui.form.on("Engagement Form Field", {
   form_render: function (frm, cdt, cdn) {
+    // debugger;
     frm.trigger("field_type", cdt, cdn);
+    const fld = frm.cur_grid.get_field("set_depends_on");
+    fld.$input.addClass("btn btn-link"); 
+    // frm.cur_grid
+    //   .get_field("set_depends_on")
+    //   .$wrapper.addClass("btn btn-outline-secondary");
   },
   field_type: function (frm, cdt, cdn) {
     var child = locals[cdt][cdn];
@@ -267,16 +273,95 @@ frappe.ui.form.on("Engagement Form Field", {
     frappe.model.set_value(cdt, cdn, "field_linked_field", val);
   },
   set_filters: function (frm, cdt, cdn) {
-    debugger;
     let child = locals[cdt][cdn];
     if (!child.field_doctype) {
       frappe.throw("You must select the Form first");
     }
-    edit_filters(frm, child);
+    edit_filters(
+      frm,
+      child.field_doctype,
+      child.field_filters_plain || "{}",
+      (filters) => {
+        frappe.model.set_value(
+          child.doctype,
+          child.name,
+          "field_filters_plain",
+          filters
+        );
+      }
+    );
+  },
+  set_depends_on: function (frm, cdt, cdn) {
+    let child = locals[cdt][cdn];
+    edit_filters(
+      frm,
+      child.parent,
+      child.depends_on_plain || "{}",
+      (filters) => {
+        frappe.model.set_value(
+          child.doctype,
+          child.name,
+          "depends_on_plain",
+          filters
+        );
+      }
+    );
+  },
+  set_mandatory_depends_on: function (frm, cdt, cdn) {
+    let child = locals[cdt][cdn];
+    edit_filters(
+      frm,
+      child.parent,
+      child.mandatory_depends_on_plain || "{}",
+      (filters) => {
+        frappe.model.set_value(
+          child.doctype,
+          child.name,
+          "mandatory_depends_on_plain",
+          filters
+        );
+      }
+    );
+  },
+  set_read_only_depends_on: function (frm, cdt, cdn) {
+    let child = locals[cdt][cdn];
+    edit_filters(
+      frm,
+      child.parent,
+      child.read_only_depends_on_plain || "{}",
+      (filters) => {
+        frappe.model.set_value(
+          child.doctype,
+          child.name,
+          "read_only_depends_on_plain",
+          filters
+        );
+      }
+    );
   },
 });
 
-function edit_filters(frm, child) {
+
+function edit_filters(frm, doctype, existing_filters, on_add_filter) {
+   let field_doctype = doctype;
+   //   const { frm } = store;
+   make_filters_dialog(frm, on_add_filter);
+
+   make_filters_area(frm, field_doctype);
+   frappe.model.with_doctype(field_doctype, () => {
+     frm.dialog.show();
+    //  add_existing_filter(frm, child);
+
+     if (existing_filters) {
+       let filters = JSON.parse(existing_filters);
+       if (filters) {
+         frm.filter_group.add_filters_to_filter_group(filters);
+       }
+     }
+   });
+}
+
+function edit_filters_link(frm, child) {
   let field_doctype = child.field_doctype;
   //   const { frm } = store;
   make_filters_dialog(frm, child);
@@ -322,8 +407,7 @@ const get_linked_form_doctype = (frm, field_name) => {
   return doctype;
 };
 
-function make_filters_dialog(frm, child) {
-  debugger;
+function make_filters_dialog(frm, /*child,*/ on_add_filter) {
   frm.dialog = new frappe.ui.Dialog({
     title: __("Set Filters"),
     fields: [
@@ -333,6 +417,32 @@ function make_filters_dialog(frm, child) {
       },
     ],
     primary_action: () => {
+      //let fieldname = props.field.df.fieldname;
+      //   let field_option = props.field.df.options;
+      let filters = frm.filter_group.get_filters().map((filter) => {
+        // last element is a boolean which hides the filter hence not required to store in meta
+        filter.pop();
+
+        // filter_group component requires options and frm.set_query requires fieldname so storing both
+        // filter[0] = field_option;
+        return filter;
+      });
+
+      let link_filters = JSON.stringify(filters);
+
+      on_add_filter(link_filters);
+      //   store.form.selected_field = props.field.df;
+
+      /*
+      frappe.model.set_value(
+        child.doctype,
+        child.name,
+        "field_filters",
+        link_filters
+      );*/
+      frm.dialog.hide();
+    },
+    primary_action_OLD: () => {
       //let fieldname = props.field.df.fieldname;
       //   let field_option = props.field.df.options;
       let filters = frm.filter_group.get_filters().map((filter) => {
@@ -389,8 +499,99 @@ function add_existing_filter(frm, child) {
 // 		frm.set_df_property("form_fields", "options", link_fields, frm.doc.name, 'linked_form', cdn);
 
 // 		//set_df_property(fieldname, property, value, docname, table_field, table_row_name = null)
-
 // 		console.log("Link fields: ", link_fields)
 // 	}
 // 	console.log(child.field_type);
 // });
+
+/**
+ * Convert filters entry as set by the Filters Dialog into js format i.e the format with eval:doc....
+ * @param {*} condition e.g [["Test Form Five","sample_gender","=","Male"]]
+ */
+const convert_conditions_to_js_format = (conditions) => {
+  if(condition.length <= 0){
+    return "";
+  }
+  let res = "eval:"
+  for(var i = 0; i< conditions.length; i++) {
+    const condition = conditions[i];
+    console.log("Filter: ", condition);
+    res += '(' + construct_js_expression(condition) + ')';
+    if (i != conditions.length - 1) {
+      exp += " && ";
+    }
+  }
+  return res;
+}
+
+/**
+ * Construct a JS expression given a filter
+ * @param {*} condition e.g ["Test Form Five","sample_gender","=","Male"]
+ */
+const construct_js_expression = (condition) => {
+  if(condition.length < 4) { // condition has 4 parts
+    return "";
+  }
+  const field = condition[1];
+  const operator = condition[2];
+  const value = condition[3];
+  let exp = ''; 
+  switch (operator) {
+    case "=":
+      exp = `doc.${field}==${value}`;
+      break;
+    case "!=":
+      exp = `doc.${field}!=${value}`;
+      break;
+    case "like":
+      exp = `doc.${field}.indexOf(${value}) != -1`;
+      break;
+    case "not like":
+      exp = `doc.${field}.indexOf(${value}) == -1`;
+      break;
+    case "in":
+      exp += ''
+      for(var i = 0; i < value.length; i++){
+        exp += `doc.${field} == ${value[i]}`; 
+        if (i != value.length - 1) {
+          exp += ' || '
+        }
+      }
+      break;
+    case "not in":
+       exp += "";
+       for (var i = 0; i < value.length; i++) {
+         exp += `doc.${field} != ${value[i]}`;
+         if (i != value.length - 1) {
+           exp += " && ";
+         }
+       }
+      break;
+    case "is":
+      if(value == 'Set'){
+        exp = `doc.${field}`;
+      } 
+      else{
+        exp = `!doc.${field}`;
+      } 
+      break;
+    case ">":
+       exp = `doc.${field}>${value}`;
+      break;
+    case "<":
+      exp = `doc.${field}<${value}`;
+      break;
+    case ">=":
+      exp = `doc.${field}>=${value}`;
+      break;
+    case "<=":
+      exp = `doc.${field}<=${value}`;
+      break;
+    case "Between":
+      exp = `doc.${field}>=${value[0]} && doc.${field}<=${value[1]}`;
+      break;
+    case "Timespan":
+      break;
+  }
+  return exp;
+}

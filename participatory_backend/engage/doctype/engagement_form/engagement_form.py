@@ -14,6 +14,7 @@ import json
 import ast
 from participatory_backend.utils.qrcode import get_qrcode
 from frappe.utils import random_string, get_url
+import re
 
 SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
@@ -23,6 +24,8 @@ DOCTYPE_MAX_LENGTH = 61
 FIELD_NAME_MAX_LENGTH = frappe.db.MAX_COLUMN_LENGTH - 3
 ALLOWED_FORMULA_FIELD_TYPES = ["Currency", "Data", "Date", "Datetime", "Int", "Float", "Text", "Time"]
 ALLOWED_FILTER_FIELD_TYPES = ["Link"]
+
+LINK_FIELD_DOC_FILTER_PATTERN = re.compile(r'(\"|\')(doc\..*?)(\"|\')')
 
 class EngagementForm(Document):
 	# begin: auto-generated types
@@ -281,6 +284,18 @@ class EngagementForm(Document):
 			_create_script(field)
 
 	def make_client_script(self):
+
+		def sanitize_filters(filters):
+			"""
+			Replace any quotation marks that may exist infront of doc.XXXXXX
+			"""
+			matches = LINK_FIELD_DOC_FILTER_PATTERN.findall(filters) # returns list of tuples as [('"', 'doc.admin_1', '"'), ('"', 'doc.admin_2', '"')]		
+			for match in matches:
+				filterVal = match[1]
+				filters = re.sub(r'(\"|\')' + filterVal + '(\"|\')', filterVal, filters) 
+
+			return filters
+
 		"""
 		For Link field filters, create a Client Script
 		"""		
@@ -301,18 +316,7 @@ class EngagementForm(Document):
 		# delete scripts in case they exist
 		frappe.db.delete("Client Script", {"dt": self.form_name})
 		# make client Script
-		filter_fields = [x for x in self.form_fields if x.field_filters and x.field_type in ALLOWED_FILTER_FIELD_TYPES]
-		# full_script = frappe.ui.form.on("Bank Reconciliation", "onload", function(frm) {
-		# 			frm.set_query("bank_account", function() {
-		# 				return {
-		# 					"filters": {
-		# 						"account_type": "Bank",
-		# 						"group_or_ledger": "Ledger"
-		# 					}
-		# 				};
-		# 			});
-		# 		});
-		# full_script = 'frappe.ui.form.on("{0}", "onload", function(frm) {1}'.format(self.form_name, '{')
+		filter_fields = [x for x in self.form_fields if x.field_filters_plain and x.field_type in ALLOWED_FILTER_FIELD_TYPES] 
 		full_script = f'frappe.ui.form.on("{self.form_name}", {OPEN_BRACKET}{NEWLINE}onload: function(frm) {OPEN_BRACKET}'
 		for field in filter_fields:
 			filter = '''frm.set_query("{field_name}", function() {open_bracket}
@@ -320,7 +324,7 @@ class EngagementForm(Document):
 							"filters": {filters}
 						{close_bracket};
 					{close_bracket});'''.format(field_name=field.field_name, 
-				   				  filters=field.field_filters, # json.loads(field.field_filters.replace("\'", "\"")),
+				   				  filters=sanitize_filters(field.field_filters_plain),
 								  open_bracket=OPEN_BRACKET,
 								  close_bracket=CLOSE_BRACKET)
 			filter = filter.replace("doc.", "frm.doc.")
@@ -438,7 +442,7 @@ class EngagementForm(Document):
 				return form_field.field_choices
 			return None
 		
-		def _set_depends_on(exp: str):
+		def _set_depends_on(exp: str, ref_field:dict, ref_field_property: str):
 			"""
 			Set depends on expression 
 			"""
@@ -448,7 +452,7 @@ class EngagementForm(Document):
 			if exp.lower().startswith("eval:"):
 				return exp
 			else:
-				return f"eval:{exp}"
+				return convert_depends_on_conditions_to_js_format(eval(exp), ref_field, ref_field_property) #return f"eval:{exp}"
 			
 		def _get_field_type(field_type: str):
 			if field_type == 'Linked Field':
@@ -461,6 +465,12 @@ class EngagementForm(Document):
 			return None
 				
 		form_field.field_name = form_field.field_name.strip()
+
+		# set depends on
+		form_field.depends_on = _set_depends_on(exp=form_field.depends_on_plain, ref_field=form_field, ref_field_property='Display Depends On')
+		form_field.mandatory_depends_on = _set_depends_on(exp=form_field.mandatory_depends_on_plain, ref_field=form_field, ref_field_property='Mandatory Depends On')
+		form_field.read_only_depends_on = _set_depends_on(exp=form_field.read_only_depends_on_plain, ref_field=form_field, ref_field_property='Readonly Depends On')
+ 
 		field = {
 			'doctype': 'DocField', 
 			'label': form_field.field_label.strip() if form_field.field_label else '', # if form_field.field_type not in ['Column Break'] else '',
@@ -472,9 +482,9 @@ class EngagementForm(Document):
 			'non_negative': form_field.field_non_negative,
 			'default': form_field.field_default,
 			'in_list_view': form_field.field_in_list_view,
-			'depends_on': _set_depends_on(form_field.depends_on), # str(form_field.depends_on).strip() if form_field.depends_on else None,
-			'mandatory_depends_on': _set_depends_on(form_field.mandatory_depends_on), #str(form_field.mandatory_depends_on).strip() if form_field.mandatory_depends_on else None,
-			'read_only_depends_on': _set_depends_on(form_field.read_only_depends_on), #str(form_field.read_only_depends_on).strip() if form_field.read_only_depends_on else None,
+			'depends_on': form_field.depends_on,
+			'mandatory_depends_on': form_field.mandatory_depends_on,
+			'read_only_depends_on': form_field.read_only_depends_on,
 			'options': _get_options(),
 			'read_only': form_field.field_readonly,
 			'fetch_from': _get_fetch_from(form_field),
@@ -697,7 +707,7 @@ class EngagementForm(Document):
 		"""
 		Delete any child tables created as a result of Select Multiple.
 		NB: Do not delete any child table if the field type is Table MultiSelect as such
-		    child doctypes are those already existing in the system 
+			child doctypes are those already existing in the system 
 		"""   
 		if not self.is_new() and hasattr(self, '_doc_before_save'): #when renaming, the value of self._doc_before_save is None
 			exists = [x for x in self._doc_before_save.form_fields if x.field_type in ['Table MultiSelect', 'Select Multiple']]
@@ -851,6 +861,90 @@ class EngagementForm(Document):
 		else:
 			remove_field('grant_data_processing_consent')
 			remove_field('data_consent_statement')
+
+def convert_depends_on_conditions_to_js_format(conditions: list, ref_field:dict, ref_field_property: str) -> str:
+	"""Convert filters entry as set by the Filters Dialog into js format i.e the format with eval:doc....
+	Args:
+		conditions (list): condition e.g [["Test Form Five","sample_gender","=","Male"]] 
+	"""
+	if(len(conditions) <= 0):
+		return ""
+	
+	res = "eval:"
+	for i, condition in enumerate(conditions): 
+		print(condition)
+		res += '(' + construct_depends_on_js_expression(condition, ref_field, ref_field_property) + ')'
+		if i != len(conditions) - 1:
+			exp += " && "
+		
+	return res; 
+ 
+def construct_depends_on_js_expression(condition: list, ref_field:dict, ref_field_property: str) -> str :
+	"""Construct a JS expression given a filter condition
+
+	Args:
+		condition (list): condition e.g ["Test Form Five","sample_gender","=","Male"] 
+	"""
+	if len(condition) < 4 : # condition has 4 parts
+		return ""
+
+	field = condition[1]
+	if field == ref_field.field_name:
+		frappe.throw(f"Row {ref_field.idx}. {frappe.bold(ref_field.field_label)}. You cannot reference {frappe.bold(ref_field.field_name)} as a condition in {frappe.bold(ref_field_property)} property as you are self-referencing the same field. A field cannot depend on itself")
+	operator = condition[2]
+	value = condition[3]
+	exp = '';  
+	if operator == "=":
+		exp = f'doc.{field}=={value}'
+		
+	if operator == "!=":
+		exp = f'doc.{field}!={value}'
+		
+	if operator == "like":
+		exp = f'doc.{field}.indexOf({value}) != -1'
+		
+	if operator == "not like":
+		exp = f'doc.{field}.indexOf({value}) == -1'
+		
+	if operator == "in":
+		exp += ''
+		for i, val in enumerate(value):
+			exp += f'doc.{field} == {val}' 
+			if (i != len(value) - 1):
+				exp += ' || '
+		
+	if operator == "not in":
+		exp += ""
+		for i, val in enumerate(value):
+			exp += f'doc.{field} != {val}' 
+			if (i != len(value) - 1):
+				exp += ' && '
+		
+	if operator == "is":
+		if value == 'set':
+			exp = f'doc.{field}' 
+		elif value == 'not set':
+			exp = f'!doc.{field}'
+		
+	if operator == ">":
+		exp = f'doc.{field}>{value}'
+		
+	if operator == "<":
+		exp = f'doc.{field}<{value}'
+		
+	if operator == ">=":
+		exp = f'doc.{field}>={value}'
+		
+	if operator == "<=":
+		exp = f'doc.{field}<={value}'
+		
+	if operator == "Between":
+		exp = f'doc.{field}>={value[0]} && doc.{field}<={value[1]}'
+		
+	if operator == "Timespan": 
+		pass
+
+	return exp
 
 def doctype_to_engagement_form(doctype: str = 'Sample Test Form'):
 	"""

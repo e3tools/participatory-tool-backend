@@ -16,12 +16,14 @@ class EngagementFormField(Document):
 
 		data_field_options: DF.Literal["", "Email", "Phone", "URL"]
 		depends_on: DF.Data | None
+		depends_on_plain: DF.Data | None
 		description: DF.SmallText | None
 		field_child_doctype: DF.Link | None
 		field_choices: DF.SmallText | None
 		field_default: DF.Data | None
 		field_doctype: DF.Link | None
 		field_filters: DF.Data | None
+		field_filters_plain: DF.Data | None
 		field_in_list_view: DF.Check
 		field_is_backend_field: DF.Check
 		field_is_search_field: DF.Check
@@ -38,10 +40,12 @@ class EngagementFormField(Document):
 		linked_form: DF.Literal[None]
 		linked_form_property: DF.Literal[None]
 		mandatory_depends_on: DF.Data | None
+		mandatory_depends_on_plain: DF.Data | None
 		max_height: DF.Data | None
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
 		read_only_depends_on: DF.Data | None
+		read_only_depends_on_plain: DF.Data | None
 	# end: auto-generated types
 	pass
