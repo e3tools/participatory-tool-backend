@@ -7,8 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "list_name",
-  "column_break_nkfg",
   "description",
+  "column_break_nkfg",
+  "sort_field",
+  "sort_order",
   "section_break_venq",
   "items"
  ],
@@ -40,11 +42,24 @@
    "label": "List Items",
    "options": "Reusable List Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "sort_field",
+   "fieldtype": "Select",
+   "label": "Sort Field",
+   "options": "Item Name\nList Sequence"
+  },
+  {
+   "default": "ASC",
+   "fieldname": "sort_order",
+   "fieldtype": "Select",
+   "label": "Sort Direction",
+   "options": "ASC\nDESC"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-11-06 12:56:12.437795",
+ "modified": "2025-01-28 18:18:06.249510",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Reusable List",

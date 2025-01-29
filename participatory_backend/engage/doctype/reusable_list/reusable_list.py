@@ -10,6 +10,21 @@ from participatory_backend.enums import DefaultRolesEnum
 MODULE_NAME = 'Engage'
 
 class ReusableList(Document):
+	# begin: auto-generated types
+	# This code is auto-generated. Do not modify anything in this block.
+
+	from typing import TYPE_CHECKING
+
+	if TYPE_CHECKING:
+		from frappe.types import DF
+		from participatory_backend.engage.doctype.reusable_list_item.reusable_list_item import ReusableListItem
+
+		default_sort_order: DF.Literal["ASC", "DESC"]
+		description: DF.Data | None
+		items: DF.Table[ReusableListItem]
+		list_name: DF.Data
+
+	# end: auto-generated types
 	def validate(self):
 		if self.is_new():
 			pi = frappe.db.exists(self.doctype, {"name": ("=", self.name), "docstatus": ("<", 2)})
@@ -51,6 +66,12 @@ class ReusableList(Document):
 				}).insert(ignore_permissions=True)
 
 		def _upsert_doctype():
+			def get_sort_details():
+				field, direction = 'name', self.sort_direction
+				if self.sort_field == 'List Sequence':
+					field = 'modified'
+				return field, direction
+
 			user = frappe.session.user
 			frappe.set_user("Administrator")
 			# create doctype and upsert items
@@ -60,6 +81,7 @@ class ReusableList(Document):
 			else:
 				doc = frappe.get_doc("DocType", self.name)
 			
+			sort_field, sort_direction = get_sort_details()
 			doc.fields = []		 
 			doc.append('fields', {
 				"doctype": "DocField",
@@ -79,6 +101,8 @@ class ReusableList(Document):
 			doc.allow_import = 1
 			doc.hide_toolbar = 1
 			doc.istable = 0
+			doc.sort_field = sort_field
+			doc.sort_order = sort_direction
 			self._set_roles(doc)
 			doc.flags.ignore_permissions = True
 			res = doc.save(ignore_permissions=True)
