@@ -951,6 +951,9 @@ def construct_depends_on_js_expression(condition: list, ref_field:dict, ref_fiel
 	operator = condition[2]
 	value = condition[3]
 	exp = '';  
+	if isinstance(value, str):
+		value = '"' + value + '"'
+		
 	if operator == "=":
 		exp = f'doc.{field}=={value}'
 		
