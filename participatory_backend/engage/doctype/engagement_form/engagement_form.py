@@ -509,6 +509,9 @@ class EngagementForm(Document):
 				# If field is hidden, then the field cannot be required
 				if form_field.field_hidden:
 					form_field.field_reqd = 0
+				# If field is readonly, then the field cannot be required
+				if form_field.field_readonly:
+					form_field.field_reqd = 0
 		
 		_sanitize_field()
 		form_field.field_name = form_field.field_name.strip()
