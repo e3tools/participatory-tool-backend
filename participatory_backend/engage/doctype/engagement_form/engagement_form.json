@@ -33,8 +33,8 @@
   "web_title",
   "route",
   "public_url",
-  "include_logo_in_web_form",
   "form_image",
+  "include_logo_in_web_form",
   "column_break_mgpp",
   "anonymous",
   "success_message",
@@ -213,10 +213,9 @@
    "label": "QR Code Preview"
   },
   {
-   "description": "Image to be used for the form",
    "fieldname": "form_image",
    "fieldtype": "Attach Image",
-   "label": "Form To Use in Web View"
+   "label": "Image To Use in Web Form"
   },
   {
    "description": "Group where this form is associated with",
@@ -251,7 +250,7 @@
    "default": "0",
    "fieldname": "include_logo_in_web_form",
    "fieldtype": "Check",
-   "label": "Include Logo in Web Form"
+   "label": "Show Logo in Web Form"
   },
   {
    "fieldname": "form_image_base_64",
@@ -265,7 +264,7 @@
  "image_field": "qr_code",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-31 14:20:36.476348",
+ "modified": "2025-01-31 15:36:25.184812",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

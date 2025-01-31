@@ -17,6 +17,7 @@ from frappe.utils import random_string, get_url, image_to_base64
 import re
 from frappe.core.doctype.file.file import get_local_image
 from frappe import safe_decode
+from participatory_backend.engage.doctype.engagement_form_field.engagement_form_field import EngagementFormField
 
 SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
@@ -460,7 +461,7 @@ class EngagementForm(Document):
 				"print": 1,
 			})
 
-	def _get_docfield(self, form_field):
+	def _get_docfield(self, form_field: EngagementFormField):
 		def _get_options():
 			if form_field.field_type == 'HTML':
 				return form_field.data_field_html
@@ -500,6 +501,16 @@ class EngagementForm(Document):
 				return field.field_linked_field
 			return None
 				
+		def _sanitize_field():
+			if cint(form_field.field_reqd):
+				# If mandatory_depends_on is set, then the field cannot be required
+				if form_field.mandatory_depends_on:
+					form_field.field_reqd = 0
+				# If field is hidden, then the field cannot be required
+				if form_field.field_hidden:
+					form_field.field_reqd = 0
+		
+		_sanitize_field()
 		form_field.field_name = form_field.field_name.strip()
 
 		# set depends on
@@ -526,6 +537,7 @@ class EngagementForm(Document):
 			'fetch_from': _get_fetch_from(form_field),
 			'description': form_field.description,
 			'max_height': form_field.max_height,
+			'hidden': form_field.field_hidden,
 		}
 		return field
 

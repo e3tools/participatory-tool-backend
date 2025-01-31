@@ -25,6 +25,7 @@
   "field_reqd",
   "field_readonly",
   "field_non_negative",
+  "field_hidden",
   "field_is_backend_field",
   "field_default",
   "field_in_list_view",
@@ -288,12 +289,18 @@
    "fieldname": "data_field_html",
    "fieldtype": "Text Editor",
    "label": "HTML"
+  },
+  {
+   "default": "0",
+   "fieldname": "field_hidden",
+   "fieldtype": "Check",
+   "label": "Hidden"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-31 11:48:28.509958",
+ "modified": "2025-01-31 15:24:29.957275",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",
