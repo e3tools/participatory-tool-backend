@@ -20,6 +20,7 @@
   "field_filters_plain",
   "field_filters",
   "field_precision",
+  "data_field_html",
   "column_break_ikco",
   "field_reqd",
   "field_readonly",
@@ -281,12 +282,18 @@
    "fieldname": "field_filters_plain",
    "fieldtype": "Data",
    "label": "<b>Filters</b>"
+  },
+  {
+   "depends_on": "eval:doc.field_type == 'HTML'",
+   "fieldname": "data_field_html",
+   "fieldtype": "Text Editor",
+   "label": "HTML"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-01-29 10:07:52.855513",
+ "modified": "2025-01-31 11:48:28.509958",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",
