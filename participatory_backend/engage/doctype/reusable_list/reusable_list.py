@@ -67,7 +67,7 @@ class ReusableList(Document):
 
 		def _upsert_doctype():
 			def get_sort_details():
-				field, direction = 'name', self.sort_direction
+				field, direction = 'name', self.sort_order
 				if self.sort_field == 'List Sequence':
 					field = 'modified'
 				return field, direction
@@ -79,7 +79,13 @@ class ReusableList(Document):
 				doc = frappe.new_doc("DocType")
 				doc.name = self.name
 			else:
-				doc = frappe.get_doc("DocType", self.name)
+				# check if it exists
+				exists = frappe.db.exists("DocType", self.name)
+				if not exists:
+					doc = frappe.new_doc("DocType")
+					doc.name = self.name
+				else:
+					doc = frappe.get_doc("DocType", self.name)
 			
 			sort_field, sort_direction = get_sort_details()
 			doc.fields = []		 
