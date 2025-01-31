@@ -32,5 +32,7 @@ def scrub(text: str):
     """
     Replace special characters then call frappe.scrub 
     """
+    if not text:
+        return text
     txt = '_'.join(re.findall(r'\b\w+\b', text))
     return frappe.scrub(txt)
