@@ -13,8 +13,10 @@ from participatory_backend.utils.translator import generate_form_translations
 import json
 import ast
 from participatory_backend.utils.qrcode import get_qrcode
-from frappe.utils import random_string, get_url
+from frappe.utils import random_string, get_url, image_to_base64
 import re
+from frappe.core.doctype.file.file import get_local_image
+from frappe import safe_decode
 
 SELECT_MULTIPLE = 1
 TABLE_MULTISELECT = 2
@@ -39,15 +41,17 @@ class EngagementForm(Document):
 		from participatory_backend.engage.doctype.engagement_form_permission.engagement_form_permission import EngagementFormPermission
 
 		anonymous: DF.Check
-		description: DF.SmallText | None
+		description: DF.TextEditor | None
 		enable_web_form: DF.Check
 		field_is_table: DF.Check
 		form_design_permissions: DF.Table[EngagementFormPermission]
 		form_fields: DF.Table[EngagementFormField]
 		form_group: DF.Link | None
 		form_image: DF.AttachImage | None
+		form_image_base_64: DF.TextEditor | None
 		form_name: DF.Data
 		form_permissions: DF.Table[EngagementFormPermission]
+		include_logo_in_web_form: DF.Check
 		naming_field: DF.Data | None
 		naming_format: DF.Data | None
 		public_url: DF.Data | None
@@ -88,23 +92,49 @@ class EngagementForm(Document):
 		self.make_doctype()
 		if self.field_is_table:
 			self.enable_web_form = False
+		self.generate_image_fields()
 		self.publish_form()
+
+
+	def generate_image_fields(self):
+		if not self.field_is_table:
+			form_image = self.get_form_image() 			
+			self.qr_code = get_qrcode(self.form_url, form_image) if form_image else None
+			image, filename, extn = get_local_image(self.form_image)
+			base64str = image_to_base64(image, extn)
+			base64str = f"data:image/{extn};base64,{safe_decode(base64str)}"
+			self.form_image_base_64 = base64str
 		
 	def before_save(self): 
 		if self.field_is_table:
 			self.qr_code = None
-		else: 
-			logo_files = frappe.get_all("File",
+			self.form_image_base_64 = None
+		# else: 
+		# 	form_image = self.get_form_image()
+		# 	# logo_files = frappe.get_all("File",
+		# 	# 	fields=["name", "file_name", "file_url", "is_private"],
+		# 	# 	filters={"attached_to_name": self.name, "attached_to_field": "form_image",  "attached_to_doctype": self.doctype },
+		# 	# )
+		# 	# form_image = None
+		# 	# if logo_files:
+		# 	# 	print(logo_files)
+		# 	# 	print(frappe.local.sites_path)
+		# 	# 	form_image = frappe.utils.get_files_path(logo_files[0].file_name, is_private=logo_files[0].is_private)
+			
+		# 	self.qr_code = get_qrcode(self.form_url, form_image) if form_image else None
+		# 	image, filename, extn = get_local_image(self.form_image)
+		# 	self.form_image_base_64 = image_to_base64(image, extn)
+
+	def get_form_image(self):
+		logo_files = frappe.get_all("File",
 				fields=["name", "file_name", "file_url", "is_private"],
 				filters={"attached_to_name": self.name, "attached_to_field": "form_image",  "attached_to_doctype": self.doctype },
-			)
-			form_image = None
-			if logo_files:
-				print(logo_files)
-				print(frappe.local.sites_path)
-				form_image = frappe.utils.get_files_path(logo_files[0].file_name, is_private=logo_files[0].is_private)
-
-			self.qr_code = get_qrcode(self.form_url, form_image)
+			) 
+		if logo_files:
+			print(logo_files)
+			print(frappe.local.sites_path)
+			return frappe.utils.get_files_path(logo_files[0].file_name, is_private=logo_files[0].is_private)
+		return None
 
 	def after_rename(self, old_name, new_name, merge=False):
 		frappe.rename_doc("DocType", old=old_name, new=new_name)
@@ -155,6 +185,7 @@ class EngagementForm(Document):
 				#Table MultiSelect are associated with Non-Table DocTypes. The system will handle creation of corresponding child tables
 				if not fld.field_doctype:
 					frappe.throw(_("Row {0}. You must specify the Form for field {1}".format(fld.idx, fld.field_label)))
+				fld.field_filters = self.sanitize_filters(fld.field_filters_plain)		
 			if fld.field_type in ['Table']: 
 				if not fld.field_child_doctype:
 					frappe.throw(_("Row {0}. You must specify the Child Form for field {1}".format(fld.idx, fld.field_label)))
@@ -210,7 +241,7 @@ class EngagementForm(Document):
 	def make_doctype(self):
 		fields = []
 		self.cleanup_multiselect()
-		for field in self.form_fields:
+		for field in self.form_fields: 
 			if field.field_type == 'Select Multiple':
 				fields.append(self.handle_multi_select(field, SELECT_MULTIPLE))
 			elif field.field_type == 'Table MultiSelect':
@@ -283,19 +314,20 @@ class EngagementForm(Document):
 		for field in formula_fields:
 			_create_script(field)
 
-	def make_client_script(self):
-
-		def sanitize_filters(filters):
-			"""
-			Replace any quotation marks that may exist infront of doc.XXXXXX
-			"""
-			matches = LINK_FIELD_DOC_FILTER_PATTERN.findall(filters) # returns list of tuples as [('"', 'doc.admin_1', '"'), ('"', 'doc.admin_2', '"')]		
-			for match in matches:
-				filterVal = match[1]
-				filters = re.sub(r'(\"|\')' + filterVal + '(\"|\')', filterVal, filters) 
-
+	def sanitize_filters(self, filters):
+		"""
+		Replace any quotation marks that may exist infront of doc.XXXXXX
+		"""
+		if not filters:
 			return filters
+		matches = LINK_FIELD_DOC_FILTER_PATTERN.findall(filters) # returns list of tuples as [('"', 'doc.admin_1', '"'), ('"', 'doc.admin_2', '"')]		
+		for match in matches:
+			filterVal = match[1]
+			filters = re.sub(r'(\"|\')' + filterVal + '(\"|\')', filterVal, filters) 
 
+		return filters
+
+	def make_client_script(self): 
 		"""
 		For Link field filters, create a Client Script
 		"""		
@@ -324,7 +356,7 @@ class EngagementForm(Document):
 							"filters": {filters}
 						{close_bracket};
 					{close_bracket});'''.format(field_name=field.field_name, 
-				   				  filters=sanitize_filters(field.field_filters_plain),
+				   				  filters=self.sanitize_filters(field.field_filters_plain),
 								  open_bracket=OPEN_BRACKET,
 								  close_bracket=CLOSE_BRACKET)
 			filter = filter.replace("doc.", "frm.doc.")
@@ -489,7 +521,7 @@ class EngagementForm(Document):
 			'read_only': form_field.field_readonly,
 			'fetch_from': _get_fetch_from(form_field),
 			'description': form_field.description,
-			'max_height': form_field.max_height
+			'max_height': form_field.max_height,
 		}
 		return field
 
@@ -781,13 +813,19 @@ class EngagementForm(Document):
 
 		backend_only_fields = [x for x in self.form_fields if x.field_is_backend_field]
 		doctype = frappe.get_doc("DocType", self.name) 
+		introduction_text = self.description or ''
+		if cint(self.include_logo_in_web_form) and self.form_image_base_64:
+			# image_html = '<div alt="Logo" style="text-align: center;"> <img src="https://seeklogo.com/images/N/nyeri-county-logo-CD6A94CBC7-seeklogo.com.png" style="height:150px;"> </div>'
+			image_html = f'<div alt="Logo" style="text-align: center;"> <img src="{self.form_image_base_64}" style="height:150px;"> </div>'
+			introduction_text = f'<div>{image_html} </br> {introduction_text} </div>'
+			
 		r = { 
 			"title": self.name,
 			"doc_type": self.name,
 			"published": self.enable_web_form,
 			"module": doctype.module,
 			"is_standard": False, 
-			"introduction_text": self.description,
+			"introduction_text": introduction_text, #self.description,
 			"success_message": self.success_message,
 			"web_form_fields": [],
 			"button_label": "Submit",
@@ -795,7 +833,7 @@ class EngagementForm(Document):
 			"allow_incomplete": True if backend_only_fields else False, #only allow incomplete if there are backend only fields
 			"anonymous": self.anonymous
 		}
-
+ 
 		webform_supported_fields = frappe.get_meta("Web Form Field").get_field("fieldtype").options.split('\n')
 
 		for df in [x for x in doctype.fields if x.fieldname not in [x.field_name for x in backend_only_fields]]:# excluse backend fields
