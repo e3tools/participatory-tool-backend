@@ -100,10 +100,14 @@ class EngagementForm(Document):
 		if not self.field_is_table:
 			form_image = self.get_form_image() 			
 			self.qr_code = get_qrcode(self.form_url, form_image) if form_image else None
+		
+		if self.form_image:
 			image, filename, extn = get_local_image(self.form_image)
 			base64str = image_to_base64(image, extn)
 			base64str = f"data:image/{extn};base64,{safe_decode(base64str)}"
 			self.form_image_base_64 = base64str
+		else:
+			self.form_image_base_64 = None
 		
 	def before_save(self): 
 		if self.field_is_table:
