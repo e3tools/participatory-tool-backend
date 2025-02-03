@@ -35,6 +35,7 @@
   "public_url",
   "form_image",
   "include_logo_in_web_form",
+  "show_watermark_image",
   "column_break_mgpp",
   "anonymous",
   "success_message",
@@ -215,7 +216,7 @@
   {
    "fieldname": "form_image",
    "fieldtype": "Attach Image",
-   "label": "Image To Use in Web Form"
+   "label": "Image To Use as Logo for Web Form"
   },
   {
    "description": "Group where this form is associated with",
@@ -258,13 +259,20 @@
    "hidden": 1,
    "label": "Form Image",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "The watermark to be shown will be the one specified in the Engage Settings page",
+   "fieldname": "show_watermark_image",
+   "fieldtype": "Check",
+   "label": "Show watermark image"
   }
  ],
  "hide_toolbar": 1,
  "image_field": "qr_code",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-01-31 15:36:25.184812",
+ "modified": "2025-02-03 08:32:52.170867",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form",

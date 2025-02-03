@@ -70,6 +70,7 @@ class EngagementForm(Document):
 		route: DF.Data | None
 		show_data_processing_consent_statement: DF.Check
 		show_title_field_in_link: DF.Check
+		show_watermark_image: DF.Check
 		success_message: DF.SmallText | None
 		title_field: DF.Literal[None]
 		use_field_to_generate_id: DF.Check
@@ -867,10 +868,37 @@ class EngagementForm(Document):
 		Publishes the form to allow capturing of data from a website
 		"""
 		def _make_web_form_css():
-			return '''.web-form-title h1 { 
+			css = '''
+				.web-form-title h1 {
 					font-size: 20px !important; 
 				}
-				''' 
+
+				.web-form-banner-image {
+					z-index: 2 !important;
+					margin-bottom: -3rem !important;
+					height: 150px !important;
+					width: 150px !important;
+					text-align: center !important;
+				}
+
+				.page-header {
+					text-align: center;
+				}
+				'''
+			if self.show_watermark_image:
+				watermark_img = frappe.db.get_singles_value('Engage Settings', 'watermark_image')
+				if watermark_img:
+					css += '''
+					.page-content-wrapper {{ 
+						background-image: url({watermark_img});
+						background-repeat: no-repeat;
+						background-attachment: fixed;
+						background-size: cover;
+						background-position: center;
+					}}
+					'''.format(watermark_img=watermark_img)
+			return css
+		
 		def _make_web_form_script():
 			field_scripts = ''
 			if len(self.link_filters_map) > 0:
@@ -923,7 +951,7 @@ class EngagementForm(Document):
 
 			func_script = """const {trigger_function} = () => {{
 					frappe.web_form.fields_dict.{target_field}.set_data([]); // rest as we wait to load from backend
-					const web_form_values = frappe.web_form.get_values()
+					const web_form_values = frappe.web_form.get_values(true, false);
 					const filters = {filters};
 					frappe.call({{
 						method:"participatory_backend.api.get_list",
@@ -980,10 +1008,10 @@ class EngagementForm(Document):
 		backend_only_fields = [x for x in self.form_fields if x.field_is_backend_field]
 		doctype = frappe.get_doc("DocType", self.name) 
 		introduction_text = self.description or ''
-		if cint(self.include_logo_in_web_form) and self.form_image_base_64:
-			# image_html = '<div alt="Logo" style="text-align: center;"> <img src="https://seeklogo.com/images/N/nyeri-county-logo-CD6A94CBC7-seeklogo.com.png" style="height:150px;"> </div>'
-			image_html = f'<div alt="Logo" style="text-align: center;"> <img src="{self.form_image_base_64}" style="height:150px;"> </div>'
-			introduction_text = f'<div>{image_html} </br> {introduction_text} </div>'
+		# if cint(self.include_logo_in_web_form) and self.form_image_base_64:
+		# 	# image_html = '<div alt="Logo" style="text-align: center;"> <img src="https://seeklogo.com/images/N/nyeri-county-logo-CD6A94CBC7-seeklogo.com.png" style="height:150px;"> </div>'
+		# 	image_html = f'<div alt="Logo" style="text-align: center;"> <img src="{self.form_image_base_64}" style="height:150px;"> </div>'
+		# 	introduction_text = f'<div>{image_html} </br> {introduction_text} </div>'
 			
 		r = { 
 			"title": self.name,
@@ -997,9 +1025,11 @@ class EngagementForm(Document):
 			"button_label": "Submit",
 			"route": self.get_route(),
 			"allow_incomplete": True if backend_only_fields else False, #only allow incomplete if there are backend only fields
+			"banner_image": self.form_image if cint(self.include_logo_in_web_form) else None,
 			"anonymous": self.anonymous,
 			"custom_css": _make_web_form_css(),
 			"client_script": _make_web_form_script()
+			
 		}
  
 		webform_supported_fields = frappe.get_meta("Web Form Field").get_field("fieldtype").options.split('\n')

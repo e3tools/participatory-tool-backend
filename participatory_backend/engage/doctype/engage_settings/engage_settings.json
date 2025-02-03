@@ -11,6 +11,7 @@
   "county_slogan",
   "column_break_ehxd",
   "logo",
+  "watermark_image",
   "participatory_tool_details_tab",
   "details_specific_to_the_participatory_tool_section",
   "app_name",
@@ -187,12 +188,18 @@
    "fieldname": "socket",
    "fieldtype": "Data",
    "label": "Socket Message"
+  },
+  {
+   "description": "Watermark image to be used when rendering forms. Consider a black and white image",
+   "fieldname": "watermark_image",
+   "fieldtype": "Attach Image",
+   "label": "Web Form Watermark Image"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-12-11 20:40:52.619632",
+ "modified": "2025-02-03 08:38:02.833969",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engage Settings",
