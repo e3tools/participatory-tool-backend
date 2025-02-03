@@ -37,7 +37,7 @@ class EngagementFormField(Document):
 		field_precision: DF.Literal["", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 		field_readonly: DF.Check
 		field_reqd: DF.Check
-		field_type: DF.Literal["", "Attach", "Attach Image", "Check", "Column Break", "Currency", "Data", "Date", "Datetime", "HTML", "Int", "Float", "Geolocation", "Link", "Linked Field", "Select", "Select Multiple", "Section Break", "Text", "Tab Break", "Table", "Table MultiSelect", "Time"]
+		field_type: DF.Literal["", "Attach", "Attach Image", "Check", "Column Break", "Currency", "Data", "Date", "Datetime", "HTML", "Int", "Float", "Geolocation", "Link", "Linked Field", "Select", "Select Multiple", "Section Break", "Text", "Text Editor", "Tab Break", "Table", "Table MultiSelect", "Time"]
 		formula: DF.Data | None
 		linked_form: DF.Literal[None]
 		linked_form_property: DF.Literal[None]

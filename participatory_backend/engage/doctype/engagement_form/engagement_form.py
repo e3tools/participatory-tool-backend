@@ -39,6 +39,12 @@ class CascadeFilter:
 	filters_parsed: list
 	depends_on_form_field_value: bool # does the filter depend on values specified in the current form_field
 
+class ReadOnlyField:
+	parent_doctype: str
+	parent_property: str
+	parent_field: str
+	target_field: str
+
 class EngagementForm(Document):
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
@@ -86,6 +92,7 @@ class EngagementForm(Document):
 		# load_cascaded_county_admins()
 		# return
 		self.link_filters_map: list[type[CascadeFilter]] = []
+		self.read_only_fields_map: list[type[ReadOnlyField]] = []
 		self.form_name = frappe.unscrub(self.form_name)
 		if not self.form_fields:
 			frappe.throw(_("You must specify at lease one field"))
@@ -208,6 +215,16 @@ class EngagementForm(Document):
 			if fld.field_type == 'Select':
 				if not fld.field_choices.strip():
 					frappe.throw(_("Row {0}. You must specify the choices for field {1}".format(fld.idx, fld.field_label)))
+			
+			if fld.field_type == 'Linked Field':
+				matching = [x for x in self.form_fields if x.field_name == fld.linked_form]
+				field = ReadOnlyField()
+				field.parent_doctype = matching[0].field_doctype if matching else None
+				field.parent_property = fld.linked_form_property
+				field.parent_field = fld.linked_form
+				field.target_field = fld.field_name
+				self.read_only_fields_map.append(field)
+
 			# if fld.field_type == 'Linked Field':
 			# 	self.validate_linked_field(fld)
 
@@ -899,56 +916,142 @@ class EngagementForm(Document):
 					'''.format(watermark_img=watermark_img)
 			return css
 		
-		def _make_web_form_script():
-			field_scripts = ''
-			if len(self.link_filters_map) > 0:
-				# First make the functions for target fields. Later make triggers for source fields
-				# get unique targets
-				target_fields = set([x.target_field for x in self.link_filters_map])
-				trigger_functions = []
-				for target in target_fields:
-					engagement_form_field = [x for x in self.form_fields if x.field_name == target]
-					final_field_filters = []
-					# get the filters
-					filters = [x for x in self.link_filters_map if x.target_field == target]
-					for filter in filters:
-						if filter.depends_on_form_field_value:
-							filter_val = filter.filters_parsed[3] # filter is of the form [['Admin 2', 'parent_admin', '=', 'doc.admin_1']]
-							filter_val = filter_val.replace(DOC_PREFIX_FORMULA, 'web_form_values.')
-							final_field_filters.append([filter.filters_parsed[0], filter.filters_parsed[1], filter.filters_parsed[2], filter_val])
-						else:
-							final_field_filters.append(filter.filters_parsed)
+		def _make_web_form_script(): 
 
-					func_name, func_script = _make_target_field_function(engagement_form_field[0], filters=final_field_filters)
-					trigger_functions.append(func_name)
-					field_scripts += func_script
+			def _make_get_value_function():
+				"""
+				Make a generic handler for read only values
+				"""
+				return """
+						const fetch_value = (doctype, docname, docfield, field_name) => {  
+						const filters = [[doctype, 'name', '=', docname]]; 
+						frappe.call({
+							method:"participatory_backend.api.get_value",
+							args: {
+								doctype: doctype,
+								filters: filters,
+								fields: [docfield],
+								limit_page_length: 0,
+								// parent: "Item Attribute",
+								order_by: "name",
+							},
+							callback: (r) => {
+								if (r.message) {
+									frappe.web_form.set_value(field_name, r.message.name)
+								}
+							},
+						});
+					}
+					"""
+			
+			def _make_readonly_trigger(source_field: str):
+				# check if there are other fields that should reset their values when the value of this field changes
+				readonly_fields = [frappe._dict(x.__dict__) for x in self.read_only_fields_map if x.parent_field == source_field]
+				script = ""
+				if readonly_fields:
+					doctype = readonly_fields[0].parent_doctype
+					parent_field = readonly_fields[0].parent_field
+					parent_fields = [x.parent_property for x in readonly_fields]
+					# readonly_filter = [readonly_fields[0].parent_doctype, 'name', '=', frappe.web_form.get_value(readonly_fields[0].parent_field)]
+					script = """
+					const readonly_fields={readonly_fields};
+					// reset the dependent values
+					for (var i = 0; i < readonly_fields.length; i++) {{  
+						const target_field = readonly_fields[i].target_field;
+						frappe.web_form.set_value(target_field, '');
+					}} 
 
-				# get unique sources in order to make trigger functions for them 
-				source_fields = set([x.source_field for x in self.link_filters_map if x.source_field])
-				
-				for source in source_fields:
-					# get the targets to ensure all targets are fired when the source field value changes
-					targets = set([x.target_field for x in self.link_filters_map if x.source_field == source])
-					for target in targets:
+					frappe.call({{
+						method:"participatory_backend.api.get_list",
+						args: {{
+							doctype: '{parent_doctype}',
+							filters: [['{parent_doctype}', 'name', '=', frappe.web_form.get_value('{parent_field}')]],
+							fields: {parent_fields},
+							limit_page_length: 0,
+							order_by: "name",
+						}},
+						callback: (r) => {{
+							if (r.message && r.message.length > 0) {{
+							for (var i = 0; i < readonly_fields.length; i++) {{  
+								const target_field = readonly_fields[i].target_field;
+								const val = r.message[0][readonly_fields[i].parent_property]
+								frappe.web_form.set_value(target_field, val);
+							}} 
+						  }}
+						}}
+					  }});
+					""".format( 
+							parent_fields=parent_fields,
+							parent_doctype=doctype,
+							parent_field=parent_field,
+							readonly_fields=readonly_fields)
+				return script
+			
+			def _make_filter_functions():
+				"""
+				Make different functions to handle change of parent fields
+				"""
+				field_scripts = ''
+				if len(self.link_filters_map) > 0:
+					# First make the functions for target fields. Later make triggers for source fields
+					# get unique targets
+					target_fields = set([x.target_field for x in self.link_filters_map])
+					trigger_functions = []
+					for target in target_fields:
+						engagement_form_field = [x for x in self.form_fields if x.field_name == target]
+						final_field_filters = []
+						# get the filters
+						filters = [x for x in self.link_filters_map if x.target_field == target]
+						for filter in filters:
+							if filter.depends_on_form_field_value:
+								filter_val = filter.filters_parsed[3] # filter is of the form [['Admin 2', 'parent_admin', '=', 'doc.admin_1']]
+								filter_val = filter_val.replace(DOC_PREFIX_FORMULA, 'web_form_values.')
+								final_field_filters.append([filter.filters_parsed[0], filter.filters_parsed[1], filter.filters_parsed[2], filter_val])
+							else:
+								final_field_filters.append(filter.filters_parsed)
+
+						func_name, func_script = _make_target_field_function(engagement_form_field[0], filters=final_field_filters)
+						trigger_functions.append(func_name)
+						field_scripts += func_script
+
+					# get unique sources in order to make trigger functions for them 
+					link_source_fields = [x.source_field for x in self.link_filters_map if x.source_field]
+					read_only_source_fields = [x.parent_field for x in self.read_only_fields_map if x.parent_field]
+					# merge with source fields as a result of Read Only fields
+					source_fields = set(link_source_fields + read_only_source_fields)
+					
+					for source in source_fields:
+						# get the targets to ensure all targets are fired when the source field value changes
+						targets = set([x.target_field for x in self.link_filters_map if x.source_field == source])
+
+						# make handler for ReadOnly values that depend on this source
+						readonly_script = _make_readonly_trigger(source_field=source)  
 						field_scripts = _make_source_field_function(
 											source_field_name=source, 
-											target_field_name=target) + '\n\n' + field_scripts 
+											target_fields=targets,
+											readonly_fields_script=readonly_script
+											) + '\n\n' + field_scripts 
 
-				# ensure trigger functions are called on load
-				if trigger_functions:
-					on_load_script = """frappe.web_form.after_load = () => { """
-					for func in trigger_functions:
-						on_load_script += """\n{func}();""".format(func=func)
-					on_load_script += """\n}\n\n"""
+					# ensure trigger functions are called on load
+					if trigger_functions:
+						on_load_script = """frappe.web_form.after_load = () => { """
+						for func in trigger_functions:
+							on_load_script += """\n{func}();""".format(func=func)
+						on_load_script += """\n}\n\n"""
 
-					field_scripts = on_load_script + field_scripts # ensure trigger functions are triggered on_load
-
-			return field_scripts
+						field_scripts = on_load_script + field_scripts # ensure trigger functions are triggered on_load
+				
+				return field_scripts
+			return _make_filter_functions()
 
 		def _make_target_field_function(engagement_form_field: EngagementFormField, filters: list[type[list[type[str]]]]):
+			"""
+			Make handler to trigger changed value for dependent field 
+			"""
 			final_filter = sanitize_web_filters(str(filters))
 			function_name = _get_trigger_function_name(engagement_form_field.field_name)
 
+			read_only_script = ''; # _make_readonly_trigger()
 			func_script = """const {trigger_function} = () => {{
 					frappe.web_form.fields_dict.{target_field}.set_data([]); // rest as we wait to load from backend
 					const web_form_values = frappe.web_form.get_values(true, false);
@@ -972,22 +1075,36 @@ class EngagementForm(Document):
 							frappe.web_form.fields_dict.{target_field}.set_data(options)
 						  }}
 						}},
-						}});
-					}}
+					}});
+					//{read_only_script}
+				}}					
 				""".format(target_field=engagement_form_field.field_name, 
 			   				field_doctype=engagement_form_field.field_doctype,
 							filters=final_filter,
-							trigger_function=function_name)
+							trigger_function=function_name,
+							read_only_script=read_only_script)
 			return function_name, func_script
 		
-		def _make_source_field_function(source_field_name: str, target_field_name: str):
+		# def _make_source_field_function(source_field_name: str, target_field_name: str):  
+		def _make_source_field_function(source_field_name: str, target_fields: list[str], readonly_fields_script: str):  
+			"""
+			Create a handler to listen to changes of parent fields
+			"""
+			field_scripts = ''
+			for target_field_name in target_fields:
+				field_scripts += """\n
+								frappe.web_form.set_value('{target_field}', ''); // reset the value of target 
+								{trigger_function}() 
+							""".format(target_field=target_field_name,
+					   				   trigger_function=_get_trigger_function_name(target_field_name))
+
 			func = """frappe.web_form.on('{source_field}', (field, value) => {{ 
-						frappe.web_form.set_value('{target_field}', ''); // reset the value of target
-						{trigger_function}() 
+						{field_scripts}
+						{readonly_fields_script}
 					}});
 			""".format(source_field=source_field_name, 
-					   target_field=target_field_name,
-					   trigger_function=_get_trigger_function_name(target_field_name))
+					   field_scripts=field_scripts,
+					   readonly_fields_script=readonly_fields_script)
 			return func
 		
 		def _get_trigger_function_name(target_field):
@@ -1034,8 +1151,15 @@ class EngagementForm(Document):
  
 		webform_supported_fields = frappe.get_meta("Web Form Field").get_field("fieldtype").options.split('\n')
 
-		for df in [x for x in doctype.fields if x.fieldname not in [x.field_name for x in backend_only_fields]]:# excluse backend fields
+		for df in [x for x in doctype.fields if x.fieldname not in [x.field_name for x in backend_only_fields]]:# exclude backend fields
 			field_type = df.fieldtype
+			# for read only fields, make them as data but read only until that time when Web Form will support Read Only fields. Retrieving of the fetch values
+			# is handled by the dynamic script that is generated elsewhere in this file
+			if field_type == 'Read Only':
+				df.read_only = 1
+				df.reqd = 0
+				field_type = 'Data'
+
 			if field_type not in webform_supported_fields:
 				continue
 
