@@ -108,8 +108,8 @@ class EngagementForm(Document):
 
 	def generate_image_fields(self):
 		if not self.field_is_table:
-			form_image = self.get_form_image() 			
-			self.qr_code = get_qrcode(self.form_url, form_image) if form_image else None
+			form_image = None # self.get_form_image() # do not overlay an image. the data generated is too long		
+			self.qr_code = get_qrcode(self.form_url, form_image) # if form_image else None
 		
 		if self.form_image:
 			image, filename, extn = get_local_image(self.form_image)
