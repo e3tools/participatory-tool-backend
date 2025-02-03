@@ -361,7 +361,7 @@ class EngagementForm(Document):
 				fltr = CascadeFilter()
 				fltr.source_field = filterVal.replace(DOC_PREFIX_FORMULA, '')
 				fltr.target_field = field.field_name
-				fltr.filters_parsed = filter # frappe.safe_eval(field.field_filters_plain)
+				fltr.filters_parsed = filter
 				fltr.depends_on_form_field_value = True
 				self.link_filters_map.append(fltr)
 
@@ -371,9 +371,8 @@ class EngagementForm(Document):
 			if str(filter[3]).find(DOC_PREFIX_FORMULA) == -1: # there is no occurrence of doc.
 				fltr = CascadeFilter()
 				fltr.target_field = field.field_name
-				fltr.source_field = filterVal.replace(DOC_PREFIX_FORMULA, '')
-				# fltr.filters_plain = field.field_filters_plain
-				fltr.filters_parsed = frappe.safe_eval(field.field_filters_plain)
+				fltr.source_field = None # filterVal.replace(DOC_PREFIX_FORMULA, '') # no source_field. This is an absolute filter value
+				fltr.filters_parsed = filter 
 				fltr.depends_on_form_field_value = False
 				self.link_filters_map.append(fltr)
 
@@ -878,6 +877,7 @@ class EngagementForm(Document):
 				# First make the functions for target fields. Later make triggers for source fields
 				# get unique targets
 				target_fields = set([x.target_field for x in self.link_filters_map])
+				trigger_functions = []
 				for target in target_fields:
 					engagement_form_field = [x for x in self.form_fields if x.field_name == target]
 					final_field_filters = []
@@ -889,25 +889,39 @@ class EngagementForm(Document):
 							filter_val = filter_val.replace(DOC_PREFIX_FORMULA, 'web_form_values.')
 							final_field_filters.append([filter.filters_parsed[0], filter.filters_parsed[1], filter.filters_parsed[2], filter_val])
 						else:
-							final_field_filters.append(filter.filters_plain)
+							final_field_filters.append(filter.filters_parsed)
 
-					field_scripts += _make_target_field_function(engagement_form_field[0], filters=final_field_filters)
+					func_name, func_script = _make_target_field_function(engagement_form_field[0], filters=final_field_filters)
+					trigger_functions.append(func_name)
+					field_scripts += func_script
 
 				# get unique sources in order to make trigger functions for them 
-				source_fields = set([x.source_field for x in self.link_filters_map])
+				source_fields = set([x.source_field for x in self.link_filters_map if x.source_field])
+				
 				for source in source_fields:
 					# get the targets to ensure all targets are fired when the source field value changes
 					targets = set([x.target_field for x in self.link_filters_map if x.source_field == source])
 					for target in targets:
 						field_scripts = _make_source_field_function(
 											source_field_name=source, 
-											target_field_name=target) + '\n\n' + field_scripts
+											target_field_name=target) + '\n\n' + field_scripts 
+
+				# ensure trigger functions are called on load
+				if trigger_functions:
+					on_load_script = """frappe.web_form.after_load = () => { """
+					for func in trigger_functions:
+						on_load_script += """\n{func}();""".format(func=func)
+					on_load_script += """\n}\n\n"""
+
+					field_scripts = on_load_script + field_scripts # ensure trigger functions are triggered on_load
 
 			return field_scripts
 
 		def _make_target_field_function(engagement_form_field: EngagementFormField, filters: list[type[list[type[str]]]]):
 			final_filter = sanitize_web_filters(str(filters))
-			func = """const trigger_{target_field} = () => {{
+			function_name = _get_trigger_function_name(engagement_form_field.field_name)
+
+			func_script = """const {trigger_function} = () => {{
 					frappe.web_form.fields_dict.{target_field}.set_data([]); // rest as we wait to load from backend
 					const web_form_values = frappe.web_form.get_values()
 					const filters = {filters};
@@ -934,17 +948,22 @@ class EngagementForm(Document):
 					}}
 				""".format(target_field=engagement_form_field.field_name, 
 			   				field_doctype=engagement_form_field.field_doctype,
-							filters=final_filter)
-			return func
+							filters=final_filter,
+							trigger_function=function_name)
+			return function_name, func_script
 		
 		def _make_source_field_function(source_field_name: str, target_field_name: str):
 			func = """frappe.web_form.on('{source_field}', (field, value) => {{ 
 						frappe.web_form.set_value('{target_field}', ''); // reset the value of target
-						trigger_{target_field}() 
+						{trigger_function}() 
 					}});
 			""".format(source_field=source_field_name, 
-					   target_field=target_field_name)
+					   target_field=target_field_name,
+					   trigger_function=_get_trigger_function_name(target_field_name))
 			return func
+		
+		def _get_trigger_function_name(target_field):
+			return f"trigger_{target_field}"
 		
 		exists = frappe.db.exists("Web Form", {"doc_type": self.name})
 		if exists: 
