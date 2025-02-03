@@ -17,7 +17,8 @@ from frappe.desk.reportview import export_query
 from frappe.utils.file_manager import save_file_on_filesystem 
 from frappe import ping as pinged
 from frappe.utils.data import get_url
-from frappe.frappeclient import FrappeClient
+# from frappe.frappeclient import FrappeClient
+# from frappe.client import get_list as get_doc_list
 
 @frappe.whitelist(allow_guest=True)
 def ping():
@@ -87,6 +88,33 @@ def login(**kwargs):
         response['error'] = 'Login error' 
 
     return response
+
+@frappe.whitelist(allow_guest=True)
+def get_list(
+    doctype,
+	fields=None,
+	filters=None,
+	group_by=None,
+	order_by=None,
+	limit_start=None,
+	limit_page_length=20,
+	# parent=None,
+	debug: bool = False,
+	# as_dict: bool = True,
+	or_filters=None,
+):
+    return frappe.db.get_list(doctype=doctype, 
+                        fields=fields,
+                        filters=filters,
+                        group_by=group_by,
+                        order_by=order_by,
+                        limit_start=limit_start,
+                        limit_page_length=limit_page_length,
+                        # parent=parent,
+                        debug=debug,
+                        # as_dict=as_dict,
+                        or_filters=or_filters,
+                        ignore_permissions=True)
 
 @frappe.whitelist()
 def get_doctype(doctype: str, with_parent: int = 0):

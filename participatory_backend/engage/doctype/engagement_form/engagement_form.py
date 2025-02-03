@@ -29,6 +29,15 @@ ALLOWED_FORMULA_FIELD_TYPES = ["Currency", "Data", "Date", "Datetime", "Int", "F
 ALLOWED_FILTER_FIELD_TYPES = ["Link"]
 
 LINK_FIELD_DOC_FILTER_PATTERN = re.compile(r'(\"|\')(doc\..*?)(\"|\')')
+WEB_FORM_LINK_FIELD_DOC_FILTER_PATTERN = re.compile(r'(\"|\')(web_form_values\..*?)(\"|\')')
+DOC_PREFIX_FORMULA = 'doc.'
+
+class CascadeFilter:
+	source_field: str
+	target_field: str
+	# filters_plain: str
+	filters_parsed: list
+	depends_on_form_field_value: bool # does the filter depend on values specified in the current form_field
 
 class EngagementForm(Document):
 	# begin: auto-generated types
@@ -75,7 +84,7 @@ class EngagementForm(Document):
 		# from gis.shapefile_loader import load_cascaded_county_admins
 		# load_cascaded_county_admins()
 		# return
-	
+		self.link_filters_map: list[type[CascadeFilter]] = []
 		self.form_name = frappe.unscrub(self.form_name)
 		if not self.form_fields:
 			frappe.throw(_("You must specify at lease one field"))
@@ -179,7 +188,7 @@ class EngagementForm(Document):
 				frappe.db.set_value('DocType', self.name, 'title_field', fld[0].field_name)
 				frappe.db.set_value('DocType', self.name, 'show_title_field_in_link', True) 
 	
-	def validate_fields(self):
+	def validate_fields(self): 
 		for fld in self.form_fields:
 			if fld.field_type in ['Table', 'Table MultiSelect', 'Select Multiple']:
 				fld.field_in_list_view = 0 #Table and multiselect fields are not allowed to have In List View
@@ -191,6 +200,7 @@ class EngagementForm(Document):
 				if not fld.field_doctype:
 					frappe.throw(_("Row {0}. You must specify the Form for field {1}".format(fld.idx, fld.field_label)))
 				fld.field_filters = self.sanitize_filters(fld.field_filters_plain)		
+				self.make_web_form_on_change_link_function(fld)
 			if fld.field_type in ['Table']: 
 				if not fld.field_child_doctype:
 					frappe.throw(_("Row {0}. You must specify the Child Form for field {1}".format(fld.idx, fld.field_label)))
@@ -309,7 +319,7 @@ class EngagementForm(Document):
 				"reference_doctype": self.form_name,
 				"doctype_event": "Before Save",
 				"module": MODULE_NAME,
-				"script": f'doc.{field.field_name}={field.formula}'
+				"script": f'{DOC_PREFIX_FORMULA}{field.field_name}={field.formula}'
 			}).insert(ignore_permissions=True)
 
 		# delete scripts in case they exist
@@ -321,16 +331,51 @@ class EngagementForm(Document):
 
 	def sanitize_filters(self, filters):
 		"""
-		Replace any quotation marks that may exist infront of doc.XXXXXX
+		Replace any quotation marks that may exist infront of or after doc.XXXXXX
 		"""
 		if not filters:
 			return filters
+				
 		matches = LINK_FIELD_DOC_FILTER_PATTERN.findall(filters) # returns list of tuples as [('"', 'doc.admin_1', '"'), ('"', 'doc.admin_2', '"')]		
 		for match in matches:
 			filterVal = match[1]
 			filters = re.sub(r'(\"|\')' + filterVal + '(\"|\')', filterVal, filters) 
 
 		return filters
+	 
+	def make_web_form_on_change_link_function(self, field: EngagementFormField): #, filter_map: list[type[CascadeFilter]]):
+		"""Make an on change function for Web Form for handling change of the field values. 
+		This is especially so for cascaded filters 
+		"""
+		if not field.field_filters_plain:
+			return
+		# filters = field.field_filters_plain 
+		# loop through the determinant form field values
+		parsed_filters = frappe.safe_eval(field.field_filters_plain)
+		for filter in parsed_filters:
+			filter_str = str(filter)
+			matches = LINK_FIELD_DOC_FILTER_PATTERN.findall(filter_str) # returns list of tuples as [('"', 'doc.admin_1', '"'), ('"', 'doc.admin_2', '"')]		
+			for match in matches: 
+				filterVal = match[1]
+				# filters = re.sub(r'(\"|\')' + filterVal + '(\"|\')', filterVal, filter_str) 
+				fltr = CascadeFilter()
+				fltr.source_field = filterVal.replace(DOC_PREFIX_FORMULA, '')
+				fltr.target_field = field.field_name
+				fltr.filters_parsed = filter # frappe.safe_eval(field.field_filters_plain)
+				fltr.depends_on_form_field_value = True
+				self.link_filters_map.append(fltr)
+
+		# check if there are other filters that do not depend on form field values
+		# filters = frappe.safe_eval(field.field_filters_plain) # will return values e.g [['Admin 2', 'parent_admin', '=', 'doc.admin_1']]
+		for filter in parsed_filters:
+			if str(filter[3]).find(DOC_PREFIX_FORMULA) == -1: # there is no occurrence of doc.
+				fltr = CascadeFilter()
+				fltr.target_field = field.field_name
+				fltr.source_field = filterVal.replace(DOC_PREFIX_FORMULA, '')
+				# fltr.filters_plain = field.field_filters_plain
+				fltr.filters_parsed = frappe.safe_eval(field.field_filters_plain)
+				fltr.depends_on_form_field_value = False
+				self.link_filters_map.append(fltr)
 
 	def make_client_script(self): 
 		"""
@@ -364,7 +409,7 @@ class EngagementForm(Document):
 				   				  filters=self.sanitize_filters(field.field_filters_plain),
 								  open_bracket=OPEN_BRACKET,
 								  close_bracket=CLOSE_BRACKET)
-			filter = filter.replace("doc.", "frm.doc.")
+			filter = filter.replace(DOC_PREFIX_FORMULA, "frm.doc.")
 			full_script += filter
 		full_script += CLOSE_BRACKET
 
@@ -512,6 +557,10 @@ class EngagementForm(Document):
 				# If field is readonly, then the field cannot be required
 				if form_field.field_readonly:
 					form_field.field_reqd = 0
+
+				if form_field.depends_on: # if field is required, it cannot be shown optionally depending on conditions
+					bold = frappe.bold("Display Depends On")
+					frappe.throw(f"Row {form_field.idx}. The field cannot be required yet the value of {bold} has been set.")
 		
 		_sanitize_field()
 		form_field.field_name = form_field.field_name.strip()
@@ -818,6 +867,85 @@ class EngagementForm(Document):
 		"""
 		Publishes the form to allow capturing of data from a website
 		"""
+		def _make_web_form_css():
+			return '''.web-form-title h1 { 
+					font-size: 20px !important; 
+				}
+				''' 
+		def _make_web_form_script():
+			field_scripts = ''
+			if len(self.link_filters_map) > 0:
+				# First make the functions for target fields. Later make triggers for source fields
+				# get unique targets
+				target_fields = set([x.target_field for x in self.link_filters_map])
+				for target in target_fields:
+					engagement_form_field = [x for x in self.form_fields if x.field_name == target]
+					final_field_filters = []
+					# get the filters
+					filters = [x for x in self.link_filters_map if x.target_field == target]
+					for filter in filters:
+						if filter.depends_on_form_field_value:
+							filter_val = filter.filters_parsed[3] # filter is of the form [['Admin 2', 'parent_admin', '=', 'doc.admin_1']]
+							filter_val = filter_val.replace(DOC_PREFIX_FORMULA, 'web_form_values.')
+							final_field_filters.append([filter.filters_parsed[0], filter.filters_parsed[1], filter.filters_parsed[2], filter_val])
+						else:
+							final_field_filters.append(filter.filters_plain)
+
+					field_scripts += _make_target_field_function(engagement_form_field[0], filters=final_field_filters)
+
+				# get unique sources in order to make trigger functions for them 
+				source_fields = set([x.source_field for x in self.link_filters_map])
+				for source in source_fields:
+					# get the targets to ensure all targets are fired when the source field value changes
+					targets = set([x.target_field for x in self.link_filters_map if x.source_field == source])
+					for target in targets:
+						field_scripts = _make_source_field_function(
+											source_field_name=source, 
+											target_field_name=target) + '\n\n' + field_scripts
+
+			return field_scripts
+
+		def _make_target_field_function(engagement_form_field: EngagementFormField, filters: list[type[list[type[str]]]]):
+			final_filter = sanitize_web_filters(str(filters))
+			func = """const trigger_{target_field} = () => {{
+					frappe.web_form.fields_dict.{target_field}.set_data([]); // rest as we wait to load from backend
+					const web_form_values = frappe.web_form.get_values()
+					const filters = {filters};
+					frappe.call({{
+						method:"participatory_backend.api.get_list",
+						args: {{
+							doctype: '{field_doctype}',
+							filters: filters,
+							fields: ["name"],
+							limit_page_length: 0,
+							// parent: "Item Attribute",
+							order_by: "name",
+						}},
+						callback: (r) => {{
+							if (r.message) {{
+							const options = [];
+							for (var i = 0; i < r.message.length; i++) {{
+								options.push(r.message[i].name) 
+							}}
+							frappe.web_form.fields_dict.{target_field}.set_data(options)
+						  }}
+						}},
+						}});
+					}}
+				""".format(target_field=engagement_form_field.field_name, 
+			   				field_doctype=engagement_form_field.field_doctype,
+							filters=final_filter)
+			return func
+		
+		def _make_source_field_function(source_field_name: str, target_field_name: str):
+			func = """frappe.web_form.on('{source_field}', (field, value) => {{ 
+						frappe.web_form.set_value('{target_field}', ''); // reset the value of target
+						trigger_{target_field}() 
+					}});
+			""".format(source_field=source_field_name, 
+					   target_field=target_field_name)
+			return func
+		
 		exists = frappe.db.exists("Web Form", {"doc_type": self.name})
 		if exists: 
 			doc = frappe.get_doc("Web Form", exists)			
@@ -850,7 +978,9 @@ class EngagementForm(Document):
 			"button_label": "Submit",
 			"route": self.get_route(),
 			"allow_incomplete": True if backend_only_fields else False, #only allow incomplete if there are backend only fields
-			"anonymous": self.anonymous
+			"anonymous": self.anonymous,
+			"custom_css": _make_web_form_css(),
+			"client_script": _make_web_form_script()
 		}
  
 		webform_supported_fields = frappe.get_meta("Web Form Field").get_field("fieldtype").options.split('\n')
@@ -919,6 +1049,20 @@ class EngagementForm(Document):
 			remove_field('grant_data_processing_consent')
 			remove_field('data_consent_statement')
 
+def sanitize_web_filters(filters):
+	"""
+	Replace any quotation marks that may exist infront of or after doc.XXXXXX
+	"""
+	if not filters:
+		return filters
+			
+	matches = WEB_FORM_LINK_FIELD_DOC_FILTER_PATTERN.findall(filters) # returns list of tuples as [('"', 'doc.admin_1', '"'), ('"', 'doc.admin_2', '"')]		
+	for match in matches:
+		filterVal = match[1]
+		filters = re.sub(r'(\"|\')' + filterVal + '(\"|\')', filterVal, filters) 
+
+	return filters
+
 def convert_depends_on_conditions_to_js_format(conditions: list, ref_field:dict, ref_field_property: str) -> str:
 	"""Convert filters entry as set by the Filters Dialog into js format i.e the format with eval:doc....
 	Args:
@@ -928,8 +1072,7 @@ def convert_depends_on_conditions_to_js_format(conditions: list, ref_field:dict,
 		return ""
 	
 	res = "eval:"
-	for i, condition in enumerate(conditions): 
-		print(condition)
+	for i, condition in enumerate(conditions):
 		res += '(' + construct_depends_on_js_expression(condition, ref_field, ref_field_property) + ')'
 		if i != len(conditions) - 1:
 			exp += " && "
@@ -953,53 +1096,53 @@ def construct_depends_on_js_expression(condition: list, ref_field:dict, ref_fiel
 	exp = '';  
 	if isinstance(value, str):
 		value = '"' + value + '"'
-		
+
 	if operator == "=":
-		exp = f'doc.{field}=={value}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}=={value}'
 		
 	if operator == "!=":
-		exp = f'doc.{field}!={value}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}!={value}'
 		
 	if operator == "like":
-		exp = f'doc.{field}.indexOf({value}) != -1'
+		exp = f'{DOC_PREFIX_FORMULA}{field}.indexOf({value}) != -1'
 		
 	if operator == "not like":
-		exp = f'doc.{field}.indexOf({value}) == -1'
+		exp = f'{DOC_PREFIX_FORMULA}{field}.indexOf({value}) == -1'
 		
 	if operator == "in":
 		exp += ''
 		for i, val in enumerate(value):
-			exp += f'doc.{field} == {val}' 
+			exp += f'{DOC_PREFIX_FORMULA}{field} == {val}' 
 			if (i != len(value) - 1):
 				exp += ' || '
 		
 	if operator == "not in":
 		exp += ""
 		for i, val in enumerate(value):
-			exp += f'doc.{field} != {val}' 
+			exp += f'{DOC_PREFIX_FORMULA}{field} != {val}' 
 			if (i != len(value) - 1):
 				exp += ' && '
 		
 	if operator == "is":
 		if value == 'set':
-			exp = f'doc.{field}' 
+			exp = f'{DOC_PREFIX_FORMULA}{field}' 
 		elif value == 'not set':
-			exp = f'!doc.{field}'
+			exp = f'!{DOC_PREFIX_FORMULA}{field}'
 		
 	if operator == ">":
-		exp = f'doc.{field}>{value}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}>{value}'
 		
 	if operator == "<":
-		exp = f'doc.{field}<{value}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}<{value}'
 		
 	if operator == ">=":
-		exp = f'doc.{field}>={value}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}>={value}'
 		
 	if operator == "<=":
-		exp = f'doc.{field}<={value}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}<={value}'
 		
 	if operator == "Between":
-		exp = f'doc.{field}>={value[0]} && doc.{field}<={value[1]}'
+		exp = f'{DOC_PREFIX_FORMULA}{field}>={value[0]} && {DOC_PREFIX_FORMULA}{field}<={value[1]}'
 		
 	if operator == "Timespan": 
 		pass
