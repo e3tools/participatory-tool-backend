@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"xwoEG9Ronv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Form Design</span>\",\"col\":12}},{\"id\":\"vCKFCeYKRa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Engagement Form\",\"col\":3}},{\"id\":\"yD5gYwHV1O\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engagement Forms\",\"col\":3}},{\"id\":\"uxovRrPuy1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Manage Reusable Lists\",\"col\":3}},{\"id\":\"k9PMW-gxeg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"User Roles\",\"col\":3}},{\"id\":\"aZBV4lkO5z\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9PRQca8Dy3\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Data Collection</b></span>\",\"col\":12}},{\"id\":\"QFa57wF6zS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Engagement\",\"col\":3}},{\"id\":\"BW4WtKmqNZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Existing Engagements\",\"col\":3}},{\"id\":\"9HQJJEh5By\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Bo8MOt33Cu\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Technical Data</b></span>\",\"col\":12}},{\"id\":\"lRv6rGVOmT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Technical Data Source\",\"col\":3}},{\"id\":\"feXX2mRmI1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Technical Analysis\",\"col\":3}},{\"id\":\"1WXD8FFRXZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shape Files\",\"col\":3}},{\"id\":\"D2WOU6Oxgo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Raster Layers\",\"col\":3}},{\"id\":\"l44Alot9sq\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"m7phpvkj-I\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reporting</b></span>\",\"col\":12}},{\"id\":\"QHTcMqcwWJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Dashboard\",\"col\":3}},{\"id\":\"e2wM6B-XmR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboards\",\"col\":3}}]",
+ "content": "[{\"id\":\"xwoEG9Ronv\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Form Design</span>\",\"col\":12}},{\"id\":\"vCKFCeYKRa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Engagement Form\",\"col\":3}},{\"id\":\"yD5gYwHV1O\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engagement Forms\",\"col\":3}},{\"id\":\"uxovRrPuy1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Manage Reusable Lists\",\"col\":3}},{\"id\":\"BUdWrn9XsK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engagement Form Group\",\"col\":3}},{\"id\":\"aZBV4lkO5z\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9PRQca8Dy3\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Data Collection</b></span>\",\"col\":12}},{\"id\":\"QFa57wF6zS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Engagement\",\"col\":3}},{\"id\":\"BW4WtKmqNZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Existing Engagements\",\"col\":3}},{\"id\":\"9HQJJEh5By\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Bo8MOt33Cu\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Technical Data</b></span>\",\"col\":12}},{\"id\":\"lRv6rGVOmT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Technical Data Source\",\"col\":3}},{\"id\":\"feXX2mRmI1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Technical Analysis\",\"col\":3}},{\"id\":\"1WXD8FFRXZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shape Files\",\"col\":3}},{\"id\":\"D2WOU6Oxgo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Raster Layers\",\"col\":3}},{\"id\":\"l44Alot9sq\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"m7phpvkj-I\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Reporting</b></span>\",\"col\":12}},{\"id\":\"QHTcMqcwWJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create Dashboard\",\"col\":3}},{\"id\":\"e2wM6B-XmR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Dashboards\",\"col\":3}},{\"id\":\"mpDdzADknK\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"9S1-D_DA14\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Setup</b></span>\",\"col\":12}},{\"id\":\"BLxmBZEKFL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engage Settings\",\"col\":3}},{\"id\":\"J5kdg95MSp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engagement Profile\",\"col\":3}},{\"id\":\"CWF_h8JxYw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assign Form Permissions\",\"col\":3}},{\"id\":\"k9PMW-gxeg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"User Roles\",\"col\":3}}]",
  "creation": "2024-05-07 20:59:53.161817",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Engage",
  "links": [],
- "modified": "2024-12-28 12:11:04.894174",
+ "modified": "2025-02-03 19:08:49.432979",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engage",
@@ -25,6 +25,21 @@
  "roles": [],
  "sequence_id": 24.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Engage Settings",
+   "link_to": "Engage Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Assign Form Permissions",
+   "link_to": "Engagement Profile User Assignment",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Blue",
    "doc_view": "New",
@@ -59,9 +74,25 @@
   },
   {
    "color": "Grey",
+   "doc_view": "List",
+   "label": "Engagement Form Group",
+   "link_to": "Engagement Form Group",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
    "doc_view": "New",
    "label": "Shape Files",
    "link_to": "Shape File",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Engagement Profile",
+   "link_to": "Engagement Profile",
    "stats_filter": "[]",
    "type": "DocType"
   },
