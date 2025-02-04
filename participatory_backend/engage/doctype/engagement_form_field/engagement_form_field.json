@@ -146,19 +146,19 @@
   {
    "fieldname": "depends_on",
    "fieldtype": "Data",
-   "label": "Display Depends On",
+   "label": "Conditions To Display This Field",
    "read_only": 1
   },
   {
    "fieldname": "mandatory_depends_on",
    "fieldtype": "Data",
-   "label": "Mandatory Depends On",
+   "label": "Conditions To Make This Field Mandatory",
    "read_only": 1
   },
   {
    "fieldname": "read_only_depends_on",
    "fieldtype": "Data",
-   "label": "Readonly Depends On",
+   "label": "Conditions To Make This Field Read Only",
    "read_only": 1
   },
   {
@@ -247,35 +247,38 @@
   {
    "fieldname": "set_mandatory_depends_on",
    "fieldtype": "Button",
-   "label": "<b>Set Mandatory Depends On</b>"
+   "label": "<font color=\"primary\"><b>Set Conditions To Make This Field Mandatory</b></font>"
   },
   {
    "fieldname": "set_depends_on",
    "fieldtype": "Button",
-   "label": "<b>Set Depends On Condition</b>"
+   "label": "<font color=\"primary\"><b>Set Conditions To Display This Field</b></font>"
   },
   {
-   "description": "The field will be <b>displayed</b> when this condition is met. Conditions are written in form of <i>&lt;doc.FIELD_NAME&gt; ==&lt;CONDITION&gt; </i> e.g doc.first_name == 'Peter'",
+   "description": "The field will be <b>displayed</b> when this condition is met.",
    "fieldname": "depends_on_plain",
    "fieldtype": "Data",
-   "label": "Display Depends On"
+   "label": "<font color=\"secondary\">Conditions To Display This Field</font>",
+   "read_only": 1
   },
   {
-   "description": "The field will be <b>mandatory</b> when this condition is met. Conditions are written in form of <i>&lt;doc.FIELD_NAME&gt; ==&lt;CONDITION&gt; </i> e.g doc.first_name == 'Peter' ",
+   "description": "The field will be <b>mandatory</b> when this condition is met.",
    "fieldname": "mandatory_depends_on_plain",
    "fieldtype": "Data",
-   "label": "Mandatory Depends On"
+   "label": "<font color=\"secondary\">Conditions To Make This Field Mandatory</font>",
+   "read_only": 1
   },
   {
    "fieldname": "set_read_only_depends_on",
    "fieldtype": "Button",
-   "label": "<b>Set Readonly Depends On</b>"
+   "label": "<font color=\"primary\"><b>Set Conditions To Make This Field Readonly</b></font>"
   },
   {
-   "description": "The field will be <b>read only</b> when this condition is met. Conditions are written in form of <i>doc.&lt;doc.FIELD_NAME&gt; ==&lt;CONDITION&gt; </i> e.g doc.first_name == 'Peter'",
+   "description": "The field will be <b>read only</b> when this condition is met.",
    "fieldname": "read_only_depends_on_plain",
    "fieldtype": "Data",
-   "label": "Readonly Depends On "
+   "label": "<font color=\"secondary\">Conditions To Make This Field Read Only</font>",
+   "read_only": 1
   },
   {
    "depends_on": "eval:in_list([\"Link\"], doc.field_type)",
@@ -300,7 +303,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-02-03 10:19:39.877704",
+ "modified": "2025-02-04 20:40:45.862837",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",
