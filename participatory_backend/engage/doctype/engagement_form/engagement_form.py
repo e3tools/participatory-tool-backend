@@ -1125,7 +1125,7 @@ class EngagementForm(Document):
 			# 					};
 			# 				}"""
 			for table in [x for x in self.form_fields if x.field_type == 'Table']:
-				child_form = frappe.get_doc("Engagement Form", table)
+				child_form = frappe.get_doc("Engagement Form", table.field_child_doctype)
 				fields = [x for x in child_form.form_fields if x.field_type == 'Link' and x.field_filters]
 				expression = """
 							let fields = frappe.web_form.fields_dict.{table}.grid.df.fields;
