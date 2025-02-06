@@ -46,10 +46,11 @@
  ],
  "fields": [
   {
+   "description": "Short variable name to identify the field",
    "fieldname": "field_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Field Name"
+   "label": "Field ID"
   },
   {
    "fieldname": "field_type",
@@ -233,9 +234,10 @@
   {
    "bold": 1,
    "depends_on": "eval:in_list([\"Link\"], doc.field_type)",
+   "description": "When you need to reference a value for a specific field, specify the filter value as <b>doc.FIELD_ID</b> e.g doc.sub_county",
    "fieldname": "set_filters",
    "fieldtype": "Button",
-   "label": "<b>Set Filters</b>"
+   "label": "<font color=\"primary\"><b>Set Filters</b></font>"
   },
   {
    "default": "0",
@@ -282,7 +284,7 @@
   },
   {
    "depends_on": "eval:in_list([\"Link\"], doc.field_type)",
-   "description": "Filters that will be applied when retrieving list of records from the selected form. Filters are written as a JSON object in the form \n of &lt;PROPERTY_NAME&gt; OPERATOR &lt;FILTER_VALUE&gt;. An example is <br> <i><b>{ 'parent_admin': doc.admin_1,\n'admin_type': 'Polygon',\n'enabled': true\n} \n<br>\n</b></i>",
+   "description": "Filters that will be applied when retrieving list of records from the selected form. ",
    "fieldname": "field_filters_plain",
    "fieldtype": "Data",
    "label": "<b>Filters</b>"
@@ -303,7 +305,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-02-04 20:40:45.862837",
+ "modified": "2025-02-05 20:34:32.546890",
  "modified_by": "Administrator",
  "module": "Engage",
  "name": "Engagement Form Field",

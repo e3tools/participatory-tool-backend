@@ -1032,16 +1032,23 @@ class EngagementForm(Document):
 											readonly_fields_script=readonly_script
 											) + '\n\n' + field_scripts 
 
+					child_table_filters = _make_filter_query_for_child_table_links()
 					# ensure trigger functions are called on load
 					if trigger_functions:
 						on_load_script = """frappe.web_form.after_load = () => { """
 						for func in trigger_functions:
 							on_load_script += """\n{func}();""".format(func=func)
+
+						if child_table_filters:
+							for kid in child_table_filters:
+								on_load_script += """\n{func};""".format(func=kid) 
+
 						on_load_script += """\n}\n\n"""
 
 						field_scripts = on_load_script + field_scripts # ensure trigger functions are triggered on_load
 				
 				return field_scripts
+			
 			return _make_filter_functions()
 
 		def _make_target_field_function(engagement_form_field: EngagementFormField, filters: list[type[list[type[str]]]]):
@@ -1107,6 +1114,43 @@ class EngagementForm(Document):
 					   readonly_fields_script=readonly_fields_script)
 			return func
 		
+		def _make_filter_query_for_child_table_links():
+			triggers = []
+			# """frappe.web_form.fields_dict.admin_items.grid.df.fields[2].get_query = () => {
+			# 					console.log('Getting data');
+			# 					return {
+			# 						filters: {
+			# 							parent_admin: 'Kieni East',
+			# 						},
+			# 					};
+			# 				}"""
+			for table in [x for x in self.form_fields if x.field_type == 'Table']:
+				child_form = frappe.get_doc("Engagement Form", table)
+				fields = [x for x in child_form.form_fields if x.field_type == 'Link' and x.field_filters]
+				expression = """
+							let fields = frappe.web_form.fields_dict.{table}.grid.df.fields;
+							for(var i=0; i < fields.length; i++){{
+								let field = fields[i]; 
+						""".format(table=table.field_name)
+				if fields:
+					for fld in fields:
+						# get field index
+						expression += """
+								if (field.fieldname === '{field_name}'){{
+									field.get_query = (doc) => {{
+										return {{
+											query: "participatory_backend.api.get_doc_names",
+											filters: {filters},
+										}}
+									}}
+								}}""".format(table=table.field_name, 
+										field_name=fld.field_name,
+										filters=sanitize_web_filters(fld.field_filters))
+					expression += "\n}"
+
+					triggers.append(expression)
+			return triggers
+
 		def _get_trigger_function_name(target_field):
 			return f"trigger_{target_field}"
 		
